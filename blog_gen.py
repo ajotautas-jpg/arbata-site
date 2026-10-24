@@ -519,6 +519,21 @@ def feed(B, lang):
             f'<description>{E(u["desc"])}</description><language>{lang}</language>\n{items}</channel></rss>\n')
 
 
+def _newtab(html, lang):
+    """Straipsnyje visos nuorodos į įrankius ir kitus svetainės puslapius (ne blogas, ne pagrindinis) atsidaro naujame lange."""
+    import re
+    a, b = html.find('<main'), html.find('</main>')
+    if a < 0 or b < 0:
+        return html
+    def f(m):
+        tag = m.group(0)
+        h = m.group(1)
+        if 'target=' in tag or h == f'/{lang}/' or h.startswith(f'/{lang}/blog/') or not h.startswith('/'):
+            return tag
+        return tag[:-1] + ' target="_blank" rel="noopener">'
+    return html[:a] + re.sub(r'<a href="([^"]*)"[^>]*>', f, html[a:b]) + html[b:]
+
+
 def pages(B):
     validate(B)
     out = []
@@ -527,5 +542,5 @@ def pages(B):
         out.append((B.PATH['blog'](lang) + 'feed.xml', feed(B, lang)))
         for pid in sorted(POSTS):
             if lang in POSTS[pid]:
-                out.append((B.PATH[key_p(pid)](lang) + 'index.html', post_page(B, lang, pid)))
+                out.append((B.PATH[key_p(pid)](lang) + 'index.html', _newtab(post_page(B, lang, pid), lang)))
     return out
