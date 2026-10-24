@@ -26,7 +26,7 @@ T = {
   q3='Ar kofeino kiekis visada toks pats?', a3='Ne. Jis priklauso nuo partijos, lapų kiekio ir plikymo laiko, todėl pateikiame diapazonus. Tikslų skaičių gali patvirtinti tik gamintojas.',
   h_more='Taip pat naudinga', all_brands='Visos markės', note='Duomenys surinkti {d}. Receptūros keičiasi, todėl skaičius patikrink ir ant pakuotės. Bendra informacija, ne medicininė konsultacija.',
   h_src='Šaltiniai', src_note='Šaltiniai nurodyti prie kiekvieno produkto lentelėje.', open_src='šaltinis',
-  home='Pagrindinis', h_limit='Dienos riba',
+  home='Pagrindinis', h_limit='Dienos riba', upto='iki',
  ),
  'en': dict(
   hub='Tea brands', hub_h1='Caffeine in tea brands', hub_t='How much caffeine is in tea brands? Lipton, Bigelow, Twinings, Yogi',
@@ -46,7 +46,7 @@ T = {
   q3='Is the caffeine amount always the same?', a3='No. It depends on the batch, the amount of leaf and steeping time, which is why we show ranges. Only the manufacturer can confirm an exact figure.',
   h_more='Also useful', all_brands='All brands', note='Data collected {d}. Recipes change, so check the figure on the pack as well. General information, not medical advice.',
   h_src='Sources', src_note='Sources are linked next to each product in the table.', open_src='source',
-  home='Home', h_limit='Daily limit',
+  home='Home', h_limit='Daily limit', upto='up to',
  ),
  'it': dict(
   hub='Marche di tè', hub_h1='Caffeina nelle marche di tè', hub_t='Quanta caffeina c\'è nelle marche di tè? Lipton, Bigelow, Twinings, Yogi',
@@ -66,7 +66,7 @@ T = {
   q3='La quantità di caffeina è sempre la stessa?', a3='No. Dipende dal lotto, dalla quantità di foglie e dal tempo di infusione, per questo mostriamo intervalli. Solo il produttore può confermare un valore preciso.',
   h_more='Può servire anche', all_brands='Tutte le marche', note='Dati raccolti il {d}. Le ricette cambiano, controlla il valore anche sulla confezione. Informazioni generali, non parere medico.',
   h_src='Fonti', src_note='Le fonti sono collegate accanto a ogni prodotto nella tabella.', open_src='fonte',
-  home='Home', h_limit='Limite giornaliero',
+  home='Home', h_limit='Limite giornaliero', upto='fino a',
  ),
 }
 
@@ -95,23 +95,42 @@ def all_keys():
 
 
 def rng(rows, lang):
-    rs = [r for r in rows if r['lo'] is not None]
-    if any(r['avg'] for r in rs):
-        rs = [r for r in rs if r['avg']]
+    t = T[lang]
+    rs = [r for r in rows if BD.has_num(r)]
+    full = [r for r in rs if r['avg'] and r['lo'] is not None and r['hi'] is not None]
+    if full:
+        rs = full + [r for r in rs if r not in full and r['lo'] is not None and r['hi'] is not None]
     if not rs:
         return None
     if any(r['rtd'] for r in rs) and not all(r['rtd'] for r in rs):
         rs = [r for r in rs if not r['rtd']]
-    lo, hi = min(r['lo'] for r in rs), max(r['hi'] for r in rs)
+    caf = [r for r in rs if r['type'] not in ('decaf', 'herbal')]
+    if caf:
+        rs = caf
+    los = [r['lo'] for r in rs if r['lo'] is not None]
+    his = [r['hi'] for r in rs if r['hi'] is not None]
     unit = ' mg/l' if all(r['rtd'] for r in rs) else ' mg'
-    return (f'{SG.num(lo, lang)}–{SG.num(hi, lang)}' if lo != hi else SG.num(lo, lang)) + unit
+    n = lambda x: SG.num(x, lang)
+    if not los:
+        return f'{t["upto"]} {n(max(his))}' + unit
+    if not his or (all(r['hi'] is None for r in rs)):
+        return f'{n(min(los))}+' + unit
+    lo, hi = min(los), max(his)
+    return (f'{n(lo)}–{n(hi)}' if lo != hi else n(lo)) + unit
 
 
 def cell_cup(r, lang, t):
+    n = lambda x: SG.num(x, lang)
+    unit = ' mg/l' if r['rtd'] else ' mg'
+    lvl = f' ({BD.QUAL[r["qual"]][lang]})' if r.get('qual') else ''
+    if r['lo'] is None and r['hi'] is None:
+        return BD.QUAL[r['qual']][lang] if r['qual'] == 'nomg' else f'{t["qual_lbl"]}: {BD.QUAL[r["qual"]][lang]}'
+    if r['hi'] is None:
+        return f'{n(r["lo"])}+' + unit + lvl
     if r['lo'] is None:
-        return f'{t["qual_lbl"]}: {BD.QUAL[r["brand"]][lang]}'
-    base = f'{SG.num(r["lo"], lang)}–{SG.num(r["hi"], lang)}' if r['lo'] != r['hi'] else SG.num(r['lo'], lang)
-    return base + (' mg/l' if r['rtd'] else ' mg')
+        return f'{t["upto"]} {n(r["hi"])}' + unit + lvl
+    base = f'{n(r["lo"])}–{n(r["hi"])}' if r['lo'] != r['hi'] else n(r['lo'])
+    return base + unit + lvl
 
 
 def row_html(B, r, lang, t):
@@ -131,21 +150,22 @@ def brand_page(B, slug, lang):
     off = [r for r in rows if BD.official(r)]
     low = [r for r in rows if r['rel'] == 'low']
     fil = [d for d in caff.drinks() if d['id'] == 'filter'][0]['typ']
-    cupish = [r for r in off if not r['rtd'] and r['avg']]
+    cupish = [r for r in off if not r['rtd'] and r['avg'] and r['ml']]
     if off:
         rg = rng(off, lang)
         ans = t['ans_off'].format(b=name, rg=rg)
-        if all(r['rtd'] for r in off):
+        if all(r['rtd'] for r in off) and 'mg/l' in rg:
             ans = t['ans_rtd'].format(b=name, rg=rg, c=SG.num(round(sum(r['avg'] for r in off) / len(off) / 4), lang))
         title = t['t'].format(b=name, rg=rg)
         desc = t['d'].format(b=name, rg=rg)
-    elif low:
+    elif low and rng(low, lang):
         rg = rng(low, lang)
         ans = t['ans_low'].format(b=name, rg=rg)
         title, desc = t['t_none'].format(b=name), t['d_none'].format(b=name)
     else:
         rg = ''
-        ans = t['ans_qual'].format(b=name, q=BD.QUAL[slug][lang])
+        qk = next((r['qual'] for r in rows if r.get('qual')), 'medium')
+        ans = t['ans_qual'].format(b=name, q=BD.QUAL[qk][lang])
         title, desc = t['t_none'].format(b=name), t['d_none'].format(b=name)
     vs = ''
     if cupish:
