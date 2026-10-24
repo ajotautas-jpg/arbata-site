@@ -6,6 +6,7 @@ category: quit
 date: 2026-10-24
 related: mesti-kava
 sources: juliano
+about: diary, plan, tracker, calc, d_filter, d_energy, g_limit
 ---
 
 Vakar – paskutinis kavos puodelis. Šiandien skauda galvą, sunku susikaupti, o net paprasčiausi darbai reikalauja neįprastai daug pastangų. Atrodo, lyg naktį beveik nebūtų pavykę išsimiegoti, nors miegui skyrei visas aštuonias valandas.

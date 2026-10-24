@@ -6,6 +6,7 @@ category: quit
 date: 2026-10-24
 related: abstinencija
 sources: juliano, mayo
+about: calc, convert, quiz, plan, diary, d_black, d_green, g_limit, hub_b
 ---
 
 One cup in the morning, another at work, and a third because somehow you need to make it through the afternoon. Coffee easily becomes part of everyday life, and sometimes we don't even notice how much we're drinking.

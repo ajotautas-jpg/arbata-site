@@ -6,6 +6,7 @@ category: quit
 date: 2026-10-24
 related: mesti-kava
 sources: juliano
+about: diary, plan, tracker, calc, d_filter, d_energy, g_limit
 ---
 
 Ieri, l'ultimo caffè. Oggi hai mal di testa, fai fatica a concentrarti e persino le attività più semplici richiedono uno sforzo insolito. Ti sembra di aver dormito pochissimo, anche se hai riposato per otto ore.

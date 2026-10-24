@@ -6,6 +6,7 @@ category: quit
 date: 2026-10-24
 related: abstinencija
 sources: juliano, mayo
+about: calc, convert, quiz, plan, diary, d_black, d_green, g_limit, hub_b
 ---
 
 Un espresso al mattino, un altro al bar durante la pausa e il terzo dopo pranzo, perché il pomeriggio bisogna pur affrontarlo. In Italia il caffè è molto più di una bevanda: è un'abitudine quotidiana, un piccolo piacere e spesso un momento da condividere.

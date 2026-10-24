@@ -6,6 +6,7 @@ category: quit
 date: 2026-10-24
 related: mesti-kava
 sources: juliano
+about: diary, plan, tracker, calc, d_filter, d_energy, g_limit
 ---
 
 Yesterday, your last cup of coffee. Today, you've got a headache, you can't concentrate, and even the simplest tasks seem to require an unreasonable amount of effort. It feels like you barely slept, even though you got a full eight hours.

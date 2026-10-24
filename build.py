@@ -479,6 +479,7 @@ def footer(lang, quiet=False):
 
 def shell(lang, key, title, desc, main, quiet_footer=False, slim=False, scripts=(), noindex=False):
     c = C[lang]
+    main = _BG.augment(__import__('sys').modules[__name__], key, lang, main)
     js = ''.join(f'<script src="/assets/{s}" defer></script>' for s in scripts)
     return (head(lang, key, title, desc, noindex) + '\n<body>\n'
             f'<a class="skip" href="#main">{E(c["skip"])}</a>\n'

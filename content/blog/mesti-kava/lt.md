@@ -6,6 +6,7 @@ category: quit
 date: 2026-10-24
 related: abstinencija
 sources: juliano, mayo
+about: calc, convert, quiz, plan, diary, d_black, d_green, g_limit, hub_b
 ---
 
 Vienas puodelis ryte, antras darbe, trečias – nes po pietų kažkaip reikia išgyventi. Kava lengvai tampa kasdienybės dalimi, o kartais net nepastebime, kiek jos išgeriame.

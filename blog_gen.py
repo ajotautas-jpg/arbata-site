@@ -3,6 +3,8 @@
 Straipsnio failas: front matter (--- ... ---) + Markdown.
   slug, title, description, category, date (YYYY-MM-DD), [updated], [related: id, id], [sources: raktai]
 Markdown: ## / ### antraštės, pastraipos, - sąrašai, 1. sąrašai, **paryškinta**, *kursyvas*, [tekstas](nuoroda).
+  about: puslapių raktai, su kuriais straipsnis susijęs (įrankiai, d_black, g_limit, hub_b ...). Iš jų: „Įrankiai ir duomenys“ bloke
+         straipsnyje IR „Skaityk daugiau“ blokas atvirkščiai tuose puslapiuose. Be to, tekste automatiškai nuorodomi gėrimų pavadinimai (AUTO).
 Vidinės nuorodos: (@calc), (@quiz), (@convert) ... = įrankiai pagal PATH raktą; (@post:id) = kitas straipsnis
 (jei jo nėra šioje kalboje, lieka tik tekstas). Pastraipa iš vienos nuorodos tampa „CTA“ bloku.
 Straipsniai su data ateityje nepublikuojami (build'as juos praleidžia).
@@ -19,6 +21,7 @@ import unicodedata
 
 import caff
 import seo_gen
+import tools_gen as TG
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 CONTENT = os.path.join(HERE, 'content', 'blog')
@@ -47,6 +50,38 @@ MONTHS = {
     'it': ['gennaio', 'febbraio', 'marzo', 'aprile', 'maggio', 'giugno', 'luglio', 'agosto', 'settembre', 'ottobre', 'novembre', 'dicembre'],
 }
 
+UI2 = {
+    'lt': dict(more='Skaityk daugiau', about='Įrankiai ir duomenys', home_t='Iš bloga', home_sub='Straipsniai apie kavos atsisakymą ir perėjimą prie arbatos.', all='Visi straipsniai'),
+    'en': dict(more='Read more', about='Tools and data', home_t='From the blog', home_sub='Articles about quitting coffee and switching to tea.', all='All articles'),
+    'it': dict(more='Approfondisci', about='Strumenti e dati', home_t='Dal blog', home_sub='Articoli su come smettere di bere caffè e passare al tè.', all='Tutti gli articoli'),
+}
+for _l, _d in UI2.items():
+    UI[_l].update(_d)
+
+DRINK_LBL = {'lt': 'Kiek kofeino {n}?', 'en': 'Caffeine in {n}', 'it': 'Caffeina {n}'}   # {n} = seo_gen.N[id]["in"][lang]
+
+# Automatinės nuorodos tekste: puslapio raktas -> {kalba: regex}. Nuorodomas tik PIRMAS pavadinimo paminėjimas straipsnyje,
+# ne antraštėse, ne CTA, ir tik jei straipsnis dar nenurodo į tą puslapį. Daugiausiai AUTO_MAX nuorodų straipsnyje.
+AUTO_MAX = 6
+AUTO = {
+    'd_black': {'lt': r'\bjuod(?:oji|osios|ąją|ojoje|ąja)\b(?:\s+arbat\w+)?', 'en': r'\bblack tea\b', 'it': r'\btè nero\b'},
+    'd_green': {'lt': r'\bžal(?:ioji|iosios|iąją|iojoje|iąja)\b(?:\s+arbat\w+)?', 'en': r'\bgreen tea\b', 'it': r'\btè verde\b'},
+    'd_white': {'lt': r'\bbalt(?:oji|osios|ąją|ojoje|ąja)\s+arbat\w+', 'en': r'\bwhite tea\b', 'it': r'\btè bianco\b'},
+    'd_oolong': {'lt': r'\boolong\w*', 'en': r'\boolong\b', 'it': r'\boolong\b'},
+    'd_puerh': {'lt': r'\bpu-erh\w*', 'en': r'\bpu-erh\b', 'it': r'\bpu-erh\b'},
+    'd_matcha': {'lt': r'\bmatcha\w*', 'en': r'\bmatcha\b', 'it': r'\bmatcha\b'},
+    'd_mate': {'lt': r'\byerba mate\w*', 'en': r'\byerba mate\b', 'it': r'\byerba mate\b'},
+    'd_espresso': {'lt': r'\bespres\w+', 'en': r'\bespresso\b', 'it': r'\bespresso\b'},
+    'd_filter': {'lt': r'\bfiltruot\w+\s+kav\w+', 'en': r'\b(?:brewed|filter) coffee\b', 'it': r'\bcaffè (?:filtrato|filtro)\b'},
+    'd_decaf': {'lt': r'\bkav\w+ be kofeino\b', 'en': r'\bdecaf(?:feinated)? coffee\b', 'it': r'\bcaffè decaffeinato\b'},
+    'd_cola': {'lt': r'\bkol(?:a|os|ą)\b', 'en': r'\bcola\b', 'it': r'\bcola\b'},
+    'd_energy': {'lt': r'\benergin\w+\s+gėrim\w+', 'en': r'\benergy drinks?\b', 'it': r'\bbevande energetiche\b|\benergy drink\b'},
+    'g_limit': {'lt': r'\bEFSA\b|\bdienos kofeino rib\w+', 'en': r'\bEFSA\b|\bdaily caffeine limit\b', 'it': r'\bEFSA\b|\blimite giornaliero\b'},
+    'calc': {'lt': r'\bkofeino skaičiuokl\w+', 'en': r'\bcaffeine calculator\b', 'it': r'\bcalcolatore (?:della )?caffeina\b'},
+    'tracker': {'lt': r'\bkofeino sekikl\w+', 'en': r'\bcaffeine tracker\b', 'it': r'\bdiario della caffeina\b'},
+}
+GENERIC = {'tools', 'hub_d', 'hub_c', 'hub_b'}   # puslapiai be konkretaus „about“ atitikmens rodo naujausius straipsnius
+
 # papildomi šaltiniai (caff.SOURCES lieka tik kofeino duomenų bazei)
 EXTRA_SOURCES = {
     'juliano': ('Juliano & Griffiths, Psychopharmacology 2004;176(1):1–29 (caffeine withdrawal: onset 12–24 h, peak 20–51 h, 2–9 days)',
@@ -54,6 +89,7 @@ EXTRA_SOURCES = {
 }
 
 POSTS = {}      # id -> {lang: post}
+INDEX = {}      # puslapio raktas -> [straipsnių id] (iš about)
 _FM = re.compile(r'\A---\s*\n(.*?)\n---\s*\n(.*)\Z', re.S)
 
 
@@ -91,6 +127,7 @@ def _parse(path):
     datetime.date.fromisoformat(meta['date'])
     meta['related'] = [x.strip() for x in meta.get('related', '').split(',') if x.strip()]
     meta['sources'] = [x.strip() for x in meta.get('sources', '').split(',') if x.strip()]
+    meta['about'] = [x.strip() for x in meta.get('about', '').split(',') if x.strip()]
     for s in meta['sources']:
         source(s)
     meta['body'] = m.group(2).strip() + '\n'
@@ -122,6 +159,12 @@ def load():
             if k in seen:
                 raise ValueError(f'Pasikartoja slug {k}: {seen[k]} ir {pid}')
             seen[k] = pid
+    INDEX.clear()
+    for pid, by in POSTS.items():
+        for m in by.values():
+            for k in m['about']:
+                if pid not in INDEX.setdefault(k, []):
+                    INDEX[k].append(pid)
 
 
 def langs_of_post(pid):
@@ -186,8 +229,40 @@ def inline(B, lang, s):
     return s
 
 
+_TOKEN = re.compile(r'(<a\b.*?</a>|<[^>]+>)', re.S)
+
+
+def autolink(B, lang, htm, st):
+    """Nuorodina pirmą AUTO frazės paminėjimą (tik tekste ne <a> viduje). st: {'used': set(raktų), 'n': int, 'skip': set(raktų)}."""
+    if st['n'] >= AUTO_MAX:
+        return htm
+    parts = _TOKEN.split(htm)
+    for i, tok in enumerate(parts):
+        if i % 2 or not tok.strip() or st['n'] >= AUTO_MAX:
+            continue
+        for key, pats in AUTO.items():
+            if key in st['used'] or key in st['skip'] or key not in B.PATH or st['n'] >= AUTO_MAX:
+                continue
+            m = re.search(pats[lang], tok, re.I)
+            if m:
+                a, b = m.span()
+                tok = tok[:a] + f'<a href="{B.PATH[key](lang)}">{tok[a:b]}</a>' + tok[b:]
+                # nauja nuoroda gali turėti <a>; kitų raktų ieškome tik už jos ribų
+                st['used'].add(key)
+                st['n'] += 1
+                head, link, tail = tok[:a], tok[a:a + len(f'<a href="{B.PATH[key](lang)}">{m.group(0)}</a>')], tok[a + len(f'<a href="{B.PATH[key](lang)}">{m.group(0)}</a>'):]
+                tail = autolink(B, lang, tail, st)
+                head = autolink(B, lang, head, st) if head.strip() else head
+                tok = head + link + tail
+                break
+        parts[i] = tok
+    return ''.join(parts)
+
+
 def render(B, lang, md):
     out, heads = [], []
+    existing = set(re.findall(r'\]\(@([a-z0-9_]+)\)', md))
+    st = {'used': set(), 'n': 0, 'skip': existing}
     para, items, kind = [], [], None
 
     def flush_p():
@@ -197,13 +272,13 @@ def render(B, lang, md):
             if re.fullmatch(r'\[[^\]]+\]\([^)\s]+\)', text):
                 out.append(f'<p class="post-cta">{inline(B, lang, text)}</p>')
             else:
-                out.append(f'<p>{inline(B, lang, text)}</p>')
+                out.append(f'<p>{autolink(B, lang, inline(B, lang, text), st)}</p>')
             para = []
 
     def flush_l():
         nonlocal items, kind
         if items:
-            out.append(f'<{kind}>' + ''.join(f'<li>{inline(B, lang, i)}</li>' for i in items) + f'</{kind}>')
+            out.append(f'<{kind}>' + ''.join(f'<li>{autolink(B, lang, inline(B, lang, i), st)}</li>' for i in items) + f'</{kind}>')
             items, kind = [], None
 
     for line in md.split('\n'):
@@ -292,6 +367,90 @@ def index_page(B, lang):
     return out.replace('</head>', _rss_link(B, lang) + '</head>', 1)
 
 
+def related_ids(pid, lang, n=3):
+    """Pirma nurodyti related, tada tos pačios kategorijos / bendro about naujausi (iki n)."""
+    m = POSTS[pid][lang]
+    ids = [r for r in m['related'] if r in POSTS and lang in POSTS[r] and r != pid]
+    rest = [p for p in _sorted_ids(lang) if p != pid and p not in ids]
+    rest.sort(key=lambda p: (-(POSTS[p][lang]['category'] == m['category']) - len(set(POSTS[p][lang]['about']) & set(m['about'])) * 0.1,))
+    return (ids + rest)[:n]
+
+
+def page_label(B, key, lang):
+    """Rodomas pavadinimas puslapio rakto nuorodai."""
+    t = seo_gen.L[lang]
+    if key in TG.TXT:
+        return TG.TXT[key][lang]['menu']
+    if key == 'calc':
+        return t['tools_calc']
+    if key.startswith('d_') and key[2:] in seo_gen.N:
+        return DRINK_LBL[lang].format(n=seo_gen.N[key[2:]]['in'][lang])
+    if key == 'g_limit':
+        return t['g_h1']
+    if key == 'hub_d':
+        return t['hub_d']
+    if key == 'hub_c':
+        return t['hub_c']
+    if key == 'hub_b':
+        import brands_gen
+        return brands_gen.T[lang]['hub']
+    if key == 'tools':
+        return B.C[lang]['nav_tools']
+    raise ValueError(f'Nėra pavadinimo puslapio raktui {key}')
+
+
+def about_block(B, lang, m, limit=8):
+    keys = [k for k in m['about'] if k in B.PATH and lang in B.langs_of(k)][:limit]
+    if not keys:
+        return seo_gen.tools_links(B, lang)
+    E = B.E
+    links = ''.join(f'<a href="{B.PATH[k](lang)}">{E(page_label(B, k, lang))}</a>' for k in keys)
+    return f'<section class="seo-sec"><h2>{E(UI[lang]["about"])}</h2><div class="quiet-links">{links}</div></section>'
+
+
+def posts_for(key, lang, limit=3):
+    """Straipsniai, rodomi puslapyje `key` (atvirkštinės nuorodos)."""
+    if key == 'blog' or key.startswith(('b_', 'e_')) or key in ('embed', 'privacy'):
+        return []
+    ids = list(INDEX.get(key, []))
+    if key.startswith('c_'):                      # c_<a>_<b>: palyginimas -> abiejų gėrimų straipsniai
+        a, b = key.split('_')[1:3]
+        ids = INDEX.get('d_' + a, []) + INDEX.get('d_' + b, [])
+    elif key.startswith('br_'):
+        ids = INDEX.get('hub_b', [])
+    if not ids and (key in GENERIC or key == 'home'):
+        ids = list(POSTS)
+    ids = [p for p in dict.fromkeys(ids) if lang in POSTS[p]]
+    ids.sort(key=lambda p: (POSTS[p][lang]['date'], p), reverse=True)
+    return ids[:limit]
+
+
+def augment(B, key, lang, main):
+    """Į kitus puslapius (B.shell) įdeda „Skaityk daugiau“ su susijusiais straipsniais."""
+    ids = posts_for(key, lang, 3 if key != 'home' else 3)
+    if not ids:
+        return main
+    E = B.E
+    u = UI[lang]
+    cards = ''.join(_card(B, lang, p) for p in ids)
+    if key == 'home':
+        sec = (f'<section class="wrap sec" id="blog"><div class="sec-head"><h2 class="sec-title">{E(u["home_t"])}</h2>'
+               f'<p class="sec-sub">{E(u["home_sub"])}</p></div><div class="grid">{cards}</div>'
+               f'<p style="margin-top:24px"><a class="btn btn-outline btn-sm" href="{B.PATH["blog"](lang)}">{E(u["all"])} →</a></p></section>\n')
+        anchor = '<section class="wrap sec" id="shop">'
+        return main.replace(anchor, sec + anchor, 1) if anchor in main else main
+    sec = f'<section class="seo-sec post-more"><h2>{E(u["more"])}</h2><div class="grid">{cards}</div></section>\n'
+    i = main.rfind('</main>')
+    return main[:i] + sec + main[i:] if i >= 0 else main
+
+
+def validate(B):
+    for k in INDEX:
+        if k not in B.PATH:
+            raise ValueError(f'about: nežinomas puslapio raktas {k} (straipsniai: {INDEX[k]})')
+        page_label(B, k, 'lt')
+
+
 def post_page(B, lang, pid):
     E = B.E
     m = POSTS[pid][lang]
@@ -304,7 +463,7 @@ def post_page(B, lang, pid):
         toc = (f'<nav class="toc" aria-label="{E(u["toc"])}"><strong>{E(u["toc"])}</strong><ol>'
                + ''.join(f'<li><a href="#{i}">{E(h)}</a></li>' for i, h in heads) + '</ol></nav>')
     upd = f' · {E(u["updated"])} <time datetime="{m["updated"]}">{E(fmt_date(m["updated"], lang))}</time>' if m.get('updated') else ''
-    rel = [r for r in m['related'] if r in POSTS and lang in POSTS[r]]
+    rel = related_ids(pid, lang)
     related = ''
     if rel:
         related = f'<section class="seo-sec"><h2>{E(u["related"])}</h2><div class="grid">' + ''.join(_card(B, lang, r) for r in rel) + '</div></section>'
@@ -335,7 +494,7 @@ def post_page(B, lang, pid):
 </article>
 <p class="answer small">{E(t['g_note'])}</p>
 {related}
-{seo_gen.tools_links(B, lang)}
+{about_block(B, lang, m)}
 {srcs}
 </main>
 {_ld(B, lang, ld)}'''
@@ -361,6 +520,7 @@ def feed(B, lang):
 
 
 def pages(B):
+    validate(B)
     out = []
     for lang in B.LANGS:
         out.append((B.PATH['blog'](lang) + 'index.html', index_page(B, lang)))
