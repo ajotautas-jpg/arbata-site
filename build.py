@@ -82,7 +82,7 @@ LEAF_LOGO = ('<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke
 C = {
  'lt': {
   'skip': 'Pereiti prie turinio',
-  'nav_tools': 'Įrankiai', 'nav_blog': 'Blogas', 'nav_guides': 'Gidai', 'nav_kit': 'Starter rinkinys',
+  'nav_tools': 'Įrankiai', 'nav_blog': 'Blogas', 'nav_guides': 'Gidai', 'nav_lib': 'Biblioteka', 'nav_brands': 'Markės', 'nav_kit': 'Starter rinkinys',
   'cta_list': 'Prisijungti prie sąrašo', 'all_tools': 'Visi įrankiai',
   'soon': 'Netrukus', 'open': 'Atidaryti',
   'home_title': 'Arbata: mesk kavą, pasilik energiją',
@@ -182,7 +182,7 @@ C = {
  },
  'en': {
   'skip': 'Skip to content',
-  'nav_tools': 'Tools', 'nav_blog': 'Blog', 'nav_guides': 'Guides', 'nav_kit': 'Starter kit',
+  'nav_tools': 'Tools', 'nav_blog': 'Blog', 'nav_guides': 'Guides', 'nav_lib': 'Library', 'nav_brands': 'Brands', 'nav_kit': 'Starter kit',
   'cta_list': 'Join the list', 'all_tools': 'All tools',
   'soon': 'Coming soon', 'open': 'Open',
   'home_title': 'Arbata: quit coffee, keep the energy',
@@ -278,7 +278,7 @@ C = {
  },
  'it': {
   'skip': 'Vai al contenuto',
-  'nav_tools': 'Strumenti', 'nav_blog': 'Blog', 'nav_guides': 'Guide', 'nav_kit': 'Starter kit',
+  'nav_tools': 'Strumenti', 'nav_blog': 'Blog', 'nav_guides': 'Guide', 'nav_lib': 'Libreria', 'nav_brands': 'Marche', 'nav_kit': 'Starter kit',
   'cta_list': 'Iscriviti alla lista', 'all_tools': 'Tutti gli strumenti',
   'soon': 'In arrivo', 'open': 'Apri',
   'home_title': 'Arbata: lascia il caffè, tieni l\'energia',
@@ -445,8 +445,12 @@ def header(lang, key, slim=False):
                 f'<div class="langs" role="group" aria-label="Language">{langs}</div></div></header>')
     cur = ' aria-current="page"' if key == 'tools' else ''
     curb = ' aria-current="page"' if key == 'blog' or key.startswith('b_') else ''
+    curt = ' aria-current="page"' if key == 'hub_t' or key.startswith('tl_') else ''
+    curm = ' aria-current="page"' if key == 'hub_b' or key.startswith('br_') else ''
     nav = (f'<nav class="nav" aria-label="Main"><a href="{PATH["tools"](lang)}"{cur}>{E(c["nav_tools"])}</a>'
            f'<a href="{PATH["blog"](lang)}"{curb}>{E(c["nav_blog"])}</a>'
+           f'<a href="{PATH["hub_t"](lang)}"{curt}>{E(c["nav_lib"])}</a>'
+           f'<a href="{PATH["hub_b"](lang)}"{curm}>{E(c["nav_brands"])}</a>'
            f'<a href="{PATH["home"](lang)}#pillars">{E(c["nav_guides"])}</a>'
            f'<a href="{PATH["home"](lang)}#shop">{E(c["nav_kit"])}</a></nav>')
     cta = f'<a class="btn btn-forest btn-sm" href="{PATH["home"](lang)}#newsletter">{E(c["cta_list"])}</a>'
@@ -470,7 +474,7 @@ def footer(lang, quiet=False):
     c = C[lang]
     priv = f'<a href="{PATH["privacy"](lang)}">{E(c["privacy"])}</a>'
     if not quiet:
-        priv = f'<a href="{PATH["blog"](lang)}">{E(c["nav_blog"])}</a> · ' + priv
+        priv = ' · '.join(f'<a href="{PATH[k](lang)}">{E(c[n])}</a>' for k, n in (('blog', 'nav_blog'), ('hub_t', 'nav_lib'), ('hub_b', 'nav_brands'), ('tools', 'nav_tools'))) + ' · ' + priv
     if quiet:
         return (f'<footer class="ftr ftr-quiet"><div class="wrap wrap-narrow ftr-in"><span>© 2026 Arbata</span>'
                 f'<span>{contact_html()} · {priv}</span></div></footer>')
@@ -527,8 +531,9 @@ def home(lang):
     pillars = ''
     for i, (ic, t, d) in enumerate(c['pillars']):
         dark = ' card-dark' if i == 5 else ''
-        if ic == 'leaf':
-            pillars += (f'<a class="card" href="{PATH["hub_t"](lang)}"><span class="ico">{svg(ic, 26)}</span><span class="card-title">{E(t)}</span>'
+        tgt = {'leaf': 'hub_t', 'book': 'blog', 'heart': 'g_limit'}.get(ic)
+        if tgt:
+            pillars += (f'<a class="card" href="{PATH[tgt](lang)}"><span class="ico">{svg(ic, 26)}</span><span class="card-title">{E(t)}</span>'
                         f'<span class="card-text">{E(d)}</span><span class="card-foot"><span class="chip">{E(c["open"])}</span></span></a>')
             continue
         pillars += (f'<div class="card{dark}"><span class="ico">{svg(ic, 26)}</span><span class="card-title">{E(t)}</span>'

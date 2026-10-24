@@ -77,10 +77,12 @@ AUTO = {
     'd_cola': {'lt': r'\bkol(?:a|os|ą)\b', 'en': r'\bcola\b', 'it': r'\bcola\b'},
     'd_energy': {'lt': r'\benergin\w+\s+gėrim\w+', 'en': r'\benergy drinks?\b', 'it': r'\bbevande energetiche\b|\benergy drink\b'},
     'g_limit': {'lt': r'\bEFSA\b|\bdienos kofeino rib\w+', 'en': r'\bEFSA\b|\bdaily caffeine limit\b', 'it': r'\bEFSA\b|\blimite giornaliero\b'},
+    'hub_t': {'lt': r'\barbatų bibliotek\w+', 'en': r'\btea library\b', 'it': r'\blibreria dei tè\b'},
+    'hub_b': {'lt': r'\barbatų markių?\b|\barbatų markėms\b', 'en': r'\btea brands\b', 'it': r'\bmarche di tè\b'},
     'calc': {'lt': r'\bkofeino skaičiuokl\w+', 'en': r'\bcaffeine calculator\b', 'it': r'\bcalcolatore (?:della )?caffeina\b'},
     'tracker': {'lt': r'\bkofeino sekikl\w+', 'en': r'\bcaffeine tracker\b', 'it': r'\bdiario della caffeina\b'},
 }
-GENERIC = {'tools', 'hub_d', 'hub_c', 'hub_b'}   # puslapiai be konkretaus „about“ atitikmens rodo naujausius straipsnius
+GENERIC = {'tools', 'hub_d', 'hub_c', 'hub_b', 'hub_t'}   # puslapiai be konkretaus „about“ atitikmens rodo naujausius straipsnius
 
 # papildomi šaltiniai (caff.SOURCES lieka tik kofeino duomenų bazei)
 EXTRA_SOURCES = {
@@ -418,7 +420,9 @@ def posts_for(key, lang, limit=3):
         ids = INDEX.get('d_' + a, []) + INDEX.get('d_' + b, [])
     elif key.startswith('br_'):
         ids = INDEX.get('hub_b', [])
-    if not ids and (key in GENERIC or key == 'home'):
+    elif key.startswith('tl_'):
+        ids = INDEX.get(key, []) + INDEX.get('d_' + key[3:], []) + INDEX.get('hub_t', [])
+    if not ids and (key in GENERIC or key == 'home' or key.startswith('tl_')):
         ids = list(POSTS)
     ids = [p for p in dict.fromkeys(ids) if lang in POSTS[p]]
     ids.sort(key=lambda p: (POSTS[p][lang]['date'], p), reverse=True)
