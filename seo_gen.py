@@ -392,7 +392,7 @@ def hub_d_page(B, lang):
 <h1 class="page-title">{E(t['hub_d_h1'])}</h1><p class="lead">{E(t['hub_d_lead'])}</p>
 <section class="seo-sec chart-card" style="margin-top:0">{table}</section>
 {tools_links(B, lang)}
-<section class="seo-sec"><div class="quiet-links"><a href="{B.PATH['hub_c'](lang)}">{E(t['hub_c'])}</a><a href="{B.PATH['g_limit'](lang)}">{E(t['g_h1'])}</a></div></section>
+<section class="seo-sec"><div class="quiet-links"><a href="{B.PATH['hub_c'](lang)}">{E(t['hub_c'])}</a><a href="{B.PATH['g_limit'](lang)}">{E(t['g_h1'])}</a><a href="{B.PATH['hub_b'](lang)}">{E(__import__('brands_gen').T[lang]['hub'])}</a></div></section>
 {src_html(B, lang, ['mayo', 'foods', 'matcha', 'mate', 'efsa'])}
 </main>
 {jsonld(B, lang, 'hub_d', t['hub_d'], [])}'''

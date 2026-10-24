@@ -111,7 +111,7 @@ def data_js():
         'checked': CHECKED,
         'limits': LIMITS,
         'timeF': {str(k): v for k, v in TIME_F.items()},
-        'drinks': drinks(),
+        'drinks': drinks() + __import__('brands_data').tool_drinks(),
         'sources': {k: {'title': v[0], 'url': v[1]} for k, v in SOURCES.items()},
     }
     return 'window.ARBATA_DATA=' + json.dumps(payload, ensure_ascii=False, separators=(',', ':')) + ';\n'
