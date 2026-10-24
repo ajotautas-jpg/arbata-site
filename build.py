@@ -25,6 +25,19 @@ for _k, _sl in TG.SLUG.items():
     PATH['e_' + _k] = (lambda k: lambda l: f'/{l}/{EMBED_DIR[l]}/{TG.SLUG[k][l]}/')(_k)
 import seo_gen as _SG0
 _SG0.register(__import__('sys').modules[__name__])
+LANGS_OF = {}   # puslapio raktas -> kalbos, kuriomis jis egzistuoja (nenurodyta = visos)
+
+
+def langs_of(key):
+    return LANGS_OF.get(key, LANGS)
+
+
+def lang_url(key, l):
+    return PATH[key](l) if l in langs_of(key) else PATH['blog'](l) if key.startswith('b_') else PATH['home'](l)
+
+
+import blog_gen as _BG
+_BG.register(__import__('sys').modules[__name__])
 
 E = lambda s: html.escape(s, quote=True)
 
@@ -65,7 +78,7 @@ LEAF_LOGO = ('<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke
 C = {
  'lt': {
   'skip': 'Pereiti prie turinio',
-  'nav_tools': 'Įrankiai', 'nav_guides': 'Gidai', 'nav_kit': 'Starter rinkinys',
+  'nav_tools': 'Įrankiai', 'nav_blog': 'Blogas', 'nav_guides': 'Gidai', 'nav_kit': 'Starter rinkinys',
   'cta_list': 'Prisijungti prie sąrašo', 'all_tools': 'Visi įrankiai',
   'soon': 'Netrukus', 'open': 'Atidaryti',
   'home_title': 'Arbata: mesk kavą, pasilik energiją',
@@ -165,7 +178,7 @@ C = {
  },
  'en': {
   'skip': 'Skip to content',
-  'nav_tools': 'Tools', 'nav_guides': 'Guides', 'nav_kit': 'Starter kit',
+  'nav_tools': 'Tools', 'nav_blog': 'Blog', 'nav_guides': 'Guides', 'nav_kit': 'Starter kit',
   'cta_list': 'Join the list', 'all_tools': 'All tools',
   'soon': 'Coming soon', 'open': 'Open',
   'home_title': 'Arbata: quit coffee, keep the energy',
@@ -261,7 +274,7 @@ C = {
  },
  'it': {
   'skip': 'Vai al contenuto',
-  'nav_tools': 'Strumenti', 'nav_guides': 'Guide', 'nav_kit': 'Starter kit',
+  'nav_tools': 'Strumenti', 'nav_blog': 'Blog', 'nav_guides': 'Guide', 'nav_kit': 'Starter kit',
   'cta_list': 'Iscriviti alla lista', 'all_tools': 'Tutti gli strumenti',
   'soon': 'In arrivo', 'open': 'Apri',
   'home_title': 'Arbata: lascia il caffè, tieni l\'energia',
@@ -386,8 +399,9 @@ def fmt(n, lang):
 # BENDRI BLOKAI
 # --------------------------------------------------------------------------------------
 def head(lang, key, title, desc, noindex=False):
-    alts = ''.join(f'<link rel="alternate" hreflang="{l}" href="{BASE}{PATH[key](l)}">' for l in LANGS)
-    alts += f'<link rel="alternate" hreflang="x-default" href="{BASE}{PATH[key]("en")}">'
+    av = langs_of(key)
+    alts = ''.join(f'<link rel="alternate" hreflang="{l}" href="{BASE}{PATH[key](l)}">' for l in av)
+    alts += f'<link rel="alternate" hreflang="x-default" href="{BASE}{PATH[key]("en" if "en" in av else av[0])}">'
     robots = '<meta name="robots" content="noindex, follow">' if noindex else ''
     return f'''<!doctype html>
 <html lang="{lang}">
@@ -417,7 +431,7 @@ def head(lang, key, title, desc, noindex=False):
 def header(lang, key, slim=False):
     c = C[lang]
     langs = ''.join(
-        f'<a href="{PATH[key](l)}" lang="{l}" hreflang="{l}"{" aria-current=\"true\"" if l == lang else ""}>{l.upper()}</a>'
+        f'<a href="{lang_url(key, l)}" lang="{l}" hreflang="{l}"{" aria-current=\"true\"" if l == lang else ""}>{l.upper()}</a>'
         for l in LANGS)
     logo = (f'<a class="logo" href="/{lang}/"><span class="logo-mark">{LEAF_LOGO}</span>'
             f'<span class="logo-text">arbata</span></a>')
@@ -426,7 +440,9 @@ def header(lang, key, slim=False):
                 f'<a class="hdr-link" href="{PATH["tools"](lang)}">{E(c["all_tools"])}</a>'
                 f'<div class="langs" role="group" aria-label="Language">{langs}</div></div></header>')
     cur = ' aria-current="page"' if key == 'tools' else ''
+    curb = ' aria-current="page"' if key == 'blog' or key.startswith('b_') else ''
     nav = (f'<nav class="nav" aria-label="Main"><a href="{PATH["tools"](lang)}"{cur}>{E(c["nav_tools"])}</a>'
+           f'<a href="{PATH["blog"](lang)}"{curb}>{E(c["nav_blog"])}</a>'
            f'<a href="{PATH["home"](lang)}#pillars">{E(c["nav_guides"])}</a>'
            f'<a href="{PATH["home"](lang)}#shop">{E(c["nav_kit"])}</a></nav>')
     cta = f'<a class="btn btn-forest btn-sm" href="{PATH["home"](lang)}#newsletter">{E(c["cta_list"])}</a>'
@@ -437,6 +453,8 @@ def header(lang, key, slim=False):
 def footer(lang, quiet=False):
     c = C[lang]
     priv = f'<a href="{PATH["privacy"](lang)}">{E(c["privacy"])}</a>'
+    if not quiet:
+        priv = f'<a href="{PATH["blog"](lang)}">{E(c["nav_blog"])}</a> · ' + priv
     if quiet:
         return (f'<footer class="ftr ftr-quiet"><div class="wrap wrap-narrow ftr-in"><span>© 2026 Arbata</span>'
                 f'<span>{priv}</span></div></footer>')
@@ -711,6 +729,8 @@ def main():
     import seo_gen as SG
     for _p, _h in SG.pages(__import__('sys').modules[__name__]):
         write(_p, _h)
+    for _p, _h in _BG.pages(__import__('sys').modules[__name__]):
+        write(_p, _h)
 
     # šaknis: nukreipia pagal naršyklės kalbą
     write('/index.html', f'''<!doctype html>
@@ -725,10 +745,12 @@ def main():
     # sitemap (be įterpiamų puslapių ir privatumo)
     urls = ''
     import seo_gen as SG
-    for key in ('home', 'tools', 'calc') + tuple(TG.ORDER) + tuple(SG.all_keys()):
-        for lang in LANGS:
-            alts = ''.join(f'<xhtml:link rel="alternate" hreflang="{l}" href="{BASE}{PATH[key](l)}"/>' for l in LANGS)
-            urls += f'<url><loc>{BASE}{PATH[key](lang)}</loc>{alts}</url>\n'
+    for key in ('home', 'tools', 'calc') + tuple(TG.ORDER) + tuple(SG.all_keys()) + tuple(_BG.all_keys()):
+        for lang in langs_of(key):
+            alts = ''.join(f'<xhtml:link rel="alternate" hreflang="{l}" href="{BASE}{PATH[key](l)}"/>' for l in langs_of(key))
+            lm = _BG.lastmod(key, lang)
+            lm = f'<lastmod>{lm}</lastmod>' if lm else ''
+            urls += f'<url><loc>{BASE}{PATH[key](lang)}</loc>{lm}{alts}</url>\n'
     write('/sitemap.xml', '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n' + urls + '</urlset>\n')
     write('/robots.txt', f'User-agent: *\nDisallow: /_data/\nSitemap: {BASE}/sitemap.xml\n')
     print('OK', sum(len(f) for _, _, f in os.walk(OUT)), 'failų')

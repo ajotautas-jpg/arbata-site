@@ -1,0 +1,371 @@
+"""Blogas: straipsniai iš content/blog/<id>/<lang>.md (LT/EN/IT) -> /{lang}/blog/{slug}/.
+
+Straipsnio failas: front matter (--- ... ---) + Markdown.
+  slug, title, description, category, date (YYYY-MM-DD), [updated], [related: id, id], [sources: raktai]
+Markdown: ## / ### antraštės, pastraipos, - sąrašai, 1. sąrašai, **paryškinta**, *kursyvas*, [tekstas](nuoroda).
+Vidinės nuorodos: (@calc), (@quiz), (@convert) ... = įrankiai pagal PATH raktą; (@post:id) = kitas straipsnis
+(jei jo nėra šioje kalboje, lieka tik tekstas). Pastraipa iš vienos nuorodos tampa „CTA“ bloku.
+Straipsniai su data ateityje nepublikuojami (build'as juos praleidžia).
+Nauja kalba / straipsnis = tiesiog naujas failas; hreflang poros sudaromos pagal tai, kokios kalbos yra.
+"""
+import datetime
+import email.utils
+import html
+import json
+import math
+import os
+import re
+import unicodedata
+
+import caff
+import seo_gen
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+CONTENT = os.path.join(HERE, 'content', 'blog')
+LANGS = ['lt', 'en', 'it']
+DIR = 'blog'
+
+CATS = {
+    'quit': {'lt': 'Kavos atsisakymas', 'en': 'Quitting coffee', 'it': 'Smettere il caffè'},
+}
+
+UI = {
+    'lt': dict(blog='Blogas', h1='Blogas', title='Blogas: kava, kofeinas ir arbata', desc='Straipsniai apie kavos atsisakymą, kofeiną ir perėjimą prie arbatos: su šaltiniais ir be spaudimo.',
+               lead='Straipsniai apie kavos atsisakymą, kofeiną ir perėjimą prie arbatos.', empty='Straipsniai bus netrukus.', toc='Turinys', related='Skaityk toliau', min='min. skaitymo',
+               updated='Atnaujinta', rss='Blogo RSS'),
+    'en': dict(blog='Blog', h1='Blog', title='Blog: coffee, caffeine and tea', desc='Articles about quitting coffee, caffeine and switching to tea, with sources.',
+               lead='Articles about quitting coffee, caffeine and switching to tea.', empty='Articles are coming soon.', toc='Contents', related='Keep reading', min='min read',
+               updated='Updated', rss='Blog RSS'),
+    'it': dict(blog='Blog', h1='Blog', title='Blog: caffè, caffeina e tè', desc='Articoli su come smettere di bere caffè, sulla caffeina e sul passaggio al tè, con le fonti.',
+               lead='Articoli su come smettere di bere caffè, sulla caffeina e sul passaggio al tè.', empty='Gli articoli arrivano presto.', toc='Indice', related='Continua a leggere', min='min di lettura',
+               updated='Aggiornato', rss='RSS del blog'),
+}
+
+MONTHS = {
+    'lt': ['sausio', 'vasario', 'kovo', 'balandžio', 'gegužės', 'birželio', 'liepos', 'rugpjūčio', 'rugsėjo', 'spalio', 'lapkričio', 'gruodžio'],
+    'en': ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+    'it': ['gennaio', 'febbraio', 'marzo', 'aprile', 'maggio', 'giugno', 'luglio', 'agosto', 'settembre', 'ottobre', 'novembre', 'dicembre'],
+}
+
+# papildomi šaltiniai (caff.SOURCES lieka tik kofeino duomenų bazei)
+EXTRA_SOURCES = {
+    'juliano': ('Juliano & Griffiths, Psychopharmacology 2004;176(1):1–29 (caffeine withdrawal: onset 12–24 h, peak 20–51 h, 2–9 days)',
+                'https://doi.org/10.1007/s00213-004-2000-x'),
+}
+
+POSTS = {}      # id -> {lang: post}
+_FM = re.compile(r'\A---\s*\n(.*?)\n---\s*\n(.*)\Z', re.S)
+
+
+def today():
+    return os.environ.get('BLOG_TODAY') or datetime.date.today().isoformat()
+
+
+def source(key):
+    if key in EXTRA_SOURCES:
+        return EXTRA_SOURCES[key]
+    if key in caff.SOURCES:
+        return caff.SOURCES[key]
+    raise ValueError(f'Nežinomas šaltinio raktas: {key}')
+
+
+def _parse(path):
+    raw = open(path, encoding='utf-8').read()
+    m = _FM.match(raw)
+    if not m:
+        raise ValueError(f'{path}: nerastas front matter')
+    meta = {}
+    for line in m.group(1).split('\n'):
+        if not line.strip() or line.lstrip().startswith('#'):
+            continue
+        k, _, v = line.partition(':')
+        v = v.strip()
+        if len(v) >= 2 and v[0] == v[-1] == '"':
+            v = v[1:-1]
+        meta[k.strip()] = v
+    for req in ('slug', 'title', 'description', 'category', 'date'):
+        if not meta.get(req):
+            raise ValueError(f'{path}: trūksta „{req}“')
+    if meta['category'] not in CATS:
+        raise ValueError(f'{path}: nežinoma kategorija {meta["category"]}')
+    datetime.date.fromisoformat(meta['date'])
+    meta['related'] = [x.strip() for x in meta.get('related', '').split(',') if x.strip()]
+    meta['sources'] = [x.strip() for x in meta.get('sources', '').split(',') if x.strip()]
+    for s in meta['sources']:
+        source(s)
+    meta['body'] = m.group(2).strip() + '\n'
+    return meta
+
+
+def load():
+    POSTS.clear()
+    if not os.path.isdir(CONTENT):
+        return
+    t = today()
+    for pid in sorted(os.listdir(CONTENT)):
+        d = os.path.join(CONTENT, pid)
+        if not os.path.isdir(d):
+            continue
+        for lang in LANGS:
+            p = os.path.join(d, lang + '.md')
+            if not os.path.exists(p):
+                continue
+            meta = _parse(p)
+            if meta['date'] > t:
+                continue
+            meta['id'] = pid
+            POSTS.setdefault(pid, {})[lang] = meta
+    seen = {}
+    for pid, by in POSTS.items():
+        for lang, m in by.items():
+            k = (lang, m['slug'])
+            if k in seen:
+                raise ValueError(f'Pasikartoja slug {k}: {seen[k]} ir {pid}')
+            seen[k] = pid
+
+
+def langs_of_post(pid):
+    return [l for l in LANGS if l in POSTS[pid]]
+
+
+def key_p(pid):
+    return 'b_' + pid
+
+
+def register(B):
+    load()
+    B.PATH['blog'] = lambda l: f'/{l}/{DIR}/'
+    for pid in POSTS:
+        B.PATH[key_p(pid)] = (lambda pid: lambda l: f'/{l}/{DIR}/{POSTS[pid][l]["slug"]}/')(pid)
+        B.LANGS_OF[key_p(pid)] = langs_of_post(pid)
+
+
+def all_keys():
+    return ['blog'] + [key_p(p) for p in sorted(POSTS)]
+
+
+def lastmod(key, lang):
+    if key.startswith('b_') and key[2:] in POSTS and lang in POSTS[key[2:]]:
+        m = POSTS[key[2:]][lang]
+        return m.get('updated') or m['date']
+    if key == 'blog':
+        ds = [(m.get('updated') or m['date']) for by in POSTS.values() for l, m in by.items() if l == lang]
+        return max(ds) if ds else None
+    return None
+
+
+# ---------- Markdown ----------
+def slugify(s):
+    s = unicodedata.normalize('NFKD', s.lower())
+    s = ''.join(c for c in s if not unicodedata.combining(c))
+    return re.sub(r'[^a-z0-9]+', '-', s).strip('-') or 'sec'
+
+
+def _link(B, lang, text, url):
+    if url.startswith('@post:'):
+        pid = url[6:]
+        if pid in POSTS and lang in POSTS[pid]:
+            return f'<a href="{B.PATH[key_p(pid)](lang)}">{text}</a>'
+        if pid not in {p for p in os.listdir(CONTENT)}:
+            raise ValueError(f'Nežinomas straipsnis: {url}')
+        return text
+    if url.startswith('@'):
+        k = url[1:]
+        if k not in B.PATH:
+            raise ValueError(f'Nežinomas puslapio raktas: {url}')
+        return f'<a href="{B.PATH[k](lang)}">{text}</a>'
+    ext = ' target="_blank" rel="noopener"' if url.startswith('http') else ''
+    return f'<a href="{html.escape(url, quote=True)}"{ext}>{text}</a>'
+
+
+def inline(B, lang, s):
+    s = html.escape(s, quote=False)
+    s = re.sub(r'\[([^\]]+)\]\(([^)\s]+)\)', lambda m: _link(B, lang, m.group(1), html.unescape(m.group(2))), s)
+    s = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', s)
+    s = re.sub(r'(?<![\w*])\*(?![\s*])(.+?)(?<![\s*])\*(?![\w*])', r'<em>\1</em>', s)
+    return s
+
+
+def render(B, lang, md):
+    out, heads = [], []
+    para, items, kind = [], [], None
+
+    def flush_p():
+        nonlocal para
+        if para:
+            text = ' '.join(para)
+            if re.fullmatch(r'\[[^\]]+\]\([^)\s]+\)', text):
+                out.append(f'<p class="post-cta">{inline(B, lang, text)}</p>')
+            else:
+                out.append(f'<p>{inline(B, lang, text)}</p>')
+            para = []
+
+    def flush_l():
+        nonlocal items, kind
+        if items:
+            out.append(f'<{kind}>' + ''.join(f'<li>{inline(B, lang, i)}</li>' for i in items) + f'</{kind}>')
+            items, kind = [], None
+
+    for line in md.split('\n'):
+        s = line.rstrip()
+        if not s.strip():
+            flush_p(); flush_l()
+            continue
+        m = re.match(r'(#{2,3})\s+(.*)', s)
+        if m:
+            flush_p(); flush_l()
+            lvl, txt = len(m.group(1)), m.group(2).strip()
+            hid = slugify(re.sub(r'[*_]', '', txt))
+            if lvl == 2:
+                heads.append((hid, re.sub(r'[*_]', '', txt)))
+            out.append(f'<h{lvl} id="{hid}">{inline(B, lang, txt)}</h{lvl}>')
+            continue
+        m = re.match(r'\s*[-*]\s+(.*)', s) or None
+        n = re.match(r'\s*\d+\.\s+(.*)', s)
+        if m or n:
+            flush_p()
+            k = 'ul' if m else 'ol'
+            if kind and kind != k:
+                flush_l()
+            kind = k
+            items.append((m or n).group(1))
+            continue
+        flush_l()
+        para.append(s.strip())
+    flush_p(); flush_l()
+    return '\n'.join(out), heads
+
+
+def read_min(md):
+    return max(1, math.ceil(len(re.findall(r'\w+', md)) / 200))
+
+
+def fmt_date(iso, lang):
+    d = datetime.date.fromisoformat(iso)
+    if lang == 'lt':
+        return f'{d.year} m. {MONTHS["lt"][d.month - 1]} {d.day} d.'
+    return f'{d.day} {MONTHS[lang][d.month - 1]} {d.year}'
+
+
+def _sorted_ids(lang):
+    ids = [p for p in POSTS if lang in POSTS[p]]
+    return sorted(ids, key=lambda p: (POSTS[p][lang]['date'], p), reverse=True)
+
+
+# ---------- puslapiai ----------
+def _ld(B, lang, objs):
+    return ''.join('<script type="application/ld+json">' + json.dumps(o, ensure_ascii=False).replace('</', '<\\/') + '</script>' for o in objs)
+
+
+def _crumb_ld(B, lang, items):
+    return {'@context': 'https://schema.org', '@type': 'BreadcrumbList',
+            'itemListElement': [{'@type': 'ListItem', 'position': i + 1, 'name': n, 'item': u} for i, (n, u) in enumerate(items)]}
+
+
+def _rss_link(B, lang):
+    return f'<link rel="alternate" type="application/rss+xml" title="{B.E(UI[lang]["rss"])}" href="/{lang}/{DIR}/feed.xml">'
+
+
+def _card(B, lang, pid):
+    E = B.E
+    m = POSTS[pid][lang]
+    return (f'<a class="card" href="{B.PATH[key_p(pid)](lang)}"><span class="chip">{E(CATS[m["category"]][lang])}</span>'
+            f'<h2 class="card-title">{E(m["title"])}</h2><p class="card-text">{E(m["description"])}</p>'
+            f'<span class="card-foot"><span class="small">{E(fmt_date(m["date"], lang))}</span>'
+            f'<span class="small">{read_min(m["body"])} {E(UI[lang]["min"])}</span></span></a>')
+
+
+def index_page(B, lang):
+    E = B.E
+    u = UI[lang]
+    t = seo_gen.L[lang]
+    ids = _sorted_ids(lang)
+    cards = ''.join(_card(B, lang, p) for p in ids) or f'<p>{E(u["empty"])}</p>'
+    main = f'''<main id="main" class="wrap wrap-narrow seo">
+<div class="crumbs"><a href="{B.PATH['home'](lang)}">{E(t['home'])}</a> / <span>{E(u['blog'])}</span></div>
+<h1 class="page-title">{E(u['h1'])}</h1><p class="lead">{E(u['lead'])}</p>
+<div class="grid">{cards}</div>
+{seo_gen.tools_links(B, lang)}
+</main>
+{_ld(B, lang, [_crumb_ld(B, lang, [(t['home'], B.BASE + B.PATH['home'](lang)), (u['blog'], B.BASE + B.PATH['blog'](lang))])])}'''
+    out = B.shell(lang, 'blog', u['title'], u['desc'], main)
+    return out.replace('</head>', _rss_link(B, lang) + '</head>', 1)
+
+
+def post_page(B, lang, pid):
+    E = B.E
+    m = POSTS[pid][lang]
+    u = UI[lang]
+    t = seo_gen.L[lang]
+    key = key_p(pid)
+    body, heads = render(B, lang, m['body'])
+    toc = ''
+    if len(heads) >= 3:
+        toc = (f'<nav class="toc" aria-label="{E(u["toc"])}"><strong>{E(u["toc"])}</strong><ol>'
+               + ''.join(f'<li><a href="#{i}">{E(h)}</a></li>' for i, h in heads) + '</ol></nav>')
+    upd = f' · {E(u["updated"])} <time datetime="{m["updated"]}">{E(fmt_date(m["updated"], lang))}</time>' if m.get('updated') else ''
+    rel = [r for r in m['related'] if r in POSTS and lang in POSTS[r]]
+    related = ''
+    if rel:
+        related = f'<section class="seo-sec"><h2>{E(u["related"])}</h2><div class="grid">' + ''.join(_card(B, lang, r) for r in rel) + '</div></section>'
+    srcs = ''
+    if m['sources']:
+        items = ''.join(f'<li><a href="{source(k)[1]}" target="_blank" rel="noopener nofollow">{E(source(k)[0])}</a></li>' for k in m['sources'])
+        srcs = (f'<section class="seo-sec"><h2>{E(t["h_src"])}</h2><ul class="small srclist">{items}</ul>'
+                f'<p class="small">{E(t["src_note"].format(d=m.get("updated") or m["date"]))}</p></section>')
+    url = B.BASE + B.PATH[key](lang)
+    org = {'@type': 'Organization', 'name': 'Arbata', 'url': B.BASE + '/'}
+    ld = [
+        _crumb_ld(B, lang, [(t['home'], B.BASE + B.PATH['home'](lang)), (u['blog'], B.BASE + B.PATH['blog'](lang)), (m['title'], url)]),
+        {'@context': 'https://schema.org', '@type': 'BlogPosting', 'headline': m['title'], 'description': m['description'],
+         'datePublished': m['date'], 'dateModified': m.get('updated') or m['date'], 'inLanguage': lang,
+         'mainEntityOfPage': url, 'url': url, 'author': org, 'publisher': org, 'articleSection': CATS[m['category']][lang]},
+    ]
+    main = f'''<main id="main" class="wrap wrap-narrow seo post">
+<div class="crumbs"><a href="{B.PATH['home'](lang)}">{E(t['home'])}</a> / <a href="{B.PATH['blog'](lang)}">{E(u['blog'])}</a> / <span>{E(m['title'])}</span></div>
+<article class="post-art">
+<header class="post-head">
+<p class="post-meta"><span class="chip">{E(CATS[m['category']][lang])}</span><time datetime="{m['date']}">{E(fmt_date(m['date'], lang))}</time><span>· {read_min(m['body'])} {E(u['min'])}</span>{upd}</p>
+<h1 class="page-title">{E(m['title'])}</h1>
+</header>
+{toc}
+<div class="post-body">
+{body}
+</div>
+</article>
+<p class="answer small">{E(t['g_note'])}</p>
+{related}
+{seo_gen.tools_links(B, lang)}
+{srcs}
+</main>
+{_ld(B, lang, ld)}'''
+    out = B.shell(lang, key, m['title'], m['description'], main)
+    out = out.replace('<meta property="og:type" content="website">',
+                      f'<meta property="og:type" content="article"><meta property="article:published_time" content="{m["date"]}">', 1)
+    return out.replace('</head>', _rss_link(B, lang) + '</head>', 1)
+
+
+def feed(B, lang):
+    E = lambda s: html.escape(s, quote=False)
+    u = UI[lang]
+    items = ''
+    for pid in _sorted_ids(lang):
+        m = POSTS[pid][lang]
+        url = B.BASE + B.PATH[key_p(pid)](lang)
+        dt = datetime.datetime.fromisoformat(m['date']).replace(tzinfo=datetime.timezone.utc)
+        items += (f'<item><title>{E(m["title"])}</title><link>{url}</link><guid isPermaLink="true">{url}</guid>'
+                  f'<pubDate>{email.utils.format_datetime(dt)}</pubDate><description>{E(m["description"])}</description></item>\n')
+    return ('<?xml version="1.0" encoding="UTF-8"?>\n<rss version="2.0"><channel>'
+            f'<title>Arbata: {E(u["blog"])}</title><link>{B.BASE}{B.PATH["blog"](lang)}</link>'
+            f'<description>{E(u["desc"])}</description><language>{lang}</language>\n{items}</channel></rss>\n')
+
+
+def pages(B):
+    out = []
+    for lang in B.LANGS:
+        out.append((B.PATH['blog'](lang) + 'index.html', index_page(B, lang)))
+        out.append((B.PATH['blog'](lang) + 'feed.xml', feed(B, lang)))
+        for pid in sorted(POSTS):
+            if lang in POSTS[pid]:
+                out.append((B.PATH[key_p(pid)](lang) + 'index.html', post_page(B, lang, pid)))
+    return out
