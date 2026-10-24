@@ -452,6 +452,18 @@ def header(lang, key, slim=False):
             f'<div class="langs" role="group" aria-label="Language">{langs}</div>{cta}</div></header>')
 
 
+CONTACT_PHONE = '+37069639386'
+CONTACT_EMAIL = None   # kai bus sukurtas el. paštas @pajusk.lt, įrašyti čia
+
+
+def contact_html():
+    parts = []
+    if CONTACT_EMAIL:
+        parts.append(f'<a href="mailto:{CONTACT_EMAIL}">{CONTACT_EMAIL}</a>')
+    parts.append(f'<a href="tel:{CONTACT_PHONE}">{CONTACT_PHONE[:4]} {CONTACT_PHONE[4:7]} {CONTACT_PHONE[7:]}</a>')
+    return ' · '.join(parts)
+
+
 def footer(lang, quiet=False):
     c = C[lang]
     priv = f'<a href="{PATH["privacy"](lang)}">{E(c["privacy"])}</a>'
@@ -459,9 +471,9 @@ def footer(lang, quiet=False):
         priv = f'<a href="{PATH["blog"](lang)}">{E(c["nav_blog"])}</a> · ' + priv
     if quiet:
         return (f'<footer class="ftr ftr-quiet"><div class="wrap wrap-narrow ftr-in"><span>© 2026 Arbata</span>'
-                f'<span>{priv}</span></div></footer>')
+                f'<span>{contact_html()} · {priv}</span></div></footer>')
     return (f'<footer class="ftr"><div class="wrap ftr-in"><div><span class="logo-text">arbata</span>'
-            f'<small>{E(c["disclaimer"])}</small></div><div>{priv}</div></div>'
+            f'<small>{E(c["disclaimer"])}</small></div><div>{contact_html()}<br>{priv}</div></div>'
             f'<div class="wrap ftr-bottom">© 2026 Arbata</div></footer>')
 
 

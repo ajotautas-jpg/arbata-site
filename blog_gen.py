@@ -173,7 +173,7 @@ def _link(B, lang, text, url):
         k = url[1:]
         if k not in B.PATH:
             raise ValueError(f'Nežinomas puslapio raktas: {url}')
-        return f'<a href="{B.PATH[k](lang)}">{text}</a>'
+        return f'<a href="{B.PATH[k](lang)}" target="_blank" rel="noopener">{text}</a>'
     ext = ' target="_blank" rel="noopener"' if url.startswith('http') else ''
     return f'<a href="{html.escape(url, quote=True)}"{ext}>{text}</a>'
 
