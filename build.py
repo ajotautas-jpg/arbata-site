@@ -527,6 +527,10 @@ def home(lang):
     pillars = ''
     for i, (ic, t, d) in enumerate(c['pillars']):
         dark = ' card-dark' if i == 5 else ''
+        if ic == 'leaf':
+            pillars += (f'<a class="card" href="{PATH["hub_t"](lang)}"><span class="ico">{svg(ic, 26)}</span><span class="card-title">{E(t)}</span>'
+                        f'<span class="card-text">{E(d)}</span><span class="card-foot"><span class="chip">{E(c["open"])}</span></span></a>')
+            continue
         pillars += (f'<div class="card{dark}"><span class="ico">{svg(ic, 26)}</span><span class="card-title">{E(t)}</span>'
                     f'<span class="card-text">{E(d)}</span><span class="card-foot"><span class="chip chip-soon">{E(c["soon"])}</span></span></div>')
     tools_cards = ''
