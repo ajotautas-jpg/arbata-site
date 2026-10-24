@@ -273,10 +273,10 @@ def brand_block(B, lang, i):
     for r in BD.rows():
         if r['type'] in types and BD.official(r) and r['lo'] is not None and r['hi'] is not None and r['avg'] and r['brand'] in BG.indexable():
             rg = BG.cell_cup(r, lang, BG.T[lang])
-            lines += f'<li><a href="{B.PATH[BG.key_b(r["brand"])](lang)}">{E(BD.brand_name(r["brand"]))}</a>: {E(r["product"])}, {E(rg)}</li>'
+            lines += f'<a class="lib-card" href="{B.PATH[BG.key_b(r["brand"])](lang)}"><span class="lib-name">{E(BD.brand_name(r["brand"]))}</span><span class="lib-kind">{E(rg)}</span><span class="lib-taste">{E(r["product"])}</span></a>'
     if not lines:
         return ''
-    return f'<section class="seo-sec"><h2>{E(t["h_brands"])}</h2><p>{E(t["brands_note"])}</p><ul class="pairs">{lines}</ul><p class="small"><a href="{B.PATH["hub_b"](lang)}">{E(t["hub_b"])} →</a></p></section>'
+    return f'<section class="seo-sec"><h2>{E(t["h_brands"])}</h2><p>{E(t["brands_note"])}</p><div class="lib-grid">{lines}</div><p class="small"><a href="{B.PATH["hub_b"](lang)}">{E(t["hub_b"])} →</a></p></section>'
 
 
 def tea_page(B, i, lang):
@@ -343,13 +343,13 @@ def hub_page(B, lang):
         trs += (f'<tr><th scope="row"><a href="{B.PATH[key_t(i)](lang)}">{E(SG.N[i]["nom"][lang])}</a></th><td>{E(X[lang][i]["kind"])}</td>'
                 f'<td>{d["lo"]}–{d["hi"]} mg</td><td>{E(BREW[i][0])}</td></tr>')
     table = f'<div class="chart-card" style="margin-top:0"><table class="cmp"><thead><tr><th>{E(t["th_tea"])}</th><th>{E(t["th_kind"])}</th><th>{E(t["th_cup"])}</th><th>{E(t["th_temp"])}</th></tr></thead><tbody>{trs}</tbody></table></div>'
-    cards = ''.join(f'<li><a href="{B.PATH[key_t(i)](lang)}">{E(SG.N[i]["nom"][lang])}</a>: {E(X[lang][i]["taste"])}</li>' for i in IDS)
+    cards = ''.join(f'<a class="lib-card" href="{B.PATH[key_t(i)](lang)}"><span class="lib-name">{E(SG.N[i]["nom"][lang])}</span><span class="lib-kind">{E(X[lang][i]["kind"])}</span><span class="lib-taste">{E(X[lang][i]["taste"])}</span></a>' for i in IDS)
     srcs = ['ift', 'ka', 'nutr', 'foods', 'mayo', 'efsa', 'wp_puerh', 'wp_mate', 'wp_matcha', 'wp_white']
     main = f'''<main id="main" class="wrap wrap-narrow seo">
 <div class="crumbs"><a href="{B.PATH['home'](lang)}">{E(t['home'])}</a> / <span>{E(t['hub'])}</span></div>
 <h1 class="page-title">{E(t['hub_h1'])}</h1><p class="lead">{E(t['hub_lead'])}</p>
 <section class="seo-sec"><h2>{E(t['h_order'])}</h2><p>{E(t['order_note'])}</p>{table}</section>
-<section class="seo-sec"><ul class="pairs">{cards}</ul></section>
+<section class="seo-sec"><div class="lib-grid">{cards}</div></section>
 <section class="seo-sec"><h2>{E(t['h_theanine'])}</h2><p>{E(t['theanine'])}</p></section>
 <section class="seo-sec"><div class="quiet-links"><a href="{B.PATH['hub_b'](lang)}">{E(t['hub_b'])}</a><a href="{B.PATH['hub_c'](lang)}">{E(t['hub_c'])}</a><a href="{B.PATH['calc'](lang)}">{E(t['calc'])}</a><a href="{B.PATH['quiz'](lang)}">{E(SG.L[lang].get('tools_quiz', 'Quiz'))}</a></div></section>
 {src_block(B, lang, srcs)}
