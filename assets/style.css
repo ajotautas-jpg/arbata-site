@@ -315,3 +315,11 @@ body.is-embed-tool .tool-wrap .lead{display:none}
 .toc ol{padding-left:20px;display:grid;gap:2px}
 .toc a{display:inline-flex;align-items:center;min-height:36px;color:var(--ink)}
 .grid .card>.chip{align-self:flex-start}
+
+/* Arbatų biblioteka: rūšių kortelės */
+.lib-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+.lib-card{display:flex;flex-direction:column;gap:6px;padding:20px;background:#fff;border:1px solid var(--line,#e3e6dc);border-radius:20px;color:var(--ink);text-decoration:none;transition:box-shadow .15s,transform .15s}
+.lib-card:hover,.lib-card:focus-visible{box-shadow:0 6px 20px rgba(30,60,40,.10);transform:translateY(-1px)}
+.lib-name{font-size:19px;font-weight:700;color:var(--forest,#1f4d36)}
+.lib-kind{font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;opacity:.65}
+.lib-taste{font-size:15px;line-height:1.5}
