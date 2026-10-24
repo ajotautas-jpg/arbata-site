@@ -40,6 +40,8 @@ import blog_gen as _BG
 _BG.register(__import__('sys').modules[__name__])
 import brands_gen as _BR
 _BR.register(__import__('sys').modules[__name__])
+import tealib_gen as _TL
+_TL.register(__import__('sys').modules[__name__])
 
 E = lambda s: html.escape(s, quote=True)
 
@@ -607,7 +609,7 @@ def tools_hub(lang):
 <section class="wrap groups">{groups}</section>
 <section class="wrap duo">
 <div class="panel panel-leaf"><span class="ico" style="background:var(--forest);color:var(--ground)">{svg('code', 24)}</span><h2>{E(c['widgets_title'])}</h2><p class="card-text" style="color:var(--muted-2)">{E(c['widgets_text'])}</p><a class="btn btn-forest btn-sm" href="{PATH['calc'](lang)}#share">{E(c['widgets_cta'])}</a></div>
-<div class="panel panel-white"><span class="ico" style="background:var(--sand);color:var(--sand-fg)">{svg('info', 24)}</span><h2>{E(c['data_title'])}</h2><p class="card-text">{E(c['data_text'])}</p><a class="btn btn-outline btn-sm" href="{PATH['hub_d'](lang)}">{E(__import__('seo_gen').L[lang]['hub_d'])}</a> <a class="btn btn-outline btn-sm" href="{PATH['hub_b'](lang)}">{E(__import__('brands_gen').T[lang]['hub'])}</a></div>
+<div class="panel panel-white"><span class="ico" style="background:var(--sand);color:var(--sand-fg)">{svg('info', 24)}</span><h2>{E(c['data_title'])}</h2><p class="card-text">{E(c['data_text'])}</p><a class="btn btn-outline btn-sm" href="{PATH['hub_d'](lang)}">{E(__import__('seo_gen').L[lang]['hub_d'])}</a> <a class="btn btn-outline btn-sm" href="{PATH['hub_b'](lang)}">{E(__import__('brands_gen').T[lang]['hub'])}</a> <a class="btn btn-outline btn-sm" href="{PATH['hub_t'](lang)}">{E(__import__('tealib_gen').T[lang]['hub'])}</a></div>
 </section>
 </main>'''
     return shell(lang, 'tools', c['hub_title'], c['hub_desc'], main)
@@ -748,6 +750,8 @@ def main():
         write(_p, _h)
     for _p, _h in _BR.pages(__import__('sys').modules[__name__]):
         write(_p, _h)
+    for _p, _h in _TL.pages(__import__('sys').modules[__name__]):
+        write(_p, _h)
 
     # šaknis: nukreipia pagal naršyklės kalbą
     write('/index.html', f'''<!doctype html>
@@ -762,7 +766,7 @@ def main():
     # sitemap (be įterpiamų puslapių ir privatumo)
     urls = ''
     import seo_gen as SG
-    for key in ('home', 'tools', 'calc') + tuple(TG.ORDER) + tuple(SG.all_keys()) + tuple(_BG.all_keys()) + tuple(_BR.all_keys()):
+    for key in ('home', 'tools', 'calc') + tuple(TG.ORDER) + tuple(SG.all_keys()) + tuple(_BG.all_keys()) + tuple(_BR.all_keys()) + tuple(_TL.all_keys()):
         for lang in langs_of(key):
             alts = ''.join(f'<xhtml:link rel="alternate" hreflang="{l}" href="{BASE}{PATH[key](l)}"/>' for l in langs_of(key))
             lm = _BG.lastmod(key, lang)
