@@ -739,6 +739,26 @@ def write(path, content):
         f.write(content)
 
 
+def cache_bust():
+    """CSS/JS nuorodoms prideda ?v=<turinio maiša>, kad pakeitimai pasiektų lankytojus nelaukiant talpyklos galiojimo pabaigos."""
+    import hashlib, re
+    hashes = {}
+    def h(name):
+        if name not in hashes:
+            p = os.path.join(OUT, 'assets', name)
+            hashes[name] = hashlib.md5(open(p, 'rb').read()).hexdigest()[:8] if os.path.exists(p) else ''
+        return hashes[name]
+    pat = re.compile(r'(/assets/)([\w.-]+\.(?:css|js))(?=["\'])')
+    for root, _, files in os.walk(OUT):
+        for fn in files:
+            if fn.endswith('.html'):
+                p = os.path.join(root, fn)
+                t = open(p, encoding='utf-8').read()
+                t2 = pat.sub(lambda m: f'{m.group(1)}{m.group(2)}?v={h(m.group(2))}' if h(m.group(2)) else m.group(0), t)
+                if t2 != t:
+                    open(p, 'w', encoding='utf-8').write(t2)
+
+
 def main():
     if os.path.exists(OUT):
         shutil.rmtree(OUT)
@@ -783,6 +803,7 @@ def main():
             urls += f'<url><loc>{BASE}{PATH[key](lang)}</loc>{lm}{alts}</url>\n'
     write('/sitemap.xml', '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n' + urls + '</urlset>\n')
     write('/robots.txt', f'User-agent: *\nDisallow: /_data/\nSitemap: {BASE}/sitemap.xml\n')
+    cache_bust()
     print('OK', sum(len(f) for _, _, f in os.walk(OUT)), 'failų')
 
 
