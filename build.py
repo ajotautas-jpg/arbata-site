@@ -178,6 +178,8 @@ C = {
     ('p', 'Turi teisę susipažinti su duomenimis, juos ištaisyti, ištrinti, apriboti tvarkymą ir pateikti skundą Valstybinei duomenų apsaugos inspekcijai.'),
     ('h2', 'Slapukai ir trečiosios šalys'),
     ('p', 'Svetainė šiuo metu nenaudoja sekimo ar reklamos slapukų. Šriftai įkeliami iš Google Fonts, todėl tavo IP adresas gali būti perduotas Google. Svetainę talpina Hostinger.'),
+    ('h2', 'Lankomumo statistika'),
+    ('p', 'Naudojame savo paprastą statistiką be slapukų ir be naršyklės saugyklos. Užfiksuojame puslapio adresą, kalbą, nukreipiančią svetainę (tik domeną), įrenginio tipą (telefonas, planšetė, kompiuteris) ir paspaudimus ant įrankių ar nuorodų į kitas svetaines. IP adreso neišsaugome: iš jo, naršyklės duomenų ir kasdien keičiamos atsitiktinės reikšmės sudaroma trumpa maiša, kuri galioja tik tą dieną ir neleidžia atpažinti tavęs kitą dieną. Duomenys saugomi ne ilgiau kaip 14 mėnesių ir naudojami tik svetainei gerinti. Jei naršyklėje įjungta „Do Not Track“ ar „Global Privacy Control“, statistikos nesiunčiame. Įrankių (dienoraštis, sekiklis, planas) duomenys lieka tik tavo naršyklėje.'),
   ],
  },
  'en': {
@@ -274,6 +276,8 @@ C = {
     ('p', 'You may access, correct or delete your data, restrict processing and lodge a complaint with your data protection authority.'),
     ('h2', 'Cookies and third parties'),
     ('p', 'The site currently uses no tracking or advertising cookies. Fonts load from Google Fonts, so your IP address may be shared with Google. The site is hosted by Hostinger.'),
+    ('h2', 'Visit statistics'),
+    ('p', 'We use our own simple statistics with no cookies and no browser storage. We record the page address, language, referring site (domain only), device type (phone, tablet, desktop) and clicks on tools or links to other sites. We do not store your IP address: a short hash is made from it, your browser details and a random value that changes every day, so it is valid for that day only and cannot recognise you on another day. Data is kept for no more than 14 months and is used only to improve the site. If your browser sends Do Not Track or Global Privacy Control, we send no statistics. Data in the tools (diary, tracker, plan) stays in your browser only.'),
   ],
  },
  'it': {
@@ -370,6 +374,8 @@ C = {
     ('p', 'Puoi accedere ai dati, rettificarli, cancellarli, limitarne il trattamento e proporre reclamo al Garante per la protezione dei dati personali.'),
     ('h2', 'Cookie e terze parti'),
     ('p', 'Il sito non usa al momento cookie di tracciamento o pubblicitari. I caratteri sono caricati da Google Fonts, quindi il tuo indirizzo IP può essere condiviso con Google. Il sito è ospitato da Hostinger.'),
+    ('h2', 'Statistiche di visita'),
+    ('p', 'Usiamo statistiche semplici e nostre, senza cookie e senza archiviazione nel browser. Registriamo l\'indirizzo della pagina, la lingua, il sito di provenienza (solo dominio), il tipo di dispositivo (telefono, tablet, computer) e i clic sugli strumenti o sui link verso altri siti. Non conserviamo il tuo indirizzo IP: ne ricaviamo un breve hash insieme ai dati del browser e a un valore casuale che cambia ogni giorno, valido solo per quel giorno e che non ti riconosce nei giorni successivi. I dati sono conservati al massimo 14 mesi e usati solo per migliorare il sito. Se il browser invia Do Not Track o Global Privacy Control, non inviamo statistiche. I dati degli strumenti (diario, tracker, piano) restano solo nel tuo browser.'),
   ],
  },
 }
@@ -429,6 +435,7 @@ def head(lang, key, title, desc, noindex=False):
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/style.css">
+<script src="/assets/a.js" defer></script>
 </head>'''
 
 
@@ -802,7 +809,7 @@ def main():
             lm = f'<lastmod>{lm}</lastmod>' if lm else ''
             urls += f'<url><loc>{BASE}{PATH[key](lang)}</loc>{lm}{alts}</url>\n'
     write('/sitemap.xml', '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n' + urls + '</urlset>\n')
-    write('/robots.txt', f'User-agent: *\nDisallow: /_data/\nSitemap: {BASE}/sitemap.xml\n')
+    write('/robots.txt', f'User-agent: *\nDisallow: /_data/\nDisallow: /stats/\nDisallow: /a.php\nSitemap: {BASE}/sitemap.xml\n')
     cache_bust()
     print('OK', sum(len(f) for _, _, f in os.walk(OUT)), 'failų')
 

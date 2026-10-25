@@ -17,6 +17,7 @@
       }).then(function (res) {
         if (res.ok) {
           if (msg) { msg.textContent = form.getAttribute('data-ok'); }
+          if (window.arbataTrack) window.arbataTrack('newsletter');
           form.reset();
         } else if (msg) {
           msg.textContent = form.getAttribute('data-err');
