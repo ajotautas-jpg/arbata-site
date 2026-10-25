@@ -405,7 +405,8 @@ def page_label(B, key, lang):
         import tealib_gen
         if key == 'hub_t':
             return tealib_gen.T[lang]['hub']
-        return seo_gen.N[key[3:]]['nom'][lang]
+        import tealib_gen
+        return tealib_gen.name_of(key[3:], lang)
     if key.startswith('br_'):
         import brands_data
         return brands_data.brand_name(key[3:])

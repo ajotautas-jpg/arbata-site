@@ -18,6 +18,13 @@ SRC = {
     'wp_mate': ('Wikipedia: Yerba mate', 'https://en.wikipedia.org/wiki/Yerba_mate'),
     'wp_matcha': ('Wikipedia: Matcha', 'https://en.wikipedia.org/wiki/Matcha'),
     'wp_white': ('Wikipedia: White tea', 'https://en.wikipedia.org/wiki/White_tea'),
+    'wp_rooibos': ('Wikipedia: Rooibos', 'https://en.wikipedia.org/wiki/Rooibos'),
+    'wp_herbal': ('Wikipedia: Herbal tea', 'https://en.wikipedia.org/wiki/Herbal_tea'),
+    'wp_sencha': ('Wikipedia: Sencha', 'https://en.wikipedia.org/wiki/Sencha'),
+    'wp_yellow': ('Wikipedia: Yellow tea', 'https://en.wikipedia.org/wiki/Yellow_tea'),
+    'wp_earlgrey': ('Wikipedia: Earl Grey tea', 'https://en.wikipedia.org/wiki/Earl_Grey_tea'),
+    'yama_hojicha': ('Yamamotoyama: Does Hojicha have less caffeine?', 'https://ec.yamamotoyama.co.jp/en/blogs/column/reading204'),
+    'ci_herbal': ('Caffeine Informer: Herbal tea caffeine content', 'https://www.caffeineinformer.com/caffeine-content/herbal-tea'),
 }
 
 
@@ -218,7 +225,9 @@ T = {
  ),
 }
 
-BRAND_TYPES = {'black': ('black', 'rtd_black'), 'green': ('green', 'rtd_green'), 'oolong': ('oolong',), 'white': ('white', 'rtd_white')}
+import tealib_extra as XT
+
+BRAND_TYPES = {'herbal': ('herbal',), 'black': ('black', 'rtd_black'), 'green': ('green', 'rtd_green'), 'oolong': ('oolong',), 'white': ('white', 'rtd_white')}
 
 
 def key_t(i): return 'tl_' + i
@@ -228,10 +237,12 @@ def register(B):
     B.PATH['hub_t'] = lambda l: f'/{l}/{DIR[l]}/'
     for i in IDS:
         B.PATH[key_t(i)] = (lambda i: lambda l: f'/{l}/{DIR[l]}/{SG.N[i]["slug"][l]}/')(i)
+    for i in XT.IDS:
+        B.PATH[key_t(i)] = (lambda i: lambda l: f'/{l}/{DIR[l]}/{XT.NAMES[i]["slug"][l]}/')(i)
 
 
 def all_keys():
-    return ['hub_t'] + [key_t(i) for i in IDS]
+    return ['hub_t'] + [key_t(i) for i in IDS + XT.IDS]
 
 
 def D(i):
@@ -271,12 +282,102 @@ def brand_block(B, lang, i):
         return ''
     lines = ''
     for r in BD.rows():
-        if r['type'] in types and BD.official(r) and r['lo'] is not None and r['hi'] is not None and r['avg'] and r['brand'] in BG.indexable():
+        if r['type'] in types and BD.official(r) and r['lo'] is not None and r['hi'] is not None and (r['avg'] or i == 'herbal') and r['brand'] in BG.indexable():
             rg = BG.cell_cup(r, lang, BG.T[lang])
             lines += f'<a class="lib-card" href="{B.PATH[BG.key_b(r["brand"])](lang)}"><span class="lib-name">{E(BD.brand_name(r["brand"]))}</span><span class="lib-kind">{E(rg)}</span><span class="lib-taste">{E(r["product"])}</span></a>'
     if not lines:
         return ''
     return f'<section class="seo-sec"><h2>{E(t["h_brands"])}</h2><p>{E(t["brands_note"])}</p><div class="lib-grid">{lines}</div><p class="small"><a href="{B.PATH["hub_b"](lang)}">{E(t["hub_b"])} →</a></p></section>'
+
+
+def name_of(i, lang):
+    return XT.NAMES[i]['nom'][lang] if i in XT.NAMES else SG.N[i]['nom'][lang]
+
+
+T['lt'].update(
+    x_title='Daugiau rūšių ir užpilų', x_note='Čia rūšys ir užpilai, kurių kofeino negalime pateikti vienu skaičiumi iš savo matavimų: nuo gėrimų be kofeino iki japoniškų žaliųjų ir aromatizuotų arbatų. Kur šaltinis skaičiaus nenurodo, jo nerodome.',
+    xt='{nom}: ar turi kofeino? Plikymas ir skonis', xd='{nom}: {cs} Kaip gaminama, kaip plikyti, šaltiniai.',
+    x_na='pagal pakuotę', x_min='min.', c_zero='0 mg', c_zero_herbal='dauguma 0 mg, bet ne visos', c_range='{lo}–{hi} mg puodelyje (įvertis)', c_per100='apie {v} mg / 100 ml (gamintojo duomenys)',
+    c_none='patikimo skaičiaus nerasta', c_base='kaip pagrindo arbata: {lo}–{hi} mg', h_caf='Kofeinas', plan_cta='Keiti kavą kitu gėrimu? Pabandyk mažinimo planą', conv_cta='Kava → arbata keitiklis',
+    h_flavour='Variantai ir skonis')
+T['en'].update(
+    x_title='More types and infusions', x_note='Types and infusions where we cannot give one number from our own measurements: from caffeine-free drinks to Japanese green teas and flavoured teas. Where a source gives no number, we show none.',
+    xt='{nom}: does it have caffeine? Brewing and taste', xd='{nom}: {cs} How it is made, how to brew it, sources.',
+    x_na='see packaging', x_min='min', c_zero='0 mg', c_zero_herbal='most 0 mg, but not all', c_range='{lo}–{hi} mg per cup (estimate)', c_per100='about {v} mg / 100 ml (producer data)',
+    c_none='no reliable figure found', c_base='as the base tea: {lo}–{hi} mg', h_caf='Caffeine', plan_cta='Replacing coffee with something else? Try the switch plan', conv_cta='Coffee → tea converter',
+    h_flavour='Variants and taste')
+T['it'].update(
+    x_title='Altri tipi e infusi', x_note='Tipi e infusi per cui non possiamo dare un solo numero dalle nostre misure: dalle bevande senza caffeina ai tè verdi giapponesi e ai tè aromatizzati. Dove la fonte non dà un numero, non lo mostriamo.',
+    xt='{nom}: contiene caffeina? Infusione e gusto', xd='{nom}: {cs} Come si fa, come prepararlo, fonti.',
+    x_na='vedi la confezione', x_min='min', c_zero='0 mg', c_zero_herbal='per lo più 0 mg, ma non tutte', c_range='{lo}–{hi} mg per tazza (stima)', c_per100='circa {v} mg / 100 ml (dati del produttore)',
+    c_none='nessun valore affidabile trovato', c_base='come il tè di base: {lo}–{hi} mg', h_caf='Caffeina', plan_cta='Sostituisci il caffè con altro? Prova il piano di passaggio', conv_cta='Convertitore caffè → tè',
+    h_flavour='Varianti e gusto')
+
+
+def caf_cell(i, lang):
+    t = T[lang]
+    c = XT.CAF[i]
+    k = c['kind']
+    if k == 'zero':
+        return t['c_zero_herbal'] if i == 'herbal' else t['c_zero']
+    if k == 'range':
+        return t['c_range'].format(lo=c['lo'], hi=c['hi'])
+    if k == 'per100':
+        return t['c_per100'].format(v=c['v'])
+    if k == 'base':
+        b = D('black')
+        return t['c_base'].format(lo=b['lo'], hi=b['hi'])
+    return t['c_none']
+
+
+def extra_page(B, i, lang):
+    E = B.E
+    t = T[lang]
+    x = dict(XT.X[lang][i])
+    b = D('black')
+    x['caf'] = x['caf'].replace('{lo}', str(b['lo'])).replace('{hi}', str(b['hi']))
+    nom = XT.NAMES[i]['nom'][lang]
+    temp, mins = XT.BREW[i]
+    temp_txt = f'{temp} °C' if temp else t['x_na']
+    time_txt = f'{mins} {t["x_min"]}' if mins else t['x_na']
+    cell = caf_cell(i, lang)
+    ans = x['caf'].split('. ')[0].rstrip('.') + '.'
+    rows = [(t['r_kind'], x['kind']), (t['h_caf'], cell), (t['r_temp'], temp_txt), (t['r_time'], time_txt)]
+    table = '<table class="cmp"><tbody>' + ''.join(f'<tr><th scope="row">{E(a)}</th><td>{E(v)}</td></tr>' for a, v in rows) + '</tbody></table>'
+    faqs = [
+        (t['q1'].format(inn=XT.NAMES[i]['inn'][lang]), ans),
+        (t['q2'].format(gen=XT.NAMES[i]['gen'][lang]), x['brew']),
+        (x['f3q'], x['f3a']),
+    ]
+    key = key_t(i)
+    others = [j for j in IDS + XT.IDS if j != i]
+    ol = ''.join(f'<a href="{B.PATH[key_t(j)](lang)}">{E(name_of(j, lang))}</a>' for j in others)
+    cta = ''
+    if XT.CAF[i]['kind'] == 'zero':
+        cta = (f'<p><a class="btn btn-forest btn-sm" href="{B.PATH["plan"](lang)}">{E(t["plan_cta"])} →</a> '
+               f'<a class="btn btn-outline btn-sm" href="{B.PATH["convert"](lang)}">{E(t["conv_cta"])}</a></p>')
+    srcs = list(XT.SRC[i])
+    rest = x['caf'][len(x['caf'].split('. ')[0]) + 1:].strip()
+    cafsec = ''
+    if rest or cta:
+        cafsec = f'<section class="seo-sec"><h2>{E(t["h_caf"])}</h2>' + (f'<p>{E(rest)}</p>' if rest else '') + cta + '</section>'
+    taste_h = t['h_flavour'] if i == 'earlgrey' else t['h_taste']
+    main = f'''<main id="main" class="wrap wrap-narrow seo">
+<div class="crumbs"><a href="{B.PATH['home'](lang)}">{E(t['home'])}</a> / <a href="{B.PATH['hub_t'](lang)}">{E(t['hub'])}</a> / <span>{E(nom)}</span></div>
+<h1 class="page-title">{E(t['h1'].format(nom=nom))}</h1>
+<div class="answer"><p class="answer-main">{E(ans)}</p></div>
+<section class="seo-sec"><h2>{E(t['h_glance'])}</h2>{table}</section>
+{cafsec}
+<section class="seo-sec"><h2>{E(t['h_made'])}</h2><p>{E(x['made'])}</p></section>
+<section class="seo-sec"><h2>{E(taste_h)}</h2><p>{E(x['taste'])}</p></section>
+<section class="seo-sec"><h2>{E(t['h_brew'])}</h2><p>{E(x['brew'])}</p><p><a class="btn btn-outline btn-sm" href="{B.PATH['timer'](lang)}">{E(t['timer'])} →</a></p></section>
+{brand_block(B, lang, i)}
+{SG.faq_html(B, lang, faqs)}
+<section class="seo-sec"><h2>{E(t['h_more'])}</h2><div class="quiet-links"><a href="{B.PATH['hub_t'](lang)}">{E(t['all_lib'])}</a>{ol}<a href="{B.PATH['calc'](lang)}">{E(t['calc'])}</a><a href="{B.PATH['g_limit'](lang)}">{E(SG.L[lang]['g_h1'])}</a></div></section>
+{src_block(B, lang, srcs)}
+</main>
+{jsonld(B, lang, key, nom, faqs)}'''
+    return B.shell(lang, key, t['xt'].format(nom=nom), t['xd'].format(nom=nom, cs=ans), main)
 
 
 def tea_page(B, i, lang):
@@ -311,8 +412,8 @@ def tea_page(B, i, lang):
         (t['q3'].format(nom_l=nom_l, nom=nom), t['a3'].format(typ=d['typ'], h=half)),
     ]
     key = key_t(i)
-    others = [j for j in IDS if j != i]
-    ol = ''.join(f'<a href="{B.PATH[key_t(j)](lang)}">{E(SG.N[j]["nom"][lang])}</a>' for j in others)
+    others = [j for j in IDS + XT.IDS if j != i]
+    ol = ''.join(f'<a href="{B.PATH[key_t(j)](lang)}">{E(name_of(j, lang))}</a>' for j in others)
     srcs = FIXSRC[i] + bsrc + d['src'] + ['nutr', 'efsa']
     main = f'''<main id="main" class="wrap wrap-narrow seo">
 <div class="crumbs"><a href="{B.PATH['home'](lang)}">{E(t['home'])}</a> / <a href="{B.PATH['hub_t'](lang)}">{E(t['hub'])}</a> / <span>{E(nom)}</span></div>
@@ -344,12 +445,14 @@ def hub_page(B, lang):
                 f'<td>{d["lo"]}–{d["hi"]} mg</td><td>{E(BREW[i][0])}</td></tr>')
     table = f'<div class="chart-card" style="margin-top:0"><table class="cmp"><thead><tr><th>{E(t["th_tea"])}</th><th>{E(t["th_kind"])}</th><th>{E(t["th_cup"])}</th><th>{E(t["th_temp"])}</th></tr></thead><tbody>{trs}</tbody></table></div>'
     cards = ''.join(f'<a class="lib-card" href="{B.PATH[key_t(i)](lang)}"><span class="lib-name">{E(SG.N[i]["nom"][lang])}</span><span class="lib-kind">{E(X[lang][i]["kind"])}</span><span class="lib-taste">{E(X[lang][i]["taste"])}</span></a>' for i in IDS)
-    srcs = ['ift', 'ka', 'nutr', 'foods', 'mayo', 'efsa', 'wp_puerh', 'wp_mate', 'wp_matcha', 'wp_white']
+    xcards = ''.join(f'<a class="lib-card" href="{B.PATH[key_t(i)](lang)}"><span class="lib-name">{E(XT.NAMES[i]["nom"][lang])}</span><span class="lib-kind">{E(XT.X[lang][i]["kind"])}</span><span class="lib-taste">{E(caf_cell(i, lang))}</span></a>' for i in XT.IDS)
+    srcs = ['ift', 'ka', 'nutr', 'foods', 'mayo', 'efsa', 'wp_puerh', 'wp_mate', 'wp_matcha', 'wp_white', 'wp_rooibos', 'wp_herbal', 'wp_sencha', 'wp_yellow', 'wp_earlgrey', 'yama_hojicha', 'ci_herbal']
     main = f'''<main id="main" class="wrap wrap-narrow seo">
 <div class="crumbs"><a href="{B.PATH['home'](lang)}">{E(t['home'])}</a> / <span>{E(t['hub'])}</span></div>
 <h1 class="page-title">{E(t['hub_h1'])}</h1><p class="lead">{E(t['hub_lead'])}</p>
 <section class="seo-sec"><h2>{E(t['h_order'])}</h2><p>{E(t['order_note'])}</p>{table}</section>
 <section class="seo-sec"><div class="lib-grid">{cards}</div></section>
+<section class="seo-sec"><h2>{E(t['x_title'])}</h2><p>{E(t['x_note'])}</p><div class="lib-grid">{xcards}</div></section>
 <section class="seo-sec"><h2>{E(t['h_theanine'])}</h2><p>{E(t['theanine'])}</p></section>
 <section class="seo-sec"><div class="quiet-links"><a href="{B.PATH['hub_b'](lang)}">{E(t['hub_b'])}</a><a href="{B.PATH['hub_c'](lang)}">{E(t['hub_c'])}</a><a href="{B.PATH['calc'](lang)}">{E(t['calc'])}</a><a href="{B.PATH['quiz'](lang)}">{E(SG.L[lang].get('tools_quiz', 'Quiz'))}</a></div></section>
 {src_block(B, lang, srcs)}
@@ -365,4 +468,6 @@ def pages(B):
         out.append((B.PATH['hub_t'](lang) + 'index.html', hub_page(B, lang)))
         for i in IDS:
             out.append((B.PATH[key_t(i)](lang) + 'index.html', tea_page(B, i, lang)))
+        for i in XT.IDS:
+            out.append((B.PATH[key_t(i)](lang) + 'index.html', extra_page(B, i, lang)))
     return out
