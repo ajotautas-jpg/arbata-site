@@ -184,13 +184,22 @@ SHARE.update({'plan': True, 'diary': False, 'quiz': True})
 TXT['plan'] = {
  'lt': dict(title='Kavos keitimo į arbatą planas: dienų planas su kalendoriumi', desc='Įvesk, kiek kavos geri, ir gauk savaičių planą, kaip pereiti prie arbatos. Parsisiųsk į kalendorių arba atsispausdink.', h1='Perėjimo nuo kavos prie arbatos planas', lead='Planas pakeičia kavos puodelius arbata palaipsniui ir stengiasi išlaikyti panašų kofeino kiekį, kad pereiti būtų lengviau.', menu='Mažinimo planas',
             weeks='Trukmė (savaitės)', start='Pradžia', week='Savaitė', coffee='Kava', tea='Arbata', mg='Kofeinas per dieną', ics='Į kalendorių (.ics)', print='Spausdinti / PDF', ev='Kavos keitimas arbata', ev_d='Kava: {c} p. per dieną, arbata: {t} p. per dieną (apie {lo}–{hi} mg kofeino).',
-            plan_note='Arbatos puodelių skaičius ribojamas iki 6 per dieną, todėl bendras kofeino kiekis gali mažėti. Tai bendro pobūdžio pavyzdinis planas, ne gydytojo rekomendacija. Jei esi nėščia, žindai ar vartoji vaistus, pasitark su gydytoju.', cups_short='p.'),
+            plan_note='Arbatos puodelių skaičius ribojamas iki 6 per dieną, todėl bendras kofeino kiekis gali mažėti. Tai bendro pobūdžio pavyzdinis planas, ne gydytojo rekomendacija. Jei esi nėščia, žindai ar vartoji vaistus, pasitark su gydytoju.', goal='Tikslas', g_same='Panašus kofeinas', g_less='Mažiau kofeino', g_free='Be kofeino', free='Be kofeino', limit='400 mg dienos riba (EFSA)', bars='Kofeinas per dieną pagal savaitę', ev_d_f='Kava: {c} p. per dieną, arbata ar žolelių gėrimas be kofeino: {f} p. per dieną (apie {lo}–{hi} mg kofeino).',
+            g_note='Panašus kofeinas: arbatos puodelių tiek, kad kofeino liktų panašiai. Mažiau kofeino: vienas arbatos puodelis už kiekvieną kavos puodelį. Be kofeino: vietoj kavos rooibos ar žolelių arbata (pasitikrink pakuotę).',
+            tips_h='Kas gali padėti', tip_a='Pirmą savaitę pakeisk tik rytinį puodelį', tip_b='Popietės pertraukai', tip_c='Vakarui', tip_d='Jei skauda galvą ar mieguista', tip_e='Daugiau apie planą ir ritualus',
+            over='Kai kuriomis savaitėmis viršutinė riba viršija 400 mg: rinkis „Mažiau kofeino“ ar „Be kofeino“.', cups_short='p.'),
  'en': dict(title='Coffee to tea switching plan with calendar export', desc='Enter how much coffee you drink and get a weekly plan for moving to tea. Download to your calendar or print it.', h1='Coffee-to-tea switching plan', lead='The plan swaps coffee cups for tea step by step and tries to keep caffeine roughly similar, so the move is easier.', menu='Switching plan',
             weeks='Length (weeks)', start='Start date', week='Week', coffee='Coffee', tea='Tea', mg='Caffeine per day', ics='Add to calendar (.ics)', print='Print / PDF', ev='Switching coffee to tea', ev_d='Coffee: {c} cups a day, tea: {t} cups a day (about {lo}–{hi} mg caffeine).',
-            plan_note='Tea is capped at 6 cups a day, so total caffeine may fall. This is a general example plan, not medical advice. If you are pregnant, breastfeeding or take medication, talk to your doctor.', cups_short='cups'),
+            plan_note='Tea is capped at 6 cups a day, so total caffeine may fall. This is a general example plan, not medical advice. If you are pregnant, breastfeeding or take medication, talk to your doctor.', goal='Goal', g_same='Similar caffeine', g_less='Less caffeine', g_free='Caffeine-free', free='Caffeine-free', limit='400 mg daily limit (EFSA)', bars='Caffeine per day by week', ev_d_f='Coffee: {c} cups a day, caffeine-free tea or herbal drink: {f} cups a day (about {lo}–{hi} mg caffeine).',
+            g_note='Similar caffeine: enough tea cups to keep caffeine roughly the same. Less caffeine: one tea cup for each coffee cup removed. Caffeine-free: rooibos or herbal tea instead of coffee (check the pack).',
+            tips_h='What can help', tip_a='In week one swap only the morning cup', tip_b='For the afternoon break', tip_c='For the evening', tip_d='If you get a headache or feel sleepy', tip_e='More about the plan and rituals',
+            over='In some weeks the upper end is above 400 mg: choose “Less caffeine” or “Caffeine-free”.', cups_short='cups'),
  'it': dict(title='Piano per passare dal caffè al tè con calendario', desc='Inserisci quanto caffè bevi e ottieni un piano settimanale per passare al tè. Scarica nel calendario o stampa.', h1='Piano per passare dal caffè al tè', lead='Il piano sostituisce le tazze di caffè con il tè gradualmente, cercando di mantenere una caffeina simile per rendere il passaggio più facile.', menu='Piano di passaggio',
             weeks='Durata (settimane)', start='Data di inizio', week='Settimana', coffee='Caffè', tea='Tè', mg='Caffeina al giorno', ics='Nel calendario (.ics)', print='Stampa / PDF', ev='Dal caffè al tè', ev_d='Caffè: {c} tazze al giorno, tè: {t} tazze al giorno (circa {lo}–{hi} mg di caffeina).',
-            plan_note='Il tè è limitato a 6 tazze al giorno, quindi la caffeina totale può diminuire. È un piano di esempio generale, non un parere medico. In gravidanza, allattamento o se prendi farmaci, parla con il medico.', cups_short='taz.'),
+            plan_note='Il tè è limitato a 6 tazze al giorno, quindi la caffeina totale può diminuire. È un piano di esempio generale, non un parere medico. In gravidanza, allattamento o se prendi farmaci, parla con il medico.', goal='Obiettivo', g_same='Caffeina simile', g_less='Meno caffeina', g_free='Senza caffeina', free='Senza caffeina', limit='Limite giornaliero 400 mg (EFSA)', bars='Caffeina al giorno per settimana', ev_d_f='Caffè: {c} tazze al giorno, tè o tisana senza caffeina: {f} tazze al giorno (circa {lo}–{hi} mg di caffeina).',
+            g_note='Caffeina simile: tante tazze di tè da mantenere la caffeina quasi uguale. Meno caffeina: una tazza di tè per ogni tazza di caffè tolta. Senza caffeina: rooibos o tisana al posto del caffè (controlla la confezione).',
+            tips_h='Cosa può aiutare', tip_a='Nella prima settimana sostituisci solo la tazza del mattino', tip_b='Per la pausa del pomeriggio', tip_c='Per la sera', tip_d='Se hai mal di testa o sonnolenza', tip_e='Altro sul piano e sui rituali',
+            over='In alcune settimane il valore massimo supera 400 mg: scegli “Meno caffeina” o “Senza caffeina”.', cups_short='taz.'),
 }
 
 TXT['diary'] = {
@@ -253,9 +262,16 @@ TXT['quiz'] = {
 }
 
 
-def _i18n_extra(tool, d):
+WD_SLUG = {'lt': 'kavos-abstinencija-kiek-trunka', 'en': 'caffeine-withdrawal-how-long', 'it': 'astinenza-da-caffeina-quanto-dura'}
+
+
+def _i18n_extra(tool, d, lang=None):
     if tool == 'quiz':
         d['sc'] = SC
+    if tool == 'plan' and lang:
+        import rituals_gen as RG
+        u = lambda i: f'/{lang}/{RG.DIR[lang]}/{RG.SLUG[i][lang]}/'
+        d['urls'] = {'a': u('morning'), 'b': u('break'), 'c': u('calm'), 'd': f'/{lang}/blog/{WD_SLUG[lang]}/', 'e': f'/{lang}/{RG.DIR[lang]}/'}
     return d
 
 
@@ -266,5 +282,5 @@ def i18n_json(lang, tool):  # noqa: F811
     d = dict(S[lang])
     d.update(TXT[tool][lang])
     d['temp'] = TEMP_HINT
-    _i18n_extra(tool, d)
+    _i18n_extra(tool, d, lang)
     return json.dumps(d, ensure_ascii=False).replace('</', '<\\/')
