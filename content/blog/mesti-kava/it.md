@@ -71,6 +71,8 @@ Se compaiono mal di testa o stanchezza intensa, puoi rallentare il ritmo della r
 
 Smettere di bere caffè non deve diventare una prova di forza di volontà. L'obiettivo non è dimostrare quanto velocemente puoi vivere senza caffeina, ma costruire una quotidianità in cui non senti più di averne bisogno.
 
+[Crea un piano di riduzione graduale con calendario e stampalo.](@plan)
+
 ## Alternative al caffè: perché scegliere il tè?
 
 Uno dei modi più piacevoli per ridurre il consumo di caffè è scoprire una bevanda che ti piaccia davvero.

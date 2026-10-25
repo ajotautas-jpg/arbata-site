@@ -55,6 +55,8 @@ If you experience headaches or significant fatigue, slow down the process and gi
 
 Quitting coffee doesn't need to become a test of willpower. The goal isn't to prove how quickly you can live without caffeine. It's to build a routine where you no longer feel you need it.
 
+[Build a gradual reduction plan with a calendar and print it.](@plan)
+
 ## Tea Instead of Coffee: The Best Coffee Alternatives
 
 One of the easiest ways to reduce coffee consumption is to find another drink you genuinely enjoy.

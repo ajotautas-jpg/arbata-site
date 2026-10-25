@@ -88,6 +88,10 @@ If you miss having a warm drink as part of your daily routine, naturally caffein
 
 They won't eliminate withdrawal symptoms, but they can help you maintain a familiar ritual without adding more caffeine.
 
+[Track symptoms and caffeine in the caffeine diary.](@diary)
+
+[Cut caffeine gradually: build a plan.](@plan)
+
 ## When Will You Feel Normal Again After Quitting Coffee?
 
 For many people, the most uncomfortable part of caffeine withdrawal lasts only a few days, although those days can certainly feel longer.

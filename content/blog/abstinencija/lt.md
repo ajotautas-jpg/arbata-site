@@ -74,6 +74,10 @@ Jeigu kofeino vartojimas jau nutrauktas, svarbiausia pasirūpinti savijauta, o n
 
 Jeigu norisi išlaikyti įprastą šilto gėrimo ritualą, galima rinktis natūraliai kofeino neturinčią arbatą. Ji nepašalins abstinencijos simptomų, tačiau gali padėti išsaugoti įprastą dienos ritmą.
 
+[Užsirašinėk simptomus ir kofeiną kofeino dienoraštyje.](@diary)
+
+[Mažink kofeiną palaipsniui: sudaryk planą.](@plan)
+
 ## Kada po kavos atsisakymo vėl jausiesi normaliai?
 
 Daugeliui žmonių nemaloniausias laikotarpis trunka vos kelias dienas, nors tuo metu gali atrodyti gerokai ilgiau.

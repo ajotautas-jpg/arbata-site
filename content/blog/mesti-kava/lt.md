@@ -55,6 +55,8 @@ Jeigu atsiranda galvos skausmas ar stiprus nuovargis, mažinimo tempą galima su
 
 Kavos atsisakymas neturi tapti valios išbandymu. Tikslas nėra kuo greičiau įrodyti, kad gali gyventi be kavos, o atrasti kasdienybę, kurioje jos tiesiog nebereikia.
 
+[Susidaryk palaipsnio mažinimo planą su kalendoriumi ir atsispausdink.](@plan)
+
 ## Arbata vietoj kavos: kuo pakeisti įprastą puodelį?
 
 Vienas maloniausių būdų mažinti kavos vartojimą – atrasti kitą gėrimą, kuris galėtų užimti jos vietą.

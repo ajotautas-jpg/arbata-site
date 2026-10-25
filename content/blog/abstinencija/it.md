@@ -88,6 +88,10 @@ Se ti manca il rituale di una bevanda calda durante la giornata, puoi scegliere 
 
 Non elimineranno i sintomi dell'astinenza, ma possono aiutarti a mantenere un'abitudine piacevole senza assumere altra caffeina.
 
+[Annota sintomi e caffeina nel diario della caffeina.](@diary)
+
+[Riduci la caffeina gradualmente: crea un piano.](@plan)
+
 ## Quando tornerai a sentirti normale dopo aver smesso di bere caffè?
 
 Per molte persone, la fase più fastidiosa dell'astinenza da caffeina dura soltanto pochi giorni, anche se in quel momento possono sembrare decisamente più lunghi.
