@@ -317,35 +317,50 @@
     function nextMonday() { var dt = new Date(); var add = (8 - dt.getDay()) % 7 || 7; dt.setDate(dt.getDate() + add); return localISO(dt); }
     function human(iso) { var p = iso.split('-'); try { return new Date(Date.UTC(+p[0], +p[1] - 1, +p[2])).toLocaleDateString(lang, { day: 'numeric', month: 'short', timeZone: 'UTC' }); } catch (e) { return iso; } }
     var qs0 = Q.get('start');
-    var s = { k: pick('k', coffeeIds, 'filter'), c: Math.min(10, Math.max(1, parseInt(Q.get('c'), 10) || 4)), tea: pick('tea', teaIds, 'black'), w: Math.min(6, Math.max(2, parseInt(Q.get('w'), 10) || 4)), start: /^\d{4}-\d{2}-\d{2}$/.test(qs0 || '') ? qs0 : nextMonday() };
+    var s = { k: pick('k', coffeeIds, 'filter'), c: Math.min(10, Math.max(1, parseInt(Q.get('c'), 10) || 4)), tea: pick('tea', teaIds, 'black'), w: Math.min(6, Math.max(2, parseInt(Q.get('w'), 10) || 4)), g: ['same', 'less', 'free'].indexOf(Q.get('g')) >= 0 ? Q.get('g') : 'same', start: /^\d{4}-\d{2}-\d{2}$/.test(qs0 || '') ? qs0 : nextMonday() };
     body.innerHTML =
       '<div class="tool-in">' +
       '<div class="fld"><span class="fld-label">' + esc(T.coffee_kind) + '</span><div class="pills">' + pills('data-k', coffeeIds.map(function (i) { return [i, nm(byId[i])]; }), s.k) + '</div></div>' +
       '<div class="fld"><span class="fld-label">' + esc(T.cups) + '</span>' + stepper('c-dec', 'c-inc', 'c-out') + '</div>' +
       '<div class="fld"><span class="fld-label">' + esc(T.target) + '</span><div class="pills">' + pills('data-tea', TEAS.map(function (d) { return [d.id, nm(d)]; }), s.tea) + '</div></div>' +
       '<div class="fld"><span class="fld-label">' + esc(T.weeks) + '</span><div class="pills">' + pills('data-w', [2, 3, 4, 5, 6].map(function (x) { return [x, x]; }), s.w) + '</div></div>' +
+      '<div class="fld"><span class="fld-label">' + esc(T.goal) + '</span><div class="pills">' + pills('data-g', [['same', T.g_same], ['less', T.g_less], ['free', T.g_free]], s.g) + '</div><p class="small">' + esc(T.g_note) + '</p></div>' +
       '<div class="fld"><label class="fld-label" for="sd">' + esc(T.start) + '</label><input class="sel" type="date" id="sd" value="' + s.start + '"></div></div>' +
       '<div class="tool-out"><div class="fld-row"><button class="btn btn-amber btn-sm" type="button" id="ics">' + esc(T.ics) + '</button><button class="btn btn-outline-light btn-sm" type="button" id="prn">' + esc(T.print) + '</button></div>' +
       '<p class="tool-note" style="color:var(--leaf-2)">' + esc(T.plan_note) + '</p></div>';
-    extra.innerHTML = '<div class="chart-card"><table class="cmp" id="ptbl"></table></div>';
+    extra.innerHTML = '<div class="chart-card"><table class="cmp" id="ptbl"></table></div><div class="chart-card"><h3 class="small" style="margin:0 0 8px">' + esc(T.bars) + '</h3><div id="pbars"></div></div><div class="chart-card" id="ptips"></div>';
     function rows() {
       var cof = byId[s.k], tea = byId[s.tea], out = [];
       for (var w = 0; w <= s.w; w++) {
-        var cc = w === 0 ? s.c : Math.round(s.c * (1 - w / s.w));
-        var tc = w === 0 ? 0 : Math.min(6, Math.round((s.c - cc) * cof.typ / tea.typ));
-        out.push({ w: w, c: cc, t: tc, lo: cc * cof.lo + tc * tea.lo, hi: cc * cof.hi + tc * tea.hi });
+        var cc = w === 0 ? s.c : Math.round(s.c * (1 - w / s.w)), tc = 0, fc = 0;
+        if (w > 0) {
+          if (s.g === 'same') tc = Math.min(6, Math.round((s.c - cc) * cof.typ / tea.typ));
+          else if (s.g === 'less') tc = Math.min(6, s.c - cc);
+          else fc = Math.min(6, s.c - cc);
+        }
+        out.push({ w: w, c: cc, t: tc, f: fc, lo: cc * cof.lo + tc * tea.lo, hi: cc * cof.hi + tc * tea.hi });
       }
       return out;
     }
     function render() {
       $('c-out').textContent = s.c;
-      setPressed('[data-k]', 'data-k', s.k); setPressed('[data-tea]', 'data-tea', s.tea); setPressed('[data-w]', 'data-w', s.w);
-      var h = '<thead><tr><th>' + esc(T.week) + '</th><th>' + esc(T.coffee) + '</th><th>' + esc(T.tea) + '</th><th>' + esc(T.mg) + '</th></tr></thead><tbody>';
+      setPressed('[data-k]', 'data-k', s.k); setPressed('[data-tea]', 'data-tea', s.tea); setPressed('[data-w]', 'data-w', s.w); setPressed('[data-g]', 'data-g', s.g);
+      var fr = s.g === 'free';
+      var h = '<thead><tr><th>' + esc(T.week) + '</th><th>' + esc(T.coffee) + '</th><th>' + esc(fr ? T.free : T.tea) + '</th><th>' + esc(T.mg) + '</th></tr></thead><tbody>';
       rows().forEach(function (r) {
         var label = r.w === 0 ? esc(T.today) : (esc(T.week) + ' ' + r.w + '<br><span class="small">' + esc(human(addDays(s.start, (r.w - 1) * 7))) + '</span>');
-        h += '<tr><th scope="row">' + label + '</th><td>' + r.c + '</td><td>' + r.t + '</td><td>' + r.lo + '–' + r.hi + ' mg</td></tr>';
+        h += '<tr><th scope="row">' + label + '</th><td>' + r.c + '</td><td>' + (fr ? r.f : r.t) + '</td><td>' + r.lo + '–' + r.hi + ' mg</td></tr>';
       });
       $('ptbl').innerHTML = h + '</tbody>';
+      var rs = rows(), mx = 400; rs.forEach(function (r) { if (r.hi > mx) mx = r.hi; });
+      var b = '';
+      rs.forEach(function (r) {
+        b += '<div class="pbar"><span class="pbar-l">' + (r.w === 0 ? esc(T.today) : esc(T.week) + ' ' + r.w) + '</span><span class="pbar-t"><i class="pbar-hi" style="width:' + (r.hi / mx * 100) + '%"></i><i class="pbar-lo" style="width:' + (r.lo / mx * 100) + '%"></i><em class="pbar-lim" style="left:' + (400 / mx * 100) + '%"></em></span><span class="pbar-v">' + r.lo + '–' + r.hi + '</span></div>';
+      });
+      $('pbars').innerHTML = b + '<p class="small">' + esc(T.limit) + '</p>' + (mx > 400 ? '<p class="small" style="color:#C77F12">' + esc(T.over) + '</p>' : '');
+      var U = T.urls || {};
+      function a(k, t) { return U[k] ? '<li><a href="' + U[k] + '" target="_blank" rel="noopener">' + esc(t) + '</a></li>' : ''; }
+      $('ptips').innerHTML = '<h3 class="small" style="margin:0 0 8px">' + esc(T.tips_h) + '</h3><ul class="small">' + a('a', T.tip_a) + a('b', T.tip_b) + a('c', T.tip_c) + a('d', T.tip_d) + a('e', T.tip_e) + '</ul>';
     }
     function ymd(iso) { return iso.replace(/-/g, ''); }
     function icsText(x) { return String(x).replace(/\\/g, '\\\\').replace(/;/g, '\;').replace(/,/g, '\\,').replace(/\n/g, '\\n'); }
@@ -355,7 +370,7 @@
       rows().forEach(function (r) {
         if (r.w === 0) return;
         var a = addDays(s.start, (r.w - 1) * 7), b = addDays(a, 7);
-        var d = T.ev_d.replace('{c}', r.c).replace('{t}', r.t).replace('{lo}', r.lo).replace('{hi}', r.hi);
+        var d = (s.g === 'free' ? T.ev_d_f : T.ev_d).replace('{c}', r.c).replace('{t}', r.t).replace('{f}', r.f).replace('{lo}', r.lo).replace('{hi}', r.hi);
         L.push('BEGIN:VEVENT', 'UID:arbata-' + ymd(s.start) + '-w' + r.w + '-' + Math.floor(Math.random() * 1e6) + '@arbata.pajusk.lt', 'DTSTAMP:' + stamp,
           'DTSTART;VALUE=DATE:' + ymd(a), 'DTEND;VALUE=DATE:' + ymd(b), 'SUMMARY:' + icsText(T.ev + ' · ' + T.week + ' ' + r.w), 'DESCRIPTION:' + icsText(d), 'TRANSP:TRANSPARENT', 'END:VEVENT');
       });
@@ -367,6 +382,7 @@
       if (b.hasAttribute('data-k')) s.k = b.getAttribute('data-k');
       else if (b.hasAttribute('data-tea')) s.tea = b.getAttribute('data-tea');
       else if (b.hasAttribute('data-w')) s.w = +b.getAttribute('data-w');
+      else if (b.hasAttribute('data-g')) s.g = b.getAttribute('data-g');
       else if (b.id === 'c-dec') s.c = Math.max(1, s.c - 1);
       else if (b.id === 'c-inc') s.c = Math.min(10, s.c + 1);
       else if (b.id === 'prn') { window.print(); return; }
@@ -378,7 +394,7 @@
       render(); sync();
     });
     root.addEventListener('change', function (e) { if (e.target.id === 'sd' && /^\d{4}-\d{2}-\d{2}$/.test(e.target.value)) { s.start = e.target.value; render(); sync(); } });
-    params = function () { return '?k=' + s.k + '&c=' + s.c + '&tea=' + s.tea + '&w=' + s.w + '&start=' + s.start; };
+    params = function () { return '?k=' + s.k + '&c=' + s.c + '&tea=' + s.tea + '&w=' + s.w + '&g=' + s.g + '&start=' + s.start; };
     render();
   }
 
