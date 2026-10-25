@@ -373,7 +373,7 @@ def extra_page(B, i, lang):
 <section class="seo-sec"><h2>{E(t['h_brew'])}</h2><p>{E(x['brew'])}</p><p><a class="btn btn-outline btn-sm" href="{B.PATH['timer'](lang)}">{E(t['timer'])} →</a></p></section>
 {brand_block(B, lang, i)}
 {SG.faq_html(B, lang, faqs)}
-<section class="seo-sec"><h2>{E(t['h_more'])}</h2><div class="quiet-links"><a href="{B.PATH['hub_t'](lang)}">{E(t['all_lib'])}</a>{ol}<a href="{B.PATH['calc'](lang)}">{E(t['calc'])}</a><a href="{B.PATH['g_limit'](lang)}">{E(SG.L[lang]['g_h1'])}</a></div></section>
+<section class="seo-sec"><h2>{E(t['h_more'])}</h2><div class="quiet-links"><a href="{B.PATH['hub_t'](lang)}">{E(t['all_lib'])}</a>{ol}<a href="{B.PATH['calc'](lang)}">{E(t['calc'])}</a><a href="{B.PATH['hub_r'](lang)}">{E(__import__('rituals_gen').UI[lang]['hub'])}</a><a href="{B.PATH['g_limit'](lang)}">{E(SG.L[lang]['g_h1'])}</a></div></section>
 {src_block(B, lang, srcs)}
 </main>
 {jsonld(B, lang, key, nom, faqs)}'''
@@ -454,7 +454,7 @@ def hub_page(B, lang):
 <section class="seo-sec"><div class="lib-grid">{cards}</div></section>
 <section class="seo-sec"><h2>{E(t['x_title'])}</h2><p>{E(t['x_note'])}</p><div class="lib-grid">{xcards}</div></section>
 <section class="seo-sec"><h2>{E(t['h_theanine'])}</h2><p>{E(t['theanine'])}</p></section>
-<section class="seo-sec"><div class="quiet-links"><a href="{B.PATH['hub_b'](lang)}">{E(t['hub_b'])}</a><a href="{B.PATH['hub_c'](lang)}">{E(t['hub_c'])}</a><a href="{B.PATH['calc'](lang)}">{E(t['calc'])}</a><a href="{B.PATH['quiz'](lang)}">{E(__import__('tools_gen').TXT['quiz'][lang]['menu'])}</a></div></section>
+<section class="seo-sec"><div class="quiet-links"><a href="{B.PATH['hub_r'](lang)}">{E(__import__('rituals_gen').UI[lang]['hub'])}</a><a href="{B.PATH['hub_b'](lang)}">{E(t['hub_b'])}</a><a href="{B.PATH['hub_c'](lang)}">{E(t['hub_c'])}</a><a href="{B.PATH['calc'](lang)}">{E(t['calc'])}</a><a href="{B.PATH['quiz'](lang)}">{E(__import__('tools_gen').TXT['quiz'][lang]['menu'])}</a></div></section>
 {src_block(B, lang, srcs)}
 </main>
 {jsonld(B, lang, 'hub_t', t['hub'], [])}'''

@@ -42,6 +42,8 @@ import brands_gen as _BR
 _BR.register(__import__('sys').modules[__name__])
 import tealib_gen as _TL
 _TL.register(__import__('sys').modules[__name__])
+import rituals_gen as _RG
+_RG.register(__import__('sys').modules[__name__])
 
 E = lambda s: html.escape(s, quote=True)
 
@@ -82,7 +84,7 @@ LEAF_LOGO = ('<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke
 C = {
  'lt': {
   'skip': 'Pereiti prie turinio',
-  'nav_tools': 'Įrankiai', 'nav_blog': 'Blogas', 'nav_guides': 'Gidai', 'nav_lib': 'Biblioteka', 'nav_brands': 'Markės', 'nav_kit': 'Starter rinkinys',
+  'nav_tools': 'Įrankiai', 'nav_blog': 'Blogas', 'nav_guides': 'Gidai', 'nav_lib': 'Biblioteka', 'nav_rit': 'Ritualai', 'nav_brands': 'Markės', 'nav_kit': 'Starter rinkinys',
   'cta_list': 'Prisijungti prie sąrašo', 'all_tools': 'Visi įrankiai',
   'soon': 'Netrukus', 'open': 'Atidaryti',
   'home_title': 'Arbata: mesk kavą, pasilik energiją',
@@ -184,7 +186,7 @@ C = {
  },
  'en': {
   'skip': 'Skip to content',
-  'nav_tools': 'Tools', 'nav_blog': 'Blog', 'nav_guides': 'Guides', 'nav_lib': 'Library', 'nav_brands': 'Brands', 'nav_kit': 'Starter kit',
+  'nav_tools': 'Tools', 'nav_blog': 'Blog', 'nav_guides': 'Guides', 'nav_lib': 'Library', 'nav_rit': 'Rituals', 'nav_brands': 'Brands', 'nav_kit': 'Starter kit',
   'cta_list': 'Join the list', 'all_tools': 'All tools',
   'soon': 'Coming soon', 'open': 'Open',
   'home_title': 'Arbata: quit coffee, keep the energy',
@@ -282,7 +284,7 @@ C = {
  },
  'it': {
   'skip': 'Vai al contenuto',
-  'nav_tools': 'Strumenti', 'nav_blog': 'Blog', 'nav_guides': 'Guide', 'nav_lib': 'Libreria', 'nav_brands': 'Marche', 'nav_kit': 'Starter kit',
+  'nav_tools': 'Strumenti', 'nav_blog': 'Blog', 'nav_guides': 'Guide', 'nav_lib': 'Libreria', 'nav_rit': 'Rituali', 'nav_brands': 'Marche', 'nav_kit': 'Starter kit',
   'cta_list': 'Iscriviti alla lista', 'all_tools': 'Tutti gli strumenti',
   'soon': 'In arrivo', 'open': 'Apri',
   'home_title': 'Arbata: lascia il caffè, tieni l\'energia',
@@ -457,6 +459,7 @@ def header(lang, key, slim=False):
     nav = (f'<nav class="nav" aria-label="Main"><a href="{PATH["tools"](lang)}"{cur}>{E(c["nav_tools"])}</a>'
            f'<a href="{PATH["blog"](lang)}"{curb}>{E(c["nav_blog"])}</a>'
            f'<a href="{PATH["hub_t"](lang)}"{curt}>{E(c["nav_lib"])}</a>'
+           f'<a href="{PATH["hub_r"](lang)}"{"" if not (key == "hub_r" or key.startswith("r_")) else " aria-current=page"}>{E(c["nav_rit"])}</a>'
            f'<a href="{PATH["hub_b"](lang)}"{curm}>{E(c["nav_brands"])}</a>'
            f'<a href="{PATH["home"](lang)}#pillars">{E(c["nav_guides"])}</a>'
            f'<a href="{PATH["home"](lang)}#shop">{E(c["nav_kit"])}</a></nav>')
@@ -481,7 +484,7 @@ def footer(lang, quiet=False):
     c = C[lang]
     priv = f'<a href="{PATH["privacy"](lang)}">{E(c["privacy"])}</a>'
     if not quiet:
-        priv = ' · '.join(f'<a href="{PATH[k](lang)}">{E(c[n])}</a>' for k, n in (('blog', 'nav_blog'), ('hub_t', 'nav_lib'), ('hub_b', 'nav_brands'), ('tools', 'nav_tools'))) + ' · ' + priv
+        priv = ' · '.join(f'<a href="{PATH[k](lang)}">{E(c[n])}</a>' for k, n in (('blog', 'nav_blog'), ('hub_t', 'nav_lib'), ('hub_r', 'nav_rit'), ('hub_b', 'nav_brands'), ('tools', 'nav_tools'))) + ' · ' + priv
     if quiet:
         return (f'<footer class="ftr ftr-quiet"><div class="wrap wrap-narrow ftr-in"><span>© 2026 Arbata</span>'
                 f'<span>{contact_html()} · {priv}</span></div></footer>')
@@ -538,7 +541,7 @@ def home(lang):
     pillars = ''
     for i, (ic, t, d) in enumerate(c['pillars']):
         dark = ' card-dark' if i == 5 else ''
-        tgt = {'leaf': 'hub_t', 'book': 'blog', 'heart': 'g_limit'}.get(ic)
+        tgt = {'leaf': 'hub_t', 'book': 'blog', 'heart': 'g_limit', 'cup': 'hub_r'}.get(ic)
         if tgt:
             pillars += (f'<a class="card" href="{PATH[tgt](lang)}"><span class="ico">{svg(ic, 26)}</span><span class="card-title">{E(t)}</span>'
                         f'<span class="card-text">{E(d)}</span><span class="card-foot"><span class="chip">{E(c["open"])}</span></span></a>')
@@ -788,6 +791,8 @@ def main():
         write(_p, _h)
     for _p, _h in _TL.pages(__import__('sys').modules[__name__]):
         write(_p, _h)
+    for _p, _h in _RG.pages(__import__('sys').modules[__name__]):
+        write(_p, _h)
 
     # šaknis: nukreipia pagal naršyklės kalbą
     write('/index.html', f'''<!doctype html>
@@ -802,7 +807,7 @@ def main():
     # sitemap (be įterpiamų puslapių ir privatumo)
     urls = ''
     import seo_gen as SG
-    for key in ('home', 'tools', 'calc') + tuple(TG.ORDER) + tuple(SG.all_keys()) + tuple(_BG.all_keys()) + tuple(_BR.all_keys()) + tuple(_TL.all_keys()):
+    for key in ('home', 'tools', 'calc') + tuple(TG.ORDER) + tuple(SG.all_keys()) + tuple(_BG.all_keys()) + tuple(_BR.all_keys()) + tuple(_TL.all_keys()) + tuple(_RG.all_keys()):
         for lang in langs_of(key):
             alts = ''.join(f'<xhtml:link rel="alternate" hreflang="{l}" href="{BASE}{PATH[key](l)}"/>' for l in langs_of(key))
             lm = _BG.lastmod(key, lang)

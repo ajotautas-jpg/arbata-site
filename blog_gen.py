@@ -79,11 +79,12 @@ AUTO = {
     'd_energy': {'lt': r'\benergin\w+\s+gėrim\w+', 'en': r'\benergy drinks?\b', 'it': r'\bbevande energetiche\b|\benergy drink\b'},
     'g_limit': {'lt': r'\bEFSA\b|\bdienos kofeino rib\w+', 'en': r'\bEFSA\b|\bdaily caffeine limit\b', 'it': r'\bEFSA\b|\blimite giornaliero\b'},
     'hub_t': {'lt': r'\barbatų bibliotek\w+', 'en': r'\btea library\b', 'it': r'\blibreria dei tè\b'},
+    'hub_r': {'lt': r'\bkavos ritual\w+|\bryto ritual\w+', 'en': r'\bcoffee rituals?\b|\bmorning ritual\b', 'it': r'\brituali? (?:del caffè|del mattino)\b'},
     'hub_b': {'lt': r'\barbatų markių?\b|\barbatų markėms\b', 'en': r'\btea brands\b', 'it': r'\bmarche di tè\b'},
     'calc': {'lt': r'\bkofeino skaičiuokl\w+', 'en': r'\bcaffeine calculator\b', 'it': r'\bcalcolatore (?:della )?caffeina\b'},
     'tracker': {'lt': r'\bkofeino sekikl\w+', 'en': r'\bcaffeine tracker\b', 'it': r'\bdiario della caffeina\b'},
 }
-GENERIC = {'tools', 'hub_d', 'hub_c', 'hub_b', 'hub_t'}   # puslapiai be konkretaus „about“ atitikmens rodo naujausius straipsnius
+GENERIC = {'tools', 'hub_d', 'hub_c', 'hub_b', 'hub_t', 'hub_r'}   # puslapiai be konkretaus „about“ atitikmens rodo naujausius straipsnius
 
 # papildomi šaltiniai (caff.SOURCES lieka tik kofeino duomenų bazei)
 EXTRA_SOURCES = {
@@ -407,6 +408,9 @@ def page_label(B, key, lang):
             return tealib_gen.T[lang]['hub']
         import tealib_gen
         return tealib_gen.name_of(key[3:], lang)
+    if key == 'hub_r' or key.startswith('r_'):
+        import rituals_gen
+        return rituals_gen.label(B, key, lang)
     if key.startswith('br_'):
         import brands_data
         return brands_data.brand_name(key[3:])
