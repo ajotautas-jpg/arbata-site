@@ -162,9 +162,9 @@ X = {
 T = {
  'lt': dict(
   hub='Arbatų biblioteka', hub_h1='Arbatų biblioteka: rūšys, kofeinas ir plikymas',
-  hub_t='Arbatų biblioteka: juodoji, žalioji, oolong, baltoji, pu-erh, mate, matcha',
+  hub_t='Arbatų biblioteka: juodoji, žalioji, rooibos, sencha, matcha ir kitos',
   hub_desc='Kiekviena arbatos rūšis: kaip gaminama, kiek kofeino, kaip plikyti ir kada gerti. Skaičiai su šaltiniais ir diapazonais.',
-  hub_lead='Arbatos rūšis lemia ne tik skonį: nuo jos priklauso ir kofeino kiekis. Čia surinkome septynias dažniausias, su diapazonais, plikymu ir šaltiniais.',
+  hub_lead='Arbatos rūšis lemia ne tik skonį: nuo jos priklauso ir kofeino kiekis. Čia surinkome septynias dažniausias rūšis su diapazonais, plikymu ir šaltiniais, o toliau dar šešis užpilus ir variantus, tarp jų ir tokius be kofeino.',
   th_tea='Rūšis', th_kind='Gaminimas', th_cup='Kofeino puodelyje', th_temp='Vanduo, °C',
   h_order='Nuo mažiau iki daugiau kofeino', order_note='Rūšys išrikiuotos pagal vidutinį kofeino kiekį puodelyje. Diapazonai persidengia, todėl konkretus puodelis gali būti kitoks.',
   h_theanine='Kofeinas arbatoje ir teaninas', theanine='Arbata turi ir L-teanino. Apžvalga Nutrition Reviews (2008) nurodo, kad arbata, gerta reguliariais intervalais, gali padėti išlaikyti budrumą ir dėmesį, o teaninas kartu su kofeinu gali pagerinti dėmesio perjungimą. Tai bendra informacija, ne medicininė konsultacija.',
@@ -183,9 +183,9 @@ T = {
  ),
  'en': dict(
   hub='Tea library', hub_h1='Tea library: types, caffeine and brewing',
-  hub_t='Tea library: black, green, oolong, white, pu-erh, mate, matcha',
+  hub_t='Tea library: black, green, rooibos, sencha, matcha and more',
   hub_desc='Every tea type: how it is made, how much caffeine, how to brew and when to drink it. Figures with sources and ranges.',
-  hub_lead='The type of tea decides more than flavour: it also shapes the caffeine. Here are the seven most common types, with ranges, brewing and sources.',
+  hub_lead='The type of tea decides more than flavour: it also shapes the caffeine. Here are the seven most common types with ranges, brewing and sources, followed by six more infusions and variants, including caffeine-free ones.',
   th_tea='Type', th_kind='How it is made', th_cup='Caffeine per cup', th_temp='Water, °C',
   h_order='From less to more caffeine', order_note='Types are ordered by average caffeine per cup. Ranges overlap, so a particular cup can differ.',
   h_theanine='Caffeine in tea and theanine', theanine='Tea also contains L-theanine. A review in Nutrition Reviews (2008) says tea taken at regular intervals may help maintain alertness and focused attention, and that theanine together with caffeine may improve attention switching. General information, not medical advice.',
@@ -204,9 +204,9 @@ T = {
  ),
  'it': dict(
   hub='Libreria del tè', hub_h1='Libreria del tè: tipi, caffeina e infusione',
-  hub_t='Libreria del tè: nero, verde, oolong, bianco, pu-erh, mate, matcha',
+  hub_t='Libreria del tè: nero, verde, rooibos, sencha, matcha e altri',
   hub_desc='Ogni tipo di tè: come si fa, quanta caffeina, come prepararlo e quando berlo. Valori con fonti e intervalli.',
-  hub_lead='Il tipo di tè decide più del gusto: influisce anche sulla caffeina. Ecco i sette tipi più comuni, con intervalli, infusione e fonti.',
+  hub_lead='Il tipo di tè decide più del gusto: influisce anche sulla caffeina. Ecco i sette tipi più comuni con intervalli, infusione e fonti, e poi altri sei infusi e varianti, anche senza caffeina.',
   th_tea='Tipo', th_kind='Lavorazione', th_cup='Caffeina per tazza', th_temp='Acqua, °C',
   h_order='Da meno a più caffeina', order_note='I tipi sono in ordine di caffeina media per tazza. Gli intervalli si sovrappongono, quindi una tazza può essere diversa.',
   h_theanine='Caffeina nel tè e teanina', theanine='Il tè contiene anche L-teanina. Una rassegna su Nutrition Reviews (2008) indica che il tè assunto a intervalli regolari può aiutare a mantenere vigilanza e attenzione, e che la teanina insieme alla caffeina può migliorare il cambio di attenzione. Informazioni generali, non parere medico.',
@@ -454,7 +454,7 @@ def hub_page(B, lang):
 <section class="seo-sec"><div class="lib-grid">{cards}</div></section>
 <section class="seo-sec"><h2>{E(t['x_title'])}</h2><p>{E(t['x_note'])}</p><div class="lib-grid">{xcards}</div></section>
 <section class="seo-sec"><h2>{E(t['h_theanine'])}</h2><p>{E(t['theanine'])}</p></section>
-<section class="seo-sec"><div class="quiet-links"><a href="{B.PATH['hub_b'](lang)}">{E(t['hub_b'])}</a><a href="{B.PATH['hub_c'](lang)}">{E(t['hub_c'])}</a><a href="{B.PATH['calc'](lang)}">{E(t['calc'])}</a><a href="{B.PATH['quiz'](lang)}">{E(SG.L[lang].get('tools_quiz', 'Quiz'))}</a></div></section>
+<section class="seo-sec"><div class="quiet-links"><a href="{B.PATH['hub_b'](lang)}">{E(t['hub_b'])}</a><a href="{B.PATH['hub_c'](lang)}">{E(t['hub_c'])}</a><a href="{B.PATH['calc'](lang)}">{E(t['calc'])}</a><a href="{B.PATH['quiz'](lang)}">{E(__import__('tools_gen').TXT['quiz'][lang]['menu'])}</a></div></section>
 {src_block(B, lang, srcs)}
 </main>
 {jsonld(B, lang, 'hub_t', t['hub'], [])}'''
