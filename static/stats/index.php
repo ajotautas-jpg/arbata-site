@@ -14,7 +14,7 @@ function h($s) { return htmlspecialchars((string)$s, ENT_QUOTES, 'UTF-8'); }
 $dir = dirname(__DIR__) . '/_data/analytics';
 
 // atsijungimas
-if (isset($_GET['out'])) { $_SESSION = []; session_destroy(); header('Location: /stats/'); exit; }
+if (isset($_GET['out'])) { $_SESSION = []; session_destroy(); header('Location: /stats/index.php'); exit; }
 
 // prisijungimas (iki 8 bandymų per 15 min. iš vieno IP, IP nesaugomas, tik maiša)
 if (empty($_SESSION['ok'])) {
@@ -27,7 +27,7 @@ if (empty($_SESSION['ok'])) {
         else {
             @file_put_contents($rk, (string)($n + 1), LOCK_EX);
             if (hash_equals(KEY_HASH, hash('sha256', trim((string)($_POST['key'] ?? ''))))) {
-                session_regenerate_id(true); $_SESSION['ok'] = 1; header('Location: /stats/'); exit;
+                session_regenerate_id(true); $_SESSION['ok'] = 1; header('Location: /stats/index.php'); exit;
             }
             $err = 'Wrong key.';
         }
