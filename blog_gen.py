@@ -80,7 +80,7 @@ AUTO = {
     'g_limit': {'lt': r'\bEFSA\b|\bdienos kofeino rib\w+', 'en': r'\bEFSA\b|\bdaily caffeine limit\b', 'it': r'\bEFSA\b|\blimite giornaliero\b'},
     'hub_t': {'lt': r'\barbatų bibliotek\w+', 'en': r'\btea library\b', 'it': r'\blibreria dei tè\b'},
     'hub_r': {'lt': r'\bkavos ritual\w+|\bryto ritual\w+', 'en': r'\bcoffee rituals?\b|\bmorning ritual\b', 'it': r'\brituali? (?:del caffè|del mattino)\b'},
-    'hub_b': {'lt': r'\barbatų markių?\b|\barbatų markėms\b', 'en': r'\btea brands\b', 'it': r'\bmarche di tè\b'},
+    'hub_b': {'lt': r'\barbatų markių?\b|\barbatų markėms\b|\barbatų gamintoj\w+', 'en': r'\btea brands\b', 'it': r'\bmarche di tè\b'},
     'calc': {'lt': r'\bkofeino skaičiuokl\w+', 'en': r'\bcaffeine calculator\b', 'it': r'\bcalcolatore (?:della )?caffeina\b'},
     'tracker': {'lt': r'\bkofeino sekikl\w+', 'en': r'\bcaffeine tracker\b', 'it': r'\bdiario della caffeina\b'},
 }

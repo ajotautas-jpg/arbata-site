@@ -9,11 +9,11 @@ DIR = {'lt': 'markes', 'en': 'brands', 'it': 'marche'}
 
 T = {
  'lt': dict(
-  hub='Arbatų markės', hub_h1='Kofeinas arbatų markėse', hub_t='Kiek kofeino yra arbatų markėse? Lipton, Bigelow, Twinings, Yogi',
-  hub_desc='Kofeino kiekis populiarių arbatų markių maišeliuose: gamintojų duomenys su šaltiniais, diapazonai ir palyginimas su kava.',
+  hub='Arbatų gamintojai', hub_h1='Kofeinas arbatų gamintojų produktuose', hub_t='Kiek kofeino yra gamintojų arbatose? Lipton, Bigelow, Twinings, Yogi',
+  hub_desc='Kofeino kiekis populiarių arbatų gamintojų maišeliuose: gamintojų duomenys su šaltiniais, diapazonai ir palyginimas su kava.',
   hub_lead='Gamintojai konkrečių arbatų kofeino kiekį skelbia retai, todėl šiame skyriuje atskiriame oficialius duomenis nuo orientacinių. Kofeino kiekis keičiasi pagal partiją ir plikymą.',
-  th_brand='Markė', th_mg='Oficialūs duomenys, mg', th_n='Produktai', none='nėra oficialių mg', qual_only='tik kokybinis lygis',
-  h_official='Markės su oficialiais duomenimis', h_other='Markės be oficialių mg (tik orientaciniai duomenys)',
+  th_brand='Gamintojas', th_mg='Oficialūs duomenys, mg', th_n='Produktai', none='nėra oficialių mg', qual_only='tik kokybinis lygis',
+  h_official='Gamintojai su oficialiais duomenimis', h_other='Gamintojai be oficialių mg (tik orientaciniai duomenys)',
   h1='Kiek kofeino yra {b} arbatoje?', t='Kiek kofeino yra {b} arbatoje? {rg}', t_none='Kiek kofeino yra {b} arbatoje?',
   d='{b}: kofeino kiekis arbatoje pagal šaltinius, {rg}. Lentelė su porcija, mg / 100 ml ir šaltinio nuorodomis.', d_none='{b}: kofeino kiekis arbatoje. Oficialių gamintojo duomenų nėra, rodome orientacinius šaltinius.',
   ans_off='Pagal {b} duomenis arbatos porcijoje yra {rg} kofeino (priklauso nuo produkto).', ans_low='Oficialių {b} kofeino duomenų neradome. Neoficialūs šaltiniai nurodo {rg} porcijai; tai tik orientacinis skaičius.',
@@ -24,7 +24,7 @@ T = {
   rel_high='Gamintojo puslapis', rel_medium='Gamintojo etiketė', rel_low='Orientacinis, neoficialus', per_l='mg / litrui', qual_lbl='Kokybinis lygis',
   h_faq='Dažni klausimai', q1='Kiek kofeino yra {b} arbatoje?', q2='Ar {b} arbatoje daugiau kofeino nei kavoje?', a2='Dažniausiai ne: puodelis arbatos paprastai turi mažiau kofeino nei puodelis filtruotos kavos (apie {fil} mg), bet skirtumas priklauso nuo produkto, kiekio ir plikymo laiko.',
   q3='Ar kofeino kiekis visada toks pats?', a3='Ne. Jis priklauso nuo partijos, lapų kiekio ir plikymo laiko, todėl pateikiame diapazonus. Tikslų skaičių gali patvirtinti tik gamintojas.',
-  h_more='Taip pat naudinga', all_brands='Visos markės', note='Duomenys surinkti {d}. Receptūros keičiasi, todėl skaičius patikrink ir ant pakuotės. Bendra informacija, ne medicininė konsultacija.',
+  h_more='Taip pat naudinga', all_brands='Visi gamintojai', note='Duomenys surinkti {d}. Receptūros keičiasi, todėl skaičius patikrink ir ant pakuotės. Bendra informacija, ne medicininė konsultacija.',
   h_src='Šaltiniai', src_note='Šaltiniai nurodyti prie kiekvieno produkto lentelėje.', open_src='šaltinis',
   home='Pagrindinis', h_limit='Dienos riba', upto='iki',
  ),

@@ -84,7 +84,7 @@ LEAF_LOGO = ('<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke
 C = {
  'lt': {
   'skip': 'Pereiti prie turinio',
-  'nav_tools': 'Įrankiai', 'nav_blog': 'Blogas', 'nav_guides': 'Gidai', 'nav_lib': 'Biblioteka', 'nav_rit': 'Ritualai', 'nav_brands': 'Markės', 'nav_kit': 'Starter rinkinys',
+  'nav_tools': 'Įrankiai', 'nav_blog': 'Blogas', 'nav_guides': 'Gidai', 'nav_lib': 'Biblioteka', 'nav_rit': 'Ritualai', 'nav_brands': 'Gamintojai', 'nav_kit': 'Starter rinkinys',
   'cta_list': 'Prisijungti prie sąrašo', 'all_tools': 'Visi įrankiai',
   'soon': 'Netrukus', 'open': 'Atidaryti',
   'home_title': 'Arbata: mesk kavą, pasilik energiją',
@@ -140,7 +140,7 @@ C = {
     ('choose', 'Pasirink', 'Rask arbatą vietoj kavos ir palygink kainas.', [
       ('compare', None, 'Kava → arbata keitiklis', 'Įvesk savo kavą ir gauk lygiavertį arbatos kiekį bei kelis pasiūlymus.', '1 min.'),
       ('spark', None, 'Arbatos parinkimo testas', 'Skonis, kofeino tikslas, valanda, pienas, biudžetas: gauni 3 arbatas ir kodėl.', '6–8 klausimai'),
-      ('tag', None, 'Kainų palyginimas', 'Kaina už puodelį ir už 100 mg kofeino pagal markes ir parduotuves.', '1 min.')]),
+      ('tag', None, 'Kainų palyginimas', 'Kaina už puodelį ir už 100 mg kofeino pagal gamintojus ir parduotuves.', '1 min.')]),
     ('switch', 'Pereik', 'Planas ir palaikymas per pirmąsias savaites.', [
       ('cal', None, 'Mažinimo planas', 'Dienų planas pagal tavo kavos kiekį; eksportuok į kalendorių ar PDF.', '3 min.'),
       ('book', None, 'Atsisakymo dienoraštis', 'Dienų serija, simptomai, pastabos ir trumpi patarimai.', '30 s per dieną')]),
