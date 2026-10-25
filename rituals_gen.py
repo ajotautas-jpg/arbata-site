@@ -5,9 +5,10 @@ import caff
 import seo_gen as SG
 import tealib_gen as TL
 import rituals_more as RM
+import rituals_more2 as RM2
 
 DIR = {'lt': 'ritualai', 'en': 'rituals', 'it': 'rituali'}
-IDS = ['cold', 'matcha', 'rooibos', 'morning', 'break'] + RM.IDS
+IDS = ['cold', 'matcha', 'rooibos', 'morning', 'break'] + RM.IDS + RM2.IDS
 SLUG = {
     'cold': {'lt': 'salto-uzpilo-arbata', 'en': 'cold-brew-tea', 'it': 'te-cold-brew'},
     'matcha': {'lt': 'matcha-latte', 'en': 'matcha-latte', 'it': 'matcha-latte'},
@@ -16,6 +17,7 @@ SLUG = {
     'break': {'lt': 'kavos-pertraukos-pakaitalas', 'en': 'coffee-break-swap', 'it': 'pausa-caffe-alternativa'},
 }
 SLUG.update(RM.SLUG)
+SLUG.update(RM2.SLUG)
 SRC = {
     'takeout': ('The Takeout: Maybe don\'t make sun tea this summer (cold brewing in the fridge vs warm sun tea)', 'https://thetakeout.com/what-is-sun-tea-how-to-make-food-safety-vs-cold-brew-1850570516'),
 }
@@ -72,6 +74,7 @@ UI = {
 def page_data(lang):
     d = _page_data(lang)
     d.update(RM.data(lang))
+    d.update(RM2.data(lang))
     return d
 
 
