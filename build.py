@@ -792,7 +792,7 @@ def main():
     # šaknis: nukreipia pagal naršyklės kalbą
     write('/index.html', f'''<!doctype html>
 <html lang="lt"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Arbata</title><meta name="robots" content="noindex, follow">
+<title>Arbata</title>
 <link rel="canonical" href="{BASE}/lt/">
 <noscript><meta http-equiv="refresh" content="0; url=/lt/"></noscript>
 <script>var l=(navigator.language||'lt').slice(0,2).toLowerCase();location.replace(l==='en'?'/en/':l==='it'?'/it/':'/lt/');</script>
