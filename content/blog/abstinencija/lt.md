@@ -4,7 +4,7 @@ title: Kavos abstinencija: kiek trunka ir kada pagaliau pasijusi geriau?
 description: Kiek trunka kavos abstinencija: simptomai, dienų eiga (pradžia po 12–24 val., pikas po 20–51 val., trukmė 2–9 dienos) ir kaip palengvinti savijautą.
 category: quit
 date: 2026-10-24
-related: mesti-kava
+related: mesti-kava, kava-ar-arbata-ryte
 sources: juliano
 about: diary, plan, tracker, calc, d_filter, d_energy, g_limit
 ---

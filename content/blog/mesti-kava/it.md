@@ -4,7 +4,7 @@ title: "Come smettere di bere caffè? Dire addio alla caffeina senza troppi dram
 description: Come smettere di bere caffè senza mal di testa: riduci la caffeina gradualmente, sostituisci qualche tazzina con il tè e scopri cosa aspettarti nei primi giorni.
 category: quit
 date: 2026-10-24
-related: abstinencija
+related: abstinencija, kava-ar-arbata-ryte
 sources: juliano, mayo
 about: calc, convert, quiz, plan, diary, d_black, d_green, g_limit, hub_b
 ---

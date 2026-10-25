@@ -4,7 +4,7 @@ title: "How to Quit Coffee: Breaking Up With Caffeine Without the Drama"
 description: How to quit coffee without the headache: cut caffeine gradually, swap cups for tea, and know what to expect in the first few days.
 category: quit
 date: 2026-10-24
-related: abstinencija
+related: abstinencija, kava-ar-arbata-ryte
 sources: juliano, mayo
 about: calc, convert, quiz, plan, diary, d_black, d_green, g_limit, hub_b
 ---

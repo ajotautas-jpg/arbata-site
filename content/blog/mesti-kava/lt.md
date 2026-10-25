@@ -4,7 +4,7 @@ title: Kaip mesti kavą? Skyrybos su kofeinu be didelių dramų
 description: Kaip mesti kavą be galvos skausmo: palaipsnis kofeino mažinimas, arbata vietoj kavos ir tai, ko tikėtis pirmąsias dienas.
 category: quit
 date: 2026-10-24
-related: abstinencija
+related: abstinencija, kava-ar-arbata-ryte
 sources: juliano, mayo
 about: calc, convert, quiz, plan, diary, d_black, d_green, g_limit, hub_b
 ---

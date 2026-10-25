@@ -4,7 +4,7 @@ title: "Astinenza da caffeina: quanto dura e quando inizierai a stare meglio?"
 description: Quanto dura l'astinenza da caffeina: sintomi, giorno per giorno (inizio dopo 12–24 ore, picco a 20–51 ore, 2–9 giorni) e come alleviarla.
 category: quit
 date: 2026-10-24
-related: mesti-kava
+related: mesti-kava, kava-ar-arbata-ryte
 sources: juliano
 about: diary, plan, tracker, calc, d_filter, d_energy, g_limit
 ---

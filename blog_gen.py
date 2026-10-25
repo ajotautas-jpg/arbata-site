@@ -30,6 +30,7 @@ DIR = 'blog'
 
 CATS = {
     'quit': {'lt': 'Kavos atsisakymas', 'en': 'Quitting coffee', 'it': 'Smettere il caffè'},
+    'compare': {'lt': 'Kava ir arbata', 'en': 'Coffee and tea', 'it': 'Caffè e tè'},
 }
 
 UI = {
@@ -88,6 +89,8 @@ GENERIC = {'tools', 'hub_d', 'hub_c', 'hub_b', 'hub_t'}   # puslapiai be konkret
 EXTRA_SOURCES = {
     'juliano': ('Juliano & Griffiths, Psychopharmacology 2004;176(1):1–29 (caffeine withdrawal: onset 12–24 h, peak 20–51 h, 2–9 days)',
                 'https://doi.org/10.1007/s00213-004-2000-x'),
+    'nutr': ('Nutrition Reviews 2008;66(2):82–90: Psychological effects of dietary components of tea: caffeine and L-theanine',
+             'https://pubmed.ncbi.nlm.nih.gov/18254874/'),
 }
 
 POSTS = {}      # id -> {lang: post}
@@ -398,6 +401,14 @@ def page_label(B, key, lang):
         return brands_gen.T[lang]['hub']
     if key == 'tools':
         return B.C[lang]['nav_tools']
+    if key == 'hub_t' or key.startswith('tl_'):
+        import tealib_gen
+        if key == 'hub_t':
+            return tealib_gen.T[lang]['hub']
+        return seo_gen.N[key[3:]]['nom'][lang]
+    if key.startswith('br_'):
+        import brands_data
+        return brands_data.brand_name(key[3:])
     raise ValueError(f'Nėra pavadinimo puslapio raktui {key}')
 
 

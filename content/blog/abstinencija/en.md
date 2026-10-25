@@ -4,7 +4,7 @@ title: How Long Does Caffeine Withdrawal Last and When Will You Finally Feel Bet
 description: How long caffeine withdrawal lasts: symptoms, a day-by-day timeline (onset 12–24 hours, peak 20–51 hours, 2–9 days) and ways to ease it.
 category: quit
 date: 2026-10-24
-related: mesti-kava
+related: mesti-kava, kava-ar-arbata-ryte
 sources: juliano
 about: diary, plan, tracker, calc, d_filter, d_energy, g_limit
 ---
