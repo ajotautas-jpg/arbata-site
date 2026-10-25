@@ -7,9 +7,9 @@ from collections import defaultdict
 D = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'dist')
 pages = {}
 for f in glob.glob(D + '/**/index.html', recursive=True):
-    url = '/' + os.path.relpath(os.path.dirname(f), D).replace(os.sep, '/') + '/'
+    rel = os.path.relpath(os.path.dirname(f), D).replace(os.sep, '/')
+    url = '/' if rel == '.' else '/' + rel + '/'
     pages[url] = open(f, encoding='utf-8').read()
-pages['/'] = pages.pop('/', '') if '/' in pages else ''
 
 inb, outb, broken = defaultdict(set), defaultdict(set), []
 for url, s in pages.items():
