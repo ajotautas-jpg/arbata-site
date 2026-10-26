@@ -9,9 +9,9 @@ sources: drake2013, gardiner2023, gardiner2025, chang2025, clark2017
 about: lastcup, body, timer, convert, calc, tl_green, tl_white, g_limit
 ---
 
-Išgeri kavos po pietų ir vakare normaliai užmiegi. Arba atvirkščiai: puodelis penktą valandą, o naktį vartaisi iki vidurnakčio. Kodėl žmonės taip skiriasi ir ką apie tai sako kontroliuojami tyrimai?
+Išgeri kavos po pietų ir vakare normaliai užmiegi. Arba atvirkščiai: puodelis penktą valandą, o naktį vartaisi iki vidurnakčio. Kodėl žmonės taip skiriasi ir ką apie tai rodo eksperimentai, kuriuose kofeinas lyginamas su placebo?
 
-**Trumpai.** Kontroliuojamuose tyrimuose kofeinas, išgertas prieš miegą, vidutiniškai pailgino užmigimą ir sutrumpino miegą. 2023 m. metaanalizėje (24 tyrimai) bendras miegas sutrumpėjo apie 45 min., o 2025 m. metaanalizėje (22 tyrimai, 956 dalyviai) – apie 35 min. Poveikis priklausė nuo dozės ir laiko iki miego, o žmonės jį jaučia nevienodai.
+**Trumpai.** Eksperimentuose, kuriuose kofeinas buvo lyginamas su placebo, kofeinas, išgertas prieš miegą, vidutiniškai pailgino užmigimą ir sutrumpino miegą. 2023 m. metaanalizėje (24 tyrimai) bendras miegas sutrumpėjo apie 45 min., o 2025 m. metaanalizėje (22 tyrimai, 956 dalyviai) – apie 35 min. Poveikis priklausė nuo dozės ir laiko iki miego, o žmonės jį jaučia nevienodai.
 
 ## Kaip tai tiriama
 
