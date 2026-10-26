@@ -31,6 +31,7 @@ DIR = 'blog'
 CATS = {
     'quit': {'lt': 'Kavos atsisakymas', 'en': 'Quitting coffee', 'it': 'Smettere il caffè'},
     'compare': {'lt': 'Kava ir arbata', 'en': 'Coffee and tea', 'it': 'Caffè e tè'},
+    'health': {'lt': 'Sveikata ir miegas', 'en': 'Health and sleep', 'it': 'Salute e sonno'},
 }
 
 UI = {
@@ -92,6 +93,16 @@ EXTRA_SOURCES = {
                 'https://doi.org/10.1007/s00213-004-2000-x'),
     'nutr': ('Nutrition Reviews 2008;66(2):82–90: Psychological effects of dietary components of tea: caffeine and L-theanine',
              'https://pubmed.ncbi.nlm.nih.gov/18254874/'),
+    'drake2013': ('Drake C, Roehrs T, Shambroom J, Roth T. Caffeine effects on sleep taken 0, 3, or 6 hours before going to bed. J Clin Sleep Med 2013;9(11):1195–1200',
+                  'https://doi.org/10.5664/jcsm.3170'),
+    'gardiner2023': ('Gardiner C, et al. The effect of caffeine on subsequent sleep: a systematic review and meta-analysis. Sleep Med Rev 2023;69:101764 (abstract)',
+                     'https://doi.org/10.1016/j.smrv.2023.101764'),
+    'gardiner2025': ('Gardiner CL, et al. Dose and timing effects of caffeine on subsequent sleep: a randomized clinical crossover trial. Sleep 2025;48(4):zsae230',
+                     'https://doi.org/10.1093/sleep/zsae230'),
+    'chang2025': ('Chang YH, Cheng YC, Cheng WJ. Age- and dose-specific effects of caffeine on sleep: a meta-analysis of controlled crossover trials. Sleep Med 2025;136:106874 (abstract)',
+                  'https://doi.org/10.1016/j.sleep.2025.106874'),
+    'clark2017': ('Clark I, Landolt HP. Coffee, caffeine, and sleep: a systematic review of epidemiological studies and randomized controlled trials. Sleep Med Rev 2017;31:70–78 (abstract)',
+                  'https://doi.org/10.1016/j.smrv.2016.01.006'),
 }
 
 POSTS = {}      # id -> {lang: post}
