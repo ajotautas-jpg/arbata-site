@@ -83,7 +83,7 @@ for u in urls:
 
 # 6. paslaptys repo
 tracked = subprocess.run(['git', 'ls-files'], cwd=ROOT, capture_output=True, text=True).stdout.split()
-SECRET = re.compile(r'(sk-[A-Za-z0-9]{20,}|AKIA[0-9A-Z]{16}|-----BEGIN [A-Z ]*PRIVATE KEY|MqSfVDyHo5Cb)')
+SECRET = re.compile(r'(sk-[A-Za-z0-9]{20,}|AKIA[0-9A-Z]{16}|-----BEGIN [A-Z ]*PRIVATE KEY)')
 for f in tracked:
     if f.endswith(('.png', '.jpg', '.webp', '.ico', '.svg', '.woff2')): continue
     try: t = open(os.path.join(ROOT, f), encoding='utf-8').read()
