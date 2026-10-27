@@ -11,7 +11,8 @@ session_name('arbata_stats');
 session_start();
 
 function h($s) { return htmlspecialchars((string)$s, ENT_QUOTES, 'UTF-8'); }
-$dir = dirname(__DIR__) . '/_data/analytics';
+require_once dirname(__DIR__) . '/dataroot.php';
+$dir = arbata_data_root() . '/analytics';
 
 // atsijungimas
 if (isset($_GET['out'])) { $_SESSION = []; session_destroy(); header('Location: /stats/index.php'); exit; }
@@ -167,5 +168,5 @@ table('Tools used', $tools, 12, 'Counted once per page load, on the first click 
 table('Pages with newsletter sign-ups', $newsl, 10);
 table('Outbound clicks', $outs, 10, 'Clicks to other sites, by host.');
 ?></div>
-<p class="n" style="margin-top:18px">No cookies, no IP addresses stored. A visitor is a one-day hash that cannot be linked across days. Raw data: <code>_data/analytics/*.jsonl</code> (blocked from the web, kept 14 months).</p>
+<p class="n" style="margin-top:18px">No cookies, no IP addresses stored. A visitor is a one-day hash that cannot be linked across days. Raw data: <code>analytics/*.jsonl</code> (blocked from the web, kept 14 months).</p>
 </main></body></html>
