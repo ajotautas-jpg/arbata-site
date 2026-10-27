@@ -90,6 +90,15 @@ for f in tracked:
     except Exception: continue
     if SECRET.search(t): err(f'galima paslaptis faile {f}')
 
+# 6b. sheet.conf.php (adresas + žetonas) niekada negali būti repo
+for f in tracked:
+    if os.path.basename(f).startswith('sheet.conf'): err(f'konfigūracijos failas repo: {f}')
+if os.path.exists(os.path.join(ROOT, 'dist', 'sheet.conf.php')): err('dist/sheet.conf.php')
+for f in tracked:
+    if f.endswith('.php'):
+        t = open(os.path.join(ROOT, f), encoding='utf-8').read()
+        if re.search(r'script\.google\.com/macros/s/[A-Za-z0-9_-]{20,}', t): err(f'Apps Script adresas faile {f}')
+
 # 7. nuorodų auditas
 r = subprocess.run([sys.executable, os.path.join(ROOT, 'linkaudit.py')], capture_output=True, text=True)
 head = r.stdout.split('\n')[:2]

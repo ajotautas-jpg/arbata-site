@@ -1,3 +1,4 @@
 dist/
 *.zip
 __pycache__/
+sheet.conf*.php
