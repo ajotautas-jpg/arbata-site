@@ -1,6 +1,6 @@
 <?php
 // Privatumą tausojanti lankomumo statistika: be slapukų, be IP išsaugojimo, be trečiųjų šalių.
-// Gauna {p: kelias, r: nukreipėjas, e: įvykis, x: papildoma reikšmė, d: įrenginys (m/t/d)} ir prideda eilutę į _data/analytics/YYYY-MM.jsonl.
+// Gauna {p: kelias, r: nukreipėjas, e: įvykis, x: papildoma reikšmė, d: įrenginys (m/t/d)} ir prideda eilutę į <duomenų šaknis>/analytics/YYYY-MM.jsonl (žr. dataroot.php).
 header('Cache-Control: no-store');
 header('X-Content-Type-Options: nosniff');
 function done($code = 204) { http_response_code($code); exit; }
@@ -38,7 +38,8 @@ if (!empty($j['r'])) {
     if ($rh !== '' && $rh !== $host && preg_match('/^[a-z0-9.-]{3,60}$/', $rh)) { $r = $rh; }
 }
 
-$dir = __DIR__ . '/_data/analytics';
+require_once __DIR__ . '/dataroot.php';
+$dir = arbata_data_root() . '/analytics';
 if (!is_dir($dir)) { @mkdir($dir, 0750, true); }
 if (!is_file($dir . '/.htaccess')) { @file_put_contents($dir . '/.htaccess', "Require all denied\nOrder allow,deny\nDeny from all\n"); }
 

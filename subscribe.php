@@ -24,7 +24,8 @@ $consent = !empty($_POST['consent']);
 if (!$consent || strlen($email) > 254 || !filter_var($email, FILTER_VALIDATE_EMAIL)) { out(false, 422); }
 
 // paprasta apsauga nuo per dažno siuntimo iš to paties IP (iki 10 per valandą)
-$dir = __DIR__ . '/_data';
+require_once __DIR__ . '/dataroot.php';
+$dir = arbata_data_root();
 if (!is_dir($dir)) { @mkdir($dir, 0750, true); }
 $ipKey = hash('sha256', ($_SERVER['REMOTE_ADDR'] ?? '') . date('YmdH'));
 $rateFile = $dir . '/rate-' . substr($ipKey, 0, 16) . '.cnt';
