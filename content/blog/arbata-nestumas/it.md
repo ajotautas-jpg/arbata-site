@@ -4,7 +4,7 @@ title: "Tè in gravidanza: come scegliere quello giusto?"
 description: Che tè si può bere in gravidanza: limite di caffeina (fino a 200 mg al giorno), tè nero, verde, matcha, deteinato e tisane.
 category: health
 date: 2026-10-27
-related: kofeinas-miegas, kava-ar-arbata-ryte, mesti-kava
+related: kava-ar-arbata-ryte, mesti-kava
 sources: acog2010, nhs, efsa
 about: calc, convert, tl_black, tl_green, tl_matcha, tl_herbal, tl_rooibos, g_limit
 ---

@@ -4,7 +4,7 @@ title: "Tea During Pregnancy: A Guide to Your Daily Cup"
 description: Which tea is okay during pregnancy: the caffeine limit (up to 200 mg a day), black, green, matcha, decaf and herbal teas.
 category: health
 date: 2026-10-27
-related: kofeinas-miegas, kava-ar-arbata-ryte, mesti-kava
+related: kava-ar-arbata-ryte, mesti-kava
 sources: acog2010, nhs, efsa
 about: calc, convert, tl_black, tl_green, tl_matcha, tl_herbal, tl_rooibos, g_limit
 ---
