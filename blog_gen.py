@@ -101,6 +101,10 @@ EXTRA_SOURCES = {
                      'https://doi.org/10.1093/sleep/zsae230'),
     'chang2025': ('Chang YH, Cheng YC, Cheng WJ. Age- and dose-specific effects of caffeine on sleep: a meta-analysis of controlled crossover trials. Sleep Med 2025;136:106874 (abstract)',
                   'https://doi.org/10.1016/j.sleep.2025.106874'),
+    'acog2010': ('ACOG Committee Opinion No. 462: Moderate caffeine consumption during pregnancy. Obstet Gynecol 2010;116(2):467–468 (kofeinas < 200 mg/d.)',
+                 'https://pubmed.ncbi.nlm.nih.gov/20664420/'),
+    'nhs': ('NHS: Foods to avoid in pregnancy – caffeine (ne daugiau kaip 200 mg per dieną)',
+            'https://www.nhs.uk/pregnancy/keeping-well/foods-to-avoid/'),
     'clark2017': ('Clark I, Landolt HP. Coffee, caffeine, and sleep: a systematic review of epidemiological studies and randomized controlled trials. Sleep Med Rev 2017;31:70–78 (abstract)',
                   'https://doi.org/10.1016/j.smrv.2016.01.006'),
 }
