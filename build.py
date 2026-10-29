@@ -136,7 +136,8 @@ C = {
     ('know', 'Sužinok', 'Kiek kofeino gauni ir kuo skiriasi gėrimai.', [
       ('calc', 'calc', 'Kofeino skaičiuoklė', 'Arbata, gramai, vanduo, temperatūra ir laikas: gauni mg kofeino.', '1 min.'),
       ('compare', None, 'Lyginimo įrankis', 'Pasirink bet kuriuos du gėrimus ir gauk lentelę bei grafiką.', '1 min.'),
-      ('chart', None, 'Kofeinas organizme', 'Įvesk dienos gėrimus ir pamatyk apytikslį kofeino kiekį laike.', '2 min.')]),
+      ('chart', None, 'Kofeinas organizme', 'Įvesk dienos gėrimus ir pamatyk apytikslį kofeino kiekį laike.', '2 min.'),
+      ('chart', None, 'Kaip jausiesi po N-to puodelio', 'Pasirink gėrimą ir puodelius: kofeino kiekis, dienos riba ir ką sako šaltiniai.', '1 min.')]),
     ('choose', 'Pasirink', 'Rask arbatą vietoj kavos ir palygink kainas.', [
       ('compare', None, 'Kava → arbata keitiklis', 'Įvesk savo kavą ir gauk lygiavertį arbatos kiekį bei kelis pasiūlymus.', '1 min.'),
       ('spark', None, 'Arbatos parinkimo testas', 'Skonis, kofeino tikslas, valanda, pienas, biudžetas: gauni 3 arbatas ir kodėl.', '6–8 klausimai'),
@@ -237,7 +238,8 @@ C = {
     ('know', 'Know', 'How much caffeine you get and how drinks differ.', [
       ('calc', 'calc', 'Caffeine calculator', 'Tea, grams, water, temperature and time: get mg of caffeine.', '1 min'),
       ('compare', None, 'Comparison tool', 'Pick any two drinks and get a table and a chart.', '1 min'),
-      ('chart', None, 'Caffeine in the body', 'Enter your day\'s drinks and see approximate caffeine levels over time.', '2 min')]),
+      ('chart', None, 'Caffeine in the body', 'Enter your day\'s drinks and see approximate caffeine levels over time.', '2 min'),
+      ('chart', None, 'How you may feel after the Nth cup', 'Pick a drink and cups: caffeine amount, daily limit and what the sources say.', '1 min')]),
     ('choose', 'Choose', 'Find a tea instead of coffee and compare prices.', [
       ('compare', None, 'Coffee → tea converter', 'Enter your coffee and get an equivalent tea amount plus a few suggestions.', '1 min'),
       ('spark', None, 'Tea finder quiz', 'Flavour, caffeine goal, time of day, milk, budget: get 3 teas and why.', '6–8 questions'),
@@ -335,7 +337,8 @@ C = {
     ('know', 'Scopri', 'Quanta caffeina assumi e come differiscono le bevande.', [
       ('calc', 'calc', 'Calcolatore di caffeina', 'Tè, grammi, acqua, temperatura e tempo: ottieni i mg di caffeina.', '1 min'),
       ('compare', None, 'Strumento di confronto', 'Scegli due bevande qualsiasi e ottieni tabella e grafico.', '1 min'),
-      ('chart', None, 'Caffeina nel corpo', 'Inserisci le bevande del giorno e vedi la caffeina approssimativa nel tempo.', '2 min')]),
+      ('chart', None, 'Caffeina nel corpo', 'Inserisci le bevande del giorno e vedi la caffeina approssimativa nel tempo.', '2 min'),
+      ('chart', None, 'Come ti senti dopo la N-esima tazza', 'Scegli bevanda e tazze: caffeina, limite giornaliero e cosa dicono le fonti.', '1 min')]),
     ('choose', 'Scegli', 'Trova un tè al posto del caffè e confronta i prezzi.', [
       ('compare', None, 'Convertitore caffè → tè', 'Inserisci il tuo caffè e ottieni la quantità di tè equivalente e alcuni consigli.', '1 min'),
       ('spark', None, 'Quiz: quale tè scegliere', 'Gusto, obiettivo di caffeina, orario, latte, budget: ottieni 3 tè e perché.', '6–8 domande'),
@@ -382,7 +385,7 @@ C = {
  },
 }
 
-LIVE = {('switch', 0): 'plan', ('switch', 1): 'diary', ('choose', 1): 'quiz', ('know', 1): 'compare', ('know', 2): 'body', ('choose', 0): 'convert', ('daily', 0): 'tracker', ('daily', 1): 'lastcup', ('daily', 2): 'timer'}
+LIVE = {('switch', 0): 'plan', ('switch', 1): 'diary', ('choose', 1): 'quiz', ('know', 1): 'compare', ('know', 2): 'body', ('know', 3): 'cups', ('choose', 0): 'convert', ('daily', 0): 'tracker', ('daily', 1): 'lastcup', ('daily', 2): 'timer'}
 for _l in LANGS:
     _g = C[_l]['groups']
     for _gi, (_gid, _t, _s, _tools) in enumerate(_g):
@@ -670,7 +673,7 @@ def calc_page(lang):
         for i, (tid, l, h, w, names) in enumerate(TEAS))
     times = ''.join(f'<button type="button" data-time="{m}" aria-pressed="{"true" if m == 4 else "false"}">{m} {E(c["min"])}</button>' for m in (2, 3, 4, 5))
     a, b = round(lo / 250 * 100 * 10) / 10, round(hi / 250 * 100 * 10) / 10
-    related = ''.join(f'<a href="{PATH[k](lang)}">{E(TG.TXT[k][lang]["menu"])}</a>' for k in ('convert', 'lastcup', 'timer'))
+    related = ''.join(f'<a href="{PATH[k](lang)}">{E(TG.TXT[k][lang]["menu"])}</a>' for k in ('convert', 'lastcup', 'timer', 'cups'))
     embed_src = BASE + PATH['embed'](lang)
     main = f'''<main id="main" class="wrap wrap-narrow tool-wrap">
 <div><h1>{E(c['calc_h1'])}</h1><p class="lead" style="margin-top:10px">{E(c['calc_lead'])}</p></div>

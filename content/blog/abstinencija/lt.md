@@ -6,7 +6,7 @@ category: quit
 date: 2026-10-24
 related: mesti-kava, kava-ar-arbata-ryte
 sources: juliano
-about: diary, plan, tracker, calc, d_filter, d_energy, g_limit, tl_rooibos, tl_herbal
+about: diary, plan, tracker, calc, d_filter, d_energy, g_limit, tl_rooibos, tl_herbal, cups
 ---
 
 Vakar – paskutinis kavos puodelis. Šiandien skauda galvą, sunku susikaupti, o net paprasčiausi darbai reikalauja neįprastai daug pastangų. Atrodo, lyg naktį beveik nebūtų pavykę išsimiegoti, nors miegui skyrei visas aštuonias valandas.
@@ -87,5 +87,7 @@ Svarbiausia suprasti, kad pirmųjų dienų nuovargis ar galvos skausmas nebūtin
 Kai abstinencijos simptomai praeina, tampa lengviau įvertinti, kaip iš tiesų jautiesi be įprastos kavos dozės.
 
 O jeigu kavos atsisakymas dar tik planuojamas ir norisi sumažinti nemalonių simptomų tikimybę, verta pradėti nuo palaipsnio kofeino mažinimo.
+
+Jei nori pamatyti, ką šaltiniai sako apie konkretų kiekį, išbandyk įrankį [„Kaip jausiesi po N-to puodelio“](@cups).
 
 [Susijęs straipsnis: „Kaip mesti kavą? Skyrybos su kofeinu be didelių dramų“](@post:mesti-kava)

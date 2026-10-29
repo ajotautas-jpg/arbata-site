@@ -6,7 +6,7 @@ category: health
 date: 2026-10-26
 related: mesti-kava, abstinencija, kava-ar-arbata-ryte
 sources: drake2013, gardiner2023, gardiner2025, chang2025, clark2017
-about: lastcup, body, timer, convert, calc, tl_green, tl_white, g_limit, tl_rooibos, tl_herbal
+about: lastcup, body, timer, convert, calc, tl_green, tl_white, g_limit, tl_rooibos, tl_herbal, cups
 ---
 
 Bevi un caffè dopo pranzo e dormi benissimo. Oppure il contrario: una tazzina alle cinque e fino a mezzanotte ti giri nel letto. Perché le persone reagiscono in modo così diverso e cosa dicono gli studi controllati?
@@ -45,5 +45,7 @@ Gli studi non dicono «niente caffeina dopo le 14». Mostrano che l'effetto dipe
 [Calcola quando bere l'ultima tazza](@lastcup)
 
 Altri strumenti: il [timer della caffeina nel corpo](@timer), la [pagina sugli effetti sul corpo](@body) e il [convertitore tra bevande](@convert). Se decidi di ridurre, leggi come [smettere di bere caffè](@post:mesti-kava) e l'[astinenza](@post:abstinencija).
+
+Per vedere cosa dicono le fonti su una quantità precisa, prova lo strumento [«Come ti senti dopo la N-esima tazza»](@cups).
 
 Informazioni generali, non un consiglio medico. Se i problemi di sonno persistono, rivolgiti a un medico.

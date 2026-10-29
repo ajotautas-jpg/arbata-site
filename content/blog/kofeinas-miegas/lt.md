@@ -6,7 +6,7 @@ category: health
 date: 2026-10-26
 related: mesti-kava, abstinencija, kava-ar-arbata-ryte
 sources: drake2013, gardiner2023, gardiner2025, chang2025, clark2017
-about: lastcup, body, timer, convert, calc, tl_green, tl_white, g_limit, tl_rooibos, tl_herbal
+about: lastcup, body, timer, convert, calc, tl_green, tl_white, g_limit, tl_rooibos, tl_herbal, cups
 ---
 
 Išgeri kavos po pietų ir vakare normaliai užmiegi. Arba atvirkščiai: puodelis penktą valandą, o naktį vartaisi iki vidurnakčio. Kodėl žmonės taip skiriasi ir ką apie tai sako kontroliuojami tyrimai?
@@ -45,5 +45,7 @@ Tyrimai nesako „po 14:00 negerk“. Jie rodo, kad poveikis priklauso nuo dozė
 [Apskaičiuok, kada išgerti paskutinį puodelį](@lastcup)
 
 Daugiau pagalbos: [kofeino kiekio organizme laikmatis](@timer), [kūno poveikio puslapis](@body) ir [perskaičiavimas tarp gėrimų](@convert). Jei nusprendei kofeino atsisakyti, skaityk apie [kavos metimą](@post:mesti-kava) ir [abstinenciją](@post:abstinencija).
+
+Jei nori pamatyti, ką šaltiniai sako apie konkretų kiekį, išbandyk įrankį [„Kaip jausiesi po N-to puodelio“](@cups).
 
 Bendra informacija, ne medicininis patarimas. Jei miego problemos užsitęsia, kreipkis į gydytoją.

@@ -150,6 +150,8 @@ def page(B, tool, lang, embed):
 <div id="embed-panel" hidden><span class="small">{E(s['embed_note'])}</span><label class="sr-only" for="embed-code">iframe</label><textarea class="code code-dark" id="embed-code" rows="3" readonly></textarea></div>
 </section>'''
         others = [o for o in ORDER if o != tool][:3]
+        if tool in ('convert', 'lastcup', 'tracker', 'body', 'compare', 'plan'):
+            others = ['cups'] + [o for o in ORDER if o not in (tool, 'cups')][:2]
         links = ''.join(f'<a href="{B.PATH[o](lang)}">{E(TXT[o][lang]["menu"])}</a>' for o in others)
         related = f'<div class="quiet"><span class="fld-label">{E(s["related"])}</span><div class="quiet-links">{links}</div></div>'
     else:
@@ -168,6 +170,7 @@ def page(B, tool, lang, embed):
 <div id="tool-extra"></div>
 </div>
 <p class="tool-note" style="color:var(--muted)">{E(s['note'])} {src}</p>
+{cups_extra(B, lang) if (tool == 'cups' and not embed) else ''}
 {share}
 {related}
 {foot}
@@ -296,3 +299,126 @@ def i18n_json(lang, tool):  # noqa: F811
     d['temp'] = TEMP_HINT
     _i18n_extra(tool, d, lang)
     return json.dumps(d, ensure_ascii=False).replace('</', '<\\/')
+
+
+# ---------- Trečia partija: „Kaip jausiesi po N-to puodelio“ (raktas `cups`) ----------
+SLUG['cups'] = {'lt': 'kelintas-puodelis', 'en': 'nth-cup', 'it': 'quante-tazze'}
+ICON['cups'] = 'chart'
+ORDER.append('cups')
+SHARE['cups'] = True
+
+CUPS_SRC = {
+    'efsa': ('EFSA 2015', 'https://doi.org/10.2903/j.efsa.2015.4102', 'EFSA NDA Panel. Scientific Opinion on the safety of caffeine. EFSA Journal 2015;13(5):4102 (200 mg vienu kartu, 400 mg per dieną, 200 mg nėštumo metu; santrauka: EUFIC)'),
+    'mayo': ('Mayo Clinic', 'https://www.mayoclinic.org/healthy-lifestyle/nutrition-and-healthy-eating/in-depth/caffeine/art-20045678', 'Mayo Clinic Staff. Caffeine: How much is too much? (2025)'),
+    'fda': ('FDA', 'https://www.fda.gov/consumers/consumer-updates/spilling-beans-how-much-caffeine-too-much', 'FDA. Spilling the Beans: How Much Caffeine Is Too Much?'),
+    'drake': ('Drake 2013', 'https://doi.org/10.5664/jcsm.3170', 'Drake C, et al. Caffeine effects on sleep taken 0, 3, or 6 hours before going to bed. J Clin Sleep Med 2013;9(11):1195–1200'),
+    'gardiner23': ('Gardiner 2023', 'https://doi.org/10.1016/j.smrv.2023.101764', 'Gardiner C, et al. The effect of caffeine on subsequent sleep: a systematic review and meta-analysis. Sleep Med Rev 2023;69:101764 (abstract)'),
+    'gardiner25': ('Gardiner 2025', 'https://doi.org/10.1093/sleep/zsae230', 'Gardiner CL, et al. Dose and timing effects of caffeine on subsequent sleep. Sleep 2025;48(4):zsae230'),
+    'chang': ('Chang 2025', 'https://doi.org/10.1016/j.sleep.2025.106874', 'Chang YH, et al. Age- and dose-specific effects of caffeine on sleep: a meta-analysis. Sleep Med 2025;136:106874 (abstract)'),
+    'clark': ('Clark & Landolt 2017', 'https://doi.org/10.1016/j.smrv.2016.01.006', 'Clark I, Landolt HP. Coffee, caffeine, and sleep. Sleep Med Rev 2017;31:70–78 (abstract)'),
+    'mccusker': ('McCusker 2006', 'https://pubmed.ncbi.nlm.nih.gov/17132260/', 'McCusker RR, et al. Caffeine content of decaffeinated coffee. J Anal Toxicol 2006;30(8):611–613'),
+}
+
+TXT['cups'] = {
+ 'lt': dict(title='Kaip jausiesi po N-to puodelio: kofeino kiekis ir ką rodo šaltiniai', desc='Pasirink gėrimą ir puodelių skaičių: gausi kofeino kiekį mg, dalį dienos ribos, šaltiniais paremtą poveikio aprašymą ir pakaitalus su mažiau kofeino.', h1='Kaip jausiesi po N-to puodelio', lead='Pasirink gėrimą ir puodelių skaičių. Pamatysi kofeino kiekį, dalį dienos ribos ir ką apie tokius kiekius sako EFSA, Mayo Clinic bei FDA.', menu='Kaip jausiesi po N-to puodelio',
+  cups_l='Puodelių skaičius', preg_chk='Esu nėščia (riba 200 mg per dieną)', wt_chk='Skaičiuoti tiksliau pagal svorį', wt_l='Svoris (kg)', sleep_chk='Rodyti pastabą apie miegą', last_l='Paskutinio puodelio laikas', bed_l='Einu miegoti',
+  out_total='Kofeino iš viso', typ_pre='Tipinis kiekis', limit_l='Dienos riba', preg_short='nėštumas', mgkg='Kofeino kiekis kūno svoriui', mgkg_note='EFSA: 200 mg suaugusiam atitinka apie 3 mg/kg.',
+  b0='Šiame gėrime kofeino nėra, todėl kofeino poveikio nesitikima.',
+  b1='Iki 200 mg vienu kartu EFSA suaugusiems nelaiko keliančia rūpesčių. Vėlai dienos metu ir jautresniems žmonėms toks kiekis gali paveikti miegą.',
+  b2='Kai kuriems žmonėms tokiu kiekiu gali pasireikšti nerimastingumas, greitas širdies plakimas, skrandžio sutrikimas ar nemiga. Iki 400 mg per dieną EFSA, FDA ir Mayo Clinic suaugusiems nelaiko keliančia rūpesčių.',
+  b2_once='Jei visa tai išgeriama vienu kartu, tai viršija EFSA 200 mg vienkartinės dozės reikšmę.',
+  hi_over='Viršutinis įvertis ({x} mg) jau viršija 400 mg.',
+  b3='Tai viršija 400 mg dienos ribą suaugusiems (EFSA, FDA, Mayo Clinic). Tie patys poveikiai gali būti stipresni: nerimastingumas, greitas ar nereguliarus širdies plakimas, drebulys, skrandžio sutrikimas, nemiga. Jei simptomai stiprūs, kreipkis į gydytoją.',
+  b4='FDA nurodo, kad toksinis poveikis (pavyzdžiui, traukuliai) galimas greitai suvartojus apie 1 200 mg kofeino.',
+  preg_over='Nėštumo metu EFSA nurodo ne daugiau kaip 200 mg per dieną, todėl šis kiekis ją viršija. Pasitark su gydytoju.',
+  preg_ok='Nėštumo metu EFSA nurodo ne daugiau kaip 200 mg per dieną; dėl savo atvejo pasitark su gydytoju.',
+  decaf_note='Kava be kofeino vis tiek gali turėti keletą mg kofeino (FDA: apie 2–15 mg 237 ml puodelyje).',
+  sleep_h='Miegas.', sleep_gap='Nuo paskutinio puodelio iki miego praeina apie {h} val.', sleep_rem='Pagal modelį (pusėjimo trukmė 3–7 val.) iki miego organizme gali likti apie {a}–{b} mg, jei visas kiekis išgertas paskutinio puodelio metu. Tai modelis, ne matavimas.',
+  sleep_res='Tyrimuose apie 400 mg kofeino, išgerti net likus 6 val. iki miego, sutrumpino miegą daugiau nei valanda; metaanalizėse vidutinis sutrumpėjimas buvo apie 35–45 min. O 100 mg vienoje tyrimo grupėje miego reikšmingai nepakeitė. Žmonės poveikį jaučia nevienodai.',
+  l_lastcup='Apskaičiuok paskutinį puodelį', l_body='Kofeinas organizme',
+  swap_h='Tas pats ritualas su mažiau kofeino', l_convert='Kava → arbata keitiklis',
+  safety='Jei jauti spaudimą krūtinėje, labai greitą ar netvarkingą širdies plakimą, alpsti ar jautiesi labai blogai, kreipkis medicininės pagalbos. Bendra informacija, ne medicininis patarimas.',
+  indiv='Žmonės reaguoja skirtingai: svarbu svoris, vaistai, ligos, genetika ir tai, ar kofeino geri kasdien. Nėščios, žindančios, sergančios širdies ligomis ar nerimo sutrikimais ir vartojančios vaistus turėtų pasitarti su gydytoju.',
+  h_what='Kas nutinka išgėrus kelis puodelius kavos?', p_what='Atsakymas priklauso nuo kiekio, laiko ir paties žmogaus. Pagal mūsų duomenis puodelis (237 ml) filtruotos kavos turi apie 80–107 mg kofeino, todėl 4 puodeliai – apie 320–430 mg, t. y. ties 400 mg riba, kurią EFSA, FDA ir Mayo Clinic laiko nekeliančia rūpesčių daugumai suaugusiųjų. Nėštumo metu riba yra 200 mg per dieną.',
+  h_faq='Dažni klausimai', h_src='Šaltiniai',
+  faq=[('Kiek puodelių kavos viršija dienos ribą?', 'Pagal mūsų duomenis (filtruota kava, 237 ml, 80–107 mg): 3 puodeliai – apie 240–320 mg, 4 puodeliai – apie 320–430 mg, 5 puodeliai – apie 400–540 mg. Todėl 5 ir daugiau puodelių viršija 400 mg ribą, o 4 gali ją pasiekti. Tikslus kiekis priklauso nuo kavos ir plikymo būdo.'),
+       ('Ar kava po pietų gali sutrikdyti miegą?', 'Kontroliuojamuose tyrimuose didesnės kofeino dozės (apie 400 mg), išgertos net likus 6 val. iki miego, sutrumpino miegą. Mažesnė, 100 mg, dozė vienoje tyrimo grupėje miego reikšmingai nepakeitė. Poveikis priklauso nuo dozės, laiko ir žmogaus; vieni jį jaučia, kiti ne.'),
+       ('Ar tai medicininė rekomendacija?', 'Ne. Tai bendra informacija iš EFSA, Mayo Clinic ir FDA. Jei kofeinas kelia nerimą, širdies plakimo ar miego problemų, arba esi nėščia, žindai ar vartoji vaistus, pasitark su gydytoju.')]),
+ 'en': dict(title='How you may feel after the Nth cup: caffeine amount and what the sources say', desc='Pick a drink and a number of cups: get the caffeine in mg, the share of the daily limit, a sourced description of what such amounts may do, and lower-caffeine swaps.', h1='How you may feel after the Nth cup', lead='Pick a drink and a number of cups. See the caffeine amount, the share of the daily limit and what EFSA, Mayo Clinic and the FDA say about such amounts.', menu='How you may feel after the Nth cup',
+  cups_l='Number of cups', preg_chk='I am pregnant (limit 200 mg a day)', wt_chk='Use my weight for a closer estimate', wt_l='Weight (kg)', sleep_chk='Show a sleep note', last_l='Time of the last cup', bed_l='Bedtime',
+  out_total='Total caffeine', typ_pre='Typical amount', limit_l='Daily limit', preg_short='pregnancy', mgkg='Caffeine per body weight', mgkg_note='EFSA: 200 mg for an adult corresponds to about 3 mg/kg.',
+  b0='This drink has no caffeine, so caffeine effects are not expected.',
+  b1='Up to 200 mg in one go is not considered a safety concern for adults by EFSA. Later in the day, and in more sensitive people, this amount may affect sleep.',
+  b2='In some people this amount may cause restlessness, a fast heartbeat, an upset stomach or trouble sleeping. Up to 400 mg a day is not considered a safety concern for adults by EFSA, the FDA and Mayo Clinic.',
+  b2_once='If it is all taken at once, it is above the EFSA single-dose value of 200 mg.',
+  hi_over='The upper estimate ({x} mg) is already above 400 mg.',
+  b3='This is above the 400 mg daily limit for adults (EFSA, FDA, Mayo Clinic). The same effects may be stronger: restlessness, a fast or irregular heartbeat, tremor, an upset stomach, trouble sleeping. If symptoms are strong, see a doctor.',
+  b4='The FDA says toxic effects (for example seizures) are possible when about 1,200 mg of caffeine is consumed quickly.',
+  preg_over='During pregnancy EFSA advises no more than 200 mg a day, so this is above it. Talk to your doctor.',
+  preg_ok='During pregnancy EFSA advises no more than 200 mg a day; talk to your doctor about your own case.',
+  decaf_note='Decaf coffee can still contain a few mg of caffeine (FDA: about 2–15 mg in a 237 ml cup).',
+  sleep_h='Sleep.', sleep_gap='About {h} h pass between your last cup and bedtime.', sleep_rem='By the model (half-life 3–7 h), about {a}–{b} mg may be left at bedtime if all the caffeine was taken at the time of the last cup. A model, not a measurement.',
+  sleep_res='In studies, about 400 mg of caffeine taken even 6 hours before bed shortened sleep by more than an hour; in meta-analyses the average reduction was about 35–45 minutes. 100 mg did not significantly change sleep in one study group. People feel the effect differently.',
+  l_lastcup='Work out your last cup', l_body='Caffeine in the body',
+  swap_h='The same ritual with less caffeine', l_convert='Coffee → tea converter',
+  safety='If you feel chest pressure, a very fast or irregular heartbeat, faint, or feel very unwell, seek medical help. General information, not medical advice.',
+  indiv='People respond differently: weight, medication, health conditions, genetics and whether you drink caffeine daily all matter. If you are pregnant, breastfeeding, have a heart condition or an anxiety disorder, or take medication, talk to a doctor.',
+  h_what='What happens after several cups of coffee?', p_what='It depends on the amount, the timing and the person. By our data a 237 ml cup of filter coffee has about 80–107 mg of caffeine, so 4 cups is about 320–430 mg, right around the 400 mg level that EFSA, the FDA and Mayo Clinic consider not a safety concern for most adults. During pregnancy the limit is 200 mg a day.',
+  h_faq='Frequently asked questions', h_src='Sources',
+  faq=[('How many cups of coffee go over the daily limit?', 'By our data (filter coffee, 237 ml, 80–107 mg): 3 cups are about 240–320 mg, 4 cups about 320–430 mg and 5 cups about 400–540 mg. So 5 or more cups go over 400 mg and 4 can reach it. The exact amount depends on the coffee and how it is brewed.'),
+       ('Can coffee after lunch affect sleep?', 'In controlled studies, larger caffeine doses (about 400 mg) taken even 6 hours before bed shortened sleep. A 100 mg dose did not significantly change sleep in one study group. The effect depends on dose, timing and the person; some feel it, others do not.'),
+       ('Is this medical advice?', 'No. It is general information from EFSA, Mayo Clinic and the FDA. If caffeine causes anxiety, a racing heart or sleep problems, or you are pregnant, breastfeeding or on medication, talk to a doctor.')]),
+ 'it': dict(title='Come ti senti dopo la N-esima tazza: quantità di caffeina e cosa dicono le fonti', desc='Scegli una bevanda e il numero di tazze: ottieni la caffeina in mg, la quota del limite giornaliero, una descrizione con fonti degli effetti possibili e alternative con meno caffeina.', h1='Come ti senti dopo la N-esima tazza', lead='Scegli una bevanda e il numero di tazze. Vedi la quantità di caffeina, la quota del limite giornaliero e cosa dicono EFSA, Mayo Clinic e FDA su queste quantità.', menu='Come ti senti dopo la N-esima tazza',
+  cups_l='Numero di tazze', preg_chk='Sono in gravidanza (limite 200 mg al giorno)', wt_chk='Usa il mio peso per una stima più precisa', wt_l='Peso (kg)', sleep_chk='Mostra una nota sul sonno', last_l='Ora dell\'ultima tazza', bed_l='Vado a dormire',
+  out_total='Caffeina totale', typ_pre='Quantità tipica', limit_l='Limite giornaliero', preg_short='gravidanza', mgkg='Caffeina per peso corporeo', mgkg_note='EFSA: 200 mg per un adulto corrispondono a circa 3 mg/kg.',
+  b0='Questa bevanda non contiene caffeina, quindi non si attendono effetti della caffeina.',
+  b1='Fino a 200 mg in una volta l\'EFSA non li considera un problema di sicurezza per gli adulti. Più tardi nella giornata, e nelle persone più sensibili, questa quantità può influire sul sonno.',
+  b2='In alcune persone questa quantità può causare agitazione, battito accelerato, mal di stomaco o difficoltà a dormire. Fino a 400 mg al giorno EFSA, FDA e Mayo Clinic non li considerano un problema per gli adulti.',
+  b2_once='Se viene assunta tutta in una volta, supera il valore EFSA di 200 mg per dose singola.',
+  hi_over='La stima massima ({x} mg) supera già i 400 mg.',
+  b3='Supera il limite giornaliero di 400 mg per gli adulti (EFSA, FDA, Mayo Clinic). Gli stessi effetti possono essere più forti: agitazione, battito rapido o irregolare, tremore, mal di stomaco, difficoltà a dormire. Se i sintomi sono forti, rivolgiti a un medico.',
+  b4='La FDA indica che effetti tossici (per esempio convulsioni) sono possibili quando si assumono rapidamente circa 1.200 mg di caffeina.',
+  preg_over='In gravidanza l\'EFSA indica al massimo 200 mg al giorno, quindi questa quantità la supera. Parlane con il medico.',
+  preg_ok='In gravidanza l\'EFSA indica al massimo 200 mg al giorno; per il tuo caso parlane con il medico.',
+  decaf_note='Anche il caffè decaffeinato può contenere qualche mg di caffeina (FDA: circa 2–15 mg in una tazza da 237 ml).',
+  sleep_h='Sonno.', sleep_gap='Tra l\'ultima tazza e il momento di dormire passano circa {h} h.', sleep_rem='Secondo il modello (emivita 3–7 h) al momento di dormire possono restare circa {a}–{b} mg, se tutta la caffeina è stata assunta all\'ora dell\'ultima tazza. Un modello, non una misura.',
+  sleep_res='Negli studi circa 400 mg di caffeina assunti anche 6 ore prima di dormire hanno accorciato il sonno di più di un\'ora; nelle metanalisi la riduzione media è stata di circa 35–45 minuti. 100 mg non hanno modificato in modo significativo il sonno in un gruppo di studio. Le persone sentono l\'effetto in modo diverso.',
+  l_lastcup='Calcola l\'ultima tazza', l_body='Caffeina nel corpo',
+  swap_h='Lo stesso rituale con meno caffeina', l_convert='Convertitore caffè → tè',
+  safety='Se senti oppressione al petto, battito molto rapido o irregolare, stai per svenire o stai molto male, chiedi aiuto medico. Informazioni generali, non un parere medico.',
+  indiv='Le persone reagiscono in modo diverso: contano peso, farmaci, malattie, genetica e se bevi caffeina ogni giorno. In gravidanza, allattamento, con malattie cardiache o disturbi d\'ansia, o se prendi farmaci, parla con un medico.',
+  h_what='Cosa succede dopo diverse tazze di caffè?', p_what='Dipende dalla quantità, dall\'orario e dalla persona. Secondo i nostri dati una tazza da 237 ml di caffè filtro contiene circa 80–107 mg di caffeina, quindi 4 tazze sono circa 320–430 mg, intorno ai 400 mg che EFSA, FDA e Mayo Clinic non considerano un problema per la maggior parte degli adulti. In gravidanza il limite è 200 mg al giorno.',
+  h_faq='Domande frequenti', h_src='Fonti',
+  faq=[('Quante tazze di caffè superano il limite giornaliero?', 'Secondo i nostri dati (caffè filtro, 237 ml, 80–107 mg): 3 tazze sono circa 240–320 mg, 4 tazze circa 320–430 mg e 5 tazze circa 400–540 mg. Quindi 5 o più tazze superano i 400 mg e 4 possono raggiungerli. La quantità esatta dipende dal caffè e dalla preparazione.'),
+       ('Il caffè dopo pranzo può influire sul sonno?', 'Negli studi controllati dosi più alte di caffeina (circa 400 mg), assunte anche 6 ore prima di dormire, hanno accorciato il sonno. Una dose di 100 mg non ha modificato in modo significativo il sonno in un gruppo di studio. L\'effetto dipende da dose, orario e persona; alcuni lo sentono, altri no.'),
+       ('È un consiglio medico?', 'No. Sono informazioni generali di EFSA, Mayo Clinic e FDA. Se la caffeina ti causa ansia, battito accelerato o problemi di sonno, o sei in gravidanza, allatti o prendi farmaci, parla con un medico.')]),
+}
+
+_TOOLS_DIR = {'lt': 'irankiai', 'en': 'tools', 'it': 'strumenti'}
+_prev_extra = _i18n_extra
+
+
+def _i18n_extra(tool, d, lang=None):  # noqa: F811
+    d = _prev_extra(tool, d, lang)
+    if tool == 'cups' and lang:
+        import tealib_gen as TL
+        tl = lambda i: f'/{lang}/{TL.DIR[lang]}/{(TL.SG.N[i] if i in TL.SG.N else TL.XT.NAMES[i])["slug"][lang]}/'
+        tu = lambda k: f'/{lang}/{_TOOLS_DIR[lang]}/{SLUG[k][lang]}/'
+        d['urls'] = {'green': tl('green'), 'white': tl('white'), 'rooibos': tl('rooibos'), 'herbal': tl('herbal'),
+                     'convert': tu('convert'), 'lastcup': tu('lastcup'), 'body': tu('body')}
+        d['srcs'] = {k: [v[0], v[1]] for k, v in CUPS_SRC.items()}
+    return d
+
+
+def cups_extra(B, lang):
+    """Tekstas po įrankiu: trumpas atsakymas, DUK su JSON-LD, šaltiniai."""
+    E = B.E
+    t = TXT['cups'][lang]
+    faq = ''.join(f'<details class="faq"><summary>{E(q)}</summary><p>{E(a)}</p></details>' for q, a in t['faq'])
+    ld = json.dumps({'@context': 'https://schema.org', '@type': 'FAQPage', 'mainEntity': [
+        {'@type': 'Question', 'name': q, 'acceptedAnswer': {'@type': 'Answer', 'text': a}} for q, a in t['faq']]}, ensure_ascii=False).replace('</', '<\\/')
+    src = ''.join(f'<li><a href="{E(v[1])}" target="_blank" rel="noopener">{E(v[2])}</a></li>' for v in CUPS_SRC.values())
+    return (f'<section class="seo-sec"><h2>{E(t["h_what"])}</h2><p>{E(t["p_what"])}</p></section>'
+            f'<section class="seo-sec"><h2>{E(t["h_faq"])}</h2>{faq}</section>'
+            f'<section class="seo-sec" id="src-cups"><h2>{E(t["h_src"])}</h2><ul class="srclist">{src}</ul></section>'
+            f'<script type="application/ld+json">{ld}</script>')

@@ -6,7 +6,7 @@ category: quit
 date: 2026-10-24
 related: abstinencija, kava-ar-arbata-ryte
 sources: juliano, mayo
-about: calc, convert, quiz, plan, diary, d_black, d_green, g_limit, hub_b, tl_rooibos, tl_herbal
+about: calc, convert, quiz, plan, diary, d_black, d_green, g_limit, hub_b, tl_rooibos, tl_herbal, cups
 ---
 
 Un espresso al mattino, un altro al bar durante la pausa e il terzo dopo pranzo, perché il pomeriggio bisogna pur affrontarlo. In Italia il caffè è molto più di una bevanda: è un'abitudine quotidiana, un piccolo piacere e spesso un momento da condividere.
@@ -110,5 +110,7 @@ A volte, però, vale la pena provare a vivere senza la solita tazzina, anche sol
 Magari deciderai di bere un espresso soltanto nel fine settimana. Forse sostituirai uno dei tuoi caffè quotidiani con il tè. Oppure scoprirai che senza caffeina ti senti meglio.
 
 In fondo, la cosa più importante non è smettere di bere caffè.
+
+Per vedere cosa dicono le fonti su una quantità precisa, prova lo strumento [«Come ti senti dopo la N-esima tazza»](@cups).
 
 **È avere la libertà di scegliere.**

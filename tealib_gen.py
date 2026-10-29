@@ -358,7 +358,8 @@ def extra_page(B, i, lang):
         qc = f'?a=filter&amp;b={i}' if i in ('rooibos', 'herbal') else ''
         cta = (f'<p><a class="btn btn-forest btn-sm" href="{B.PATH["plan"](lang)}{q}">{E(t["plan_cta"])} →</a> '
                f'<a class="btn btn-outline btn-sm" href="{B.PATH["convert"](lang)}{q}">{E(t["conv_cta"])}</a>'
-               + (f' <a class="btn btn-outline btn-sm" href="{B.PATH["compare"](lang)}{qc}">{E(t["cmp_cta"])}</a>' if qc else '') + '</p>')
+               + (f' <a class="btn btn-outline btn-sm" href="{B.PATH["compare"](lang)}{qc}">{E(t["cmp_cta"])}</a>' if qc else '')
+               + f' <a class="btn btn-outline btn-sm" href="{B.PATH["cups"](lang)}">{E(__import__("tools_gen").TXT["cups"][lang]["menu"])}</a></p>')
     srcs = list(XT.SRC[i])
     rest = x['caf'][len(x['caf'].split('. ')[0]) + 1:].strip()
     cafsec = ''

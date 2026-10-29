@@ -245,6 +245,7 @@ def tools_links(B, lang, a=None, b=None):
     t = L[lang]
     cmp_url = B.PATH['compare'](lang) + (f'?a={a}&b={b}' if a and b else '')
     links = [(B.PATH['calc'](lang), t['tools_calc']), (cmp_url, t['tools_cmp']), (B.PATH['tracker'](lang), t['tools_track']), (B.PATH['convert'](lang), t['tools_conv'])]
+    links.append((B.PATH['cups'](lang), __import__('tools_gen').TXT['cups'][lang]['menu']))
     links.append((B.PATH['hub_t'](lang), __import__('tealib_gen').T[lang]['hub']))
     links.append((B.PATH['hub_r'](lang), __import__('rituals_gen').UI[lang]['hub']))
     return f'<section class="seo-sec"><h2>{E(t["h_more"])}</h2><div class="quiet-links">' + ''.join(f'<a href="{u}">{E(n)}</a>' for u, n in links) + '</div></section>'

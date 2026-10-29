@@ -6,7 +6,7 @@ category: quit
 date: 2026-10-24
 related: abstinencija, kava-ar-arbata-ryte
 sources: juliano, mayo
-about: calc, convert, quiz, plan, diary, d_black, d_green, g_limit, hub_b, tl_rooibos, tl_herbal
+about: calc, convert, quiz, plan, diary, d_black, d_green, g_limit, hub_b, tl_rooibos, tl_herbal, cups
 ---
 
 Vienas puodelis ryte, antras darbe, trečias – nes po pietų kažkaip reikia išgyventi. Kava lengvai tampa kasdienybės dalimi, o kartais net nepastebime, kiek jos išgeriame.
@@ -86,5 +86,7 @@ Tikrai ne. Jeigu mėgsti kavą, ji netrukdo miegui ir nesukelia nemalonių pojū
 Tačiau kartais verta išbandyti gyvenimą be įprasto kavos puodelio vien tam, kad suprastum, kiek iš tiesų tau jo reikia.
 
 Galbūt nuspręsi kavą gerti tik savaitgaliais. Galbūt vieną puodelį pakeisi arbata. O gal suprasi, kad be kavos jautiesi geriau.
+
+Jei nori pamatyti, ką šaltiniai sako apie konkretų kiekį, išbandyk įrankį [„Kaip jausiesi po N-to puodelio“](@cups).
 
 Svarbiausia ne pats kavos atsisakymas, o galimybė rinktis.

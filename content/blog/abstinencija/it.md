@@ -6,7 +6,7 @@ category: quit
 date: 2026-10-24
 related: mesti-kava, kava-ar-arbata-ryte
 sources: juliano
-about: diary, plan, tracker, calc, d_filter, d_energy, g_limit, tl_rooibos, tl_herbal
+about: diary, plan, tracker, calc, d_filter, d_energy, g_limit, tl_rooibos, tl_herbal, cups
 ---
 
 Ieri, l'ultimo caffè. Oggi hai mal di testa, fai fatica a concentrarti e persino le attività più semplici richiedono uno sforzo insolito. Ti sembra di aver dormito pochissimo, anche se hai riposato per otto ore.
@@ -101,5 +101,7 @@ La cosa importante da ricordare è che il mal di testa, la stanchezza e le diffi
 Quando i sintomi dell'astinenza scompaiono, diventa più facile capire come ti senti davvero senza la tua dose abituale di caffè.
 
 E se stai ancora pensando di smettere di bere caffè, ridurre gradualmente il consumo di caffeina potrebbe aiutarti a evitare alcuni dei sintomi più fastidiosi.
+
+Per vedere cosa dicono le fonti su una quantità precisa, prova lo strumento [«Come ti senti dopo la N-esima tazza»](@cups).
 
 [Articolo correlato: "Come smettere di bere caffè? Dire addio alla caffeina senza troppi drammi"](@post:mesti-kava)

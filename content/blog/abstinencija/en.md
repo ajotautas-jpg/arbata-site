@@ -6,7 +6,7 @@ category: quit
 date: 2026-10-24
 related: mesti-kava, kava-ar-arbata-ryte
 sources: juliano
-about: diary, plan, tracker, calc, d_filter, d_energy, g_limit, tl_rooibos, tl_herbal
+about: diary, plan, tracker, calc, d_filter, d_energy, g_limit, tl_rooibos, tl_herbal, cups
 ---
 
 Yesterday, your last cup of coffee. Today, you've got a headache, you can't concentrate, and even the simplest tasks seem to require an unreasonable amount of effort. It feels like you barely slept, even though you got a full eight hours.
@@ -101,5 +101,7 @@ The important thing to remember is that the headaches, tiredness, and difficulty
 Once the withdrawal symptoms fade, it becomes easier to understand how your body actually feels without its usual caffeine dose.
 
 And if you're still planning to quit coffee, gradually reducing your intake may help you avoid some of the more uncomfortable symptoms.
+
+To see what the sources say about a specific amount, try the [“How you may feel after the Nth cup”](@cups) tool.
 
 [Related article: "How to Quit Coffee: Breaking Up With Caffeine Without the Drama"](@post:mesti-kava)

@@ -6,7 +6,7 @@ category: quit
 date: 2026-10-24
 related: abstinencija, kava-ar-arbata-ryte
 sources: juliano, mayo
-about: calc, convert, quiz, plan, diary, d_black, d_green, g_limit, hub_b, tl_rooibos, tl_herbal
+about: calc, convert, quiz, plan, diary, d_black, d_green, g_limit, hub_b, tl_rooibos, tl_herbal, cups
 ---
 
 One cup in the morning, another at work, and a third because somehow you need to make it through the afternoon. Coffee easily becomes part of everyday life, and sometimes we don't even notice how much we're drinking.
@@ -90,5 +90,7 @@ Not necessarily. If you enjoy coffee, it doesn't interfere with your sleep, and 
 Still, trying life without your usual coffee can be a useful way to discover how much you actually depend on it.
 
 Maybe you'll decide to drink coffee only on weekends. Maybe you'll replace one cup with tea. Or perhaps you'll discover that you simply feel better without it.
+
+To see what the sources say about a specific amount, try the [“How you may feel after the Nth cup”](@cups) tool.
 
 Ultimately, quitting coffee isn't the most important part. **Having the freedom to choose is.**

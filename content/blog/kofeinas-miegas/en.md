@@ -6,7 +6,7 @@ category: health
 date: 2026-10-26
 related: mesti-kava, abstinencija, kava-ar-arbata-ryte
 sources: drake2013, gardiner2023, gardiner2025, chang2025, clark2017
-about: lastcup, body, timer, convert, calc, tl_green, tl_white, g_limit, tl_rooibos, tl_herbal
+about: lastcup, body, timer, convert, calc, tl_green, tl_white, g_limit, tl_rooibos, tl_herbal, cups
 ---
 
 You have a coffee after lunch and sleep fine. Or the opposite: one cup at five o'clock and you're tossing and turning until midnight. Why do people differ so much, and what do controlled studies say?
@@ -45,5 +45,7 @@ The research doesn't say "no caffeine after 2 p.m." It shows that the effect dep
 [Work out when to have your last cup](@lastcup)
 
 More help: the [caffeine-in-body timer](@timer), the [body effects page](@body) and the [drink converter](@convert). If you decide to cut back, read about [quitting coffee](@post:mesti-kava) and [withdrawal](@post:abstinencija).
+
+To see what the sources say about a specific amount, try the [“How you may feel after the Nth cup”](@cups) tool.
 
 General information, not medical advice. If sleep problems persist, see a doctor.
