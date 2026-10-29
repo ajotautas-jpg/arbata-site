@@ -394,6 +394,14 @@ TXT['cups'] = {
        ('È un consiglio medico?', 'No. Sono informazioni generali di EFSA, Mayo Clinic e FDA. Se la caffeina ti causa ansia, battito accelerato o problemi di sonno, o sei in gravidanza, allatti o prendi farmaci, parla con un medico.')]),
 }
 
+
+TXT['cups']['lt'].update(hl0='Be kofeino', hl1='Iki 200 mg: EFSA vienkartinės ribos ribose', hl2='200–400 mg: artėji prie dienos ribos', hl3='Virš 400 mg dienos ribos', hlp='Virš nėštumo ribos (200 mg per dieną)',
+  opt_more='Daugiau parinkčių: nėštumas, svoris, miegas', det_what='Ką tai reiškia', det_src='Šaltiniai ir saugumas', src_l='Šaltiniai')
+TXT['cups']['en'].update(hl0='No caffeine', hl1='Up to 200 mg: within the EFSA single-dose value', hl2='200–400 mg: nearing the daily limit', hl3='Above the 400 mg daily limit', hlp='Above the pregnancy limit (200 mg a day)',
+  opt_more='More options: pregnancy, weight, sleep', det_what='What this means', det_src='Sources and safety', src_l='Sources')
+TXT['cups']['it'].update(hl0='Senza caffeina', hl1='Fino a 200 mg: entro il valore EFSA per dose singola', hl2='200–400 mg: ti avvicini al limite giornaliero', hl3='Oltre il limite giornaliero di 400 mg', hlp='Oltre il limite in gravidanza (200 mg al giorno)',
+  opt_more='Altre opzioni: gravidanza, peso, sonno', det_what='Cosa significa', det_src='Fonti e sicurezza', src_l='Fonti')
+
 _TOOLS_DIR = {'lt': 'irankiai', 'en': 'tools', 'it': 'strumenti'}
 _prev_extra = _i18n_extra
 
