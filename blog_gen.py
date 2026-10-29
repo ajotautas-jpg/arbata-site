@@ -105,6 +105,10 @@ EXTRA_SOURCES = {
                  'https://pubmed.ncbi.nlm.nih.gov/20664420/'),
     'nhs': ('NHS: Foods to avoid in pregnancy – caffeine (ne daugiau kaip 200 mg per dieną)',
             'https://www.nhs.uk/pregnancy/keeping-well/foods-to-avoid/'),
+    'mccusker2006': ('McCusker RR, Goldberger BA, Cone EJ. Caffeine content of decaffeinated coffee. J Anal Toxicol 2006;30(8):611–613',
+                     'https://pubmed.ncbi.nlm.nih.gov/17132260/'),
+    'dir1999': ('Directive 1999/4/EC on coffee extracts and chicory extracts (decaffeinated: ≤ 0.3 % caffeine of coffee dry matter)',
+                'https://www.legislation.gov.uk/eudr/1999/4/data.html'),
     'clark2017': ('Clark I, Landolt HP. Coffee, caffeine, and sleep: a systematic review of epidemiological studies and randomized controlled trials. Sleep Med Rev 2017;31:70–78 (abstract)',
                   'https://doi.org/10.1016/j.smrv.2016.01.006'),
 }
