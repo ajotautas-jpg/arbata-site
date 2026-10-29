@@ -378,3 +378,4 @@ body.is-embed-tool .tool-wrap .lead{display:none}
 .cups-opt .sub.two{grid-template-columns:1fr}
 .cups-opt .sub .sel{width:100%;min-width:0;box-sizing:border-box}
 @media(min-width:600px){.cups-opt .sub.two{grid-template-columns:1fr 1fr}}
+.cd b,.cups-extra b{font-weight:800;color:var(--ink-d)}
