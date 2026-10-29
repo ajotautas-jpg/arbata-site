@@ -534,87 +534,102 @@
     var lids = list.map(function (d) { return d.id; });
     var s = {
       d: pick('d', lids, 'filter'), n: Math.min(12, Math.max(1, parseInt(Q.get('n'), 10) || 2)),
-      w: Math.min(250, Math.max(30, parseFloat(Q.get('w')) || 0)) || 0, wo: Q.get('w') !== null && parseFloat(Q.get('w')) > 0,
+      w: Math.min(250, Math.max(30, parseFloat(Q.get('w')) || 0)) || 70, wo: parseFloat(Q.get('w')) > 0,
       p: Q.get('p') === '1', sl: Q.get('s') === '1', l: parseHM(Q.get('l'), 15 * 60), b: parseHM(Q.get('b'), 23 * 60)
     };
-    if (!s.wo) s.w = 70;
+    var SC = 600; // matuoklio skalė, mg
     function ref(keys) {
       return keys.map(function (k) { var r = T.srcs[k]; return r ? '<a href="' + r[1] + '" target="_blank" rel="noopener">' + esc(r[0]) + '</a>' : ''; }).join(' · ');
     }
+    var cupBtns = '';
+    for (var i = 1; i <= 12; i++) cupBtns += '<button type="button" class="cup" data-n="' + i + '" aria-label="' + i + '"><i></i></button>';
     body.innerHTML =
       '<div class="tool-in"><div class="fld"><label class="fld-label" for="sd">' + esc(T.drink) + '</label>' + select('sd', list, s.d) + '</div>' +
-      '<div class="fld"><span class="fld-label">' + esc(T.cups_l) + '</span>' + stepper('nd', 'ni', 'nv') + '</div>' +
-      '<div class="fld"><label><input type="checkbox" id="pc"' + (s.p ? ' checked' : '') + '> ' + esc(T.preg_chk) + '</label></div>' +
-      '<div class="fld"><label><input type="checkbox" id="wc"' + (s.wo ? ' checked' : '') + '> ' + esc(T.wt_chk) + '</label>' +
-      '<div id="wbox"' + (s.wo ? '' : ' hidden') + '><label class="fld-label" for="wt">' + esc(T.wt_l) + '</label><input class="sel" type="number" id="wt" min="30" max="250" step="1" inputmode="numeric" value="' + (s.wo ? s.w : '') + '"></div></div>' +
-      '<div class="fld"><label><input type="checkbox" id="sc"' + (s.sl ? ' checked' : '') + '> ' + esc(T.sleep_chk) + '</label>' +
-      '<div id="sbox"' + (s.sl ? '' : ' hidden') + '><label class="fld-label" for="lt">' + esc(T.last_l) + '</label><input class="sel" type="time" id="lt" value="' + hhmm(s.l) + '">' +
-      '<label class="fld-label" for="bt">' + esc(T.bed_l) + '</label><input class="sel" type="time" id="bt" value="' + hhmm(s.b) + '"></div></div></div>' +
-      '<div class="tool-out"><div><span class="eyebrow">' + esc(T.out_total) + '</span><div style="margin-top:6px"><span class="big" id="r-big"></span> <span class="unit">mg</span></div><span class="per" id="r-sub"></span></div>' +
-      '<div id="r-bar"></div><div id="r-wt" class="small" style="color:#fff;opacity:.85"></div></div>';
-    extra.style.cssText = 'display:flex;flex-direction:column;gap:14px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px';
-    extra.innerHTML = '<div class="tool-note" id="x-band" style="color:var(--ink)" role="status"></div>' +
-      '<div class="tool-note" id="x-sleep" style="color:var(--ink)"></div><div class="tool-note" id="x-swap" style="color:var(--ink)"></div>' +
-      '<p class="tool-note" id="x-safe" style="font-weight:700;color:var(--ink)">' + esc(T.safety) + '</p><p class="tool-note" style="color:var(--muted)">' + esc(T.indiv) + ' ' + ref(['efsa', 'fda', 'mayo', 'clark']) + '</p>';
+      '<div class="fld"><span class="fld-label">' + esc(T.cups_l) + ': <b id="nv"></b></span><div class="cup-row" id="cuprow" role="group" aria-label="' + esc(T.cups_l) + '">' + cupBtns + '</div></div>' +
+      '<details class="cups-opt" id="opt"' + (s.p || s.wo || s.sl ? ' open' : '') + '><summary>' + esc(T.opt_more) + '</summary>' +
+      '<label class="chk"><input type="checkbox" id="pc"' + (s.p ? ' checked' : '') + '> <span>' + esc(T.preg_chk) + '</span></label>' +
+      '<label class="chk"><input type="checkbox" id="wc"' + (s.wo ? ' checked' : '') + '> <span>' + esc(T.wt_chk) + '</span></label>' +
+      '<div class="sub" id="wbox"' + (s.wo ? '' : ' hidden') + '><label class="fld-label" for="wt">' + esc(T.wt_l) + '</label><input class="sel" type="number" id="wt" min="30" max="250" step="1" inputmode="numeric" value="' + s.w + '"></div>' +
+      '<label class="chk"><input type="checkbox" id="sc"' + (s.sl ? ' checked' : '') + '> <span>' + esc(T.sleep_chk) + '</span></label>' +
+      '<div class="sub two" id="sbox"' + (s.sl ? '' : ' hidden') + '><div><label class="fld-label" for="lt">' + esc(T.last_l) + '</label><input class="sel" type="time" id="lt" value="' + hhmm(s.l) + '"></div>' +
+      '<div><label class="fld-label" for="bt">' + esc(T.bed_l) + '</label><input class="sel" type="time" id="bt" value="' + hhmm(s.b) + '"></div></div></details></div>' +
+      '<div class="tool-out cups-out" id="cout"><span class="eyebrow">' + esc(T.out_total) + '</span>' +
+      '<div><span class="big" id="r-big"></span> <span class="unit">mg</span></div>' +
+      '<div class="verdict" id="r-hl" role="status"></div>' +
+      '<div class="meter" aria-hidden="true"><div class="m-track"><i class="zg"></i><i class="za"></i><i class="zr"></i><b class="m-rng" id="m-rng"></b><b class="m-typ" id="m-typ"></b><b class="m-lim" id="m-lim"></b></div>' +
+      '<div class="m-ticks"><span style="left:0">0</span><span style="left:33.3%">200</span><span style="left:66.6%">400</span><span style="right:0">600+</span></div></div>' +
+      '<div class="small" id="r-sub"></div><div class="small" id="r-wt"></div></div>';
+    extra.className = 'cups-extra';
+    extra.innerHTML =
+      '<details class="cd" open><summary>' + esc(T.det_what) + '</summary><div id="x-band"></div></details>' +
+      '<details class="cd" id="d-sleep"><summary>' + esc(T.sleep_h.replace(/\.$/, '')) + '</summary><div id="x-sleep"></div></details>' +
+      '<details class="cd" id="d-swap" open><summary>' + esc(T.swap_h) + '</summary><div id="x-swap"></div></details>' +
+      '<details class="cd"><summary>' + esc(T.det_src) + '</summary><p class="small">' + esc(T.indiv) + ' ' + ref(['efsa', 'fda', 'mayo', 'clark']) + '</p></details>' +
+      '<p class="safe" id="x-safe">' + esc(T.safety) + '</p>';
     function range(a, b) { a = Math.round(a); b = Math.round(b); return a === b ? String(a) : a + '–' + b; }
+    function pct(mg) { return Math.min(100, Math.max(0, mg / SC * 100)); }
     function render() {
       var d = byId[s.d], n = s.n, lo = d.lo * n, hi = d.hi * n, typ = d.typ * n, lim = s.p ? 200 : 400;
       $('nv').textContent = n;
-      $('nd').disabled = n <= 1; $('ni').disabled = n >= 12;
+      var cb = root.querySelectorAll('.cup');
+      for (var i = 0; i < cb.length; i++) { var on = i < n; cb[i].classList.toggle('on', on); cb[i].setAttribute('aria-pressed', on ? 'true' : 'false'); }
+      var zone = typ <= 0 ? 0 : (s.p ? (typ <= 200 ? 1 : 3) : (typ <= 200 ? 1 : (typ <= 400 ? 2 : 3)));
+      $('cout').setAttribute('data-z', zone);
       $('r-big').textContent = typ > 0 ? range(lo, hi) : '0';
-      $('r-sub').textContent = typ > 0 ? T.typ_pre + ' ' + Math.round(typ) + ' mg' : T.zero_none;
-      if (typ > 0) {
-        var pc = Math.round(typ / lim * 100), pl = Math.round(lo / lim * 100), ph = Math.round(hi / lim * 100);
-        $('r-bar').innerHTML = '<div class="bar-top"><span>' + esc(T.limit_l) + ': ' + lim + ' mg' + (s.p ? ' (' + esc(T.preg_short) + ')' : '') + '</span><b>' + (pl === ph ? pl : pl + '–' + ph) + ' %</b></div><div class="bar"><i class="me" style="width:' + Math.min(100, Math.max(2, pc)) + '%"></i></div>';
-      } else $('r-bar').innerHTML = '';
+      $('r-hl').textContent = zone === 0 ? T.hl0 : (s.p && zone === 3 ? T.hlp : [T.hl0, T.hl1, T.hl2, T.hl3][zone]);
+      var rg = $('m-rng'), tp = $('m-typ'), lm = $('m-lim');
+      rg.style.left = pct(lo) + '%'; rg.style.width = Math.max(1.2, pct(hi) - pct(lo)) + '%'; rg.style.display = typ > 0 ? '' : 'none';
+      tp.style.left = pct(typ) + '%'; tp.style.display = typ > 0 ? '' : 'none';
+      lm.style.left = pct(lim) + '%'; lm.setAttribute('data-l', T.limit_l + ' ' + lim);
+      var pl = Math.round(lo / lim * 100), ph = Math.round(hi / lim * 100);
+      $('r-sub').textContent = typ > 0 ? T.limit_l + ': ' + lim + ' mg' + (s.p ? ' (' + T.preg_short + ')' : '') + ' · ' + (pl === ph ? pl : pl + '–' + ph) + ' %' : T.zero_none;
       var w = s.wo && s.w >= 30 ? s.w : 0;
       $('r-wt').textContent = (w && typ > 0) ? T.mgkg + ': ' + num(r1(lo / w)) + '–' + num(r1(hi / w)) + ' mg/kg. ' + T.mgkg_note : '';
-      // juostos tekstas
+      // ką tai reiškia
       var bt, refs;
       if (typ <= 0) { bt = T.b0 + ' ' + zeroInfo(d); refs = []; }
       else if (typ <= 200) { bt = T.b1; refs = ['efsa', 'gardiner25']; }
-      else if (typ <= 400) { bt = T.b2 + (typ > 200 ? ' ' + T.b2_once : ''); refs = ['efsa', 'mayo', 'fda']; }
+      else if (typ <= 400) { bt = T.b2 + ' ' + T.b2_once; refs = ['efsa', 'mayo', 'fda']; }
       else { bt = T.b3; refs = ['efsa', 'mayo', 'fda']; }
       if (typ > 0 && typ <= 400 && hi > 400) bt += ' ' + T.hi_over.replace('{x}', Math.round(hi));
       if (hi >= 1200) { bt += ' ' + T.b4; refs = refs.concat(['fda']); }
       if (s.p && typ > 0) { bt += ' ' + (typ > 200 ? T.preg_over : T.preg_ok); refs = refs.concat(['efsa']); }
       if (s.d === 'decaf') { bt += ' ' + T.decaf_note; refs = refs.concat(['fda', 'mccusker']); }
       var seen = {}; refs = refs.filter(function (k) { if (seen[k]) return false; seen[k] = 1; return true; });
-      $('x-band').innerHTML = bt + (refs.length ? ' <span class="small">' + ref(refs) + '</span>' : '');
+      $('x-band').innerHTML = '<p>' + bt + '</p>' + (refs.length ? '<p class="small">' + esc(T.src_l) + ': ' + ref(refs) + '</p>' : '');
       // miegas
       var sx = '';
       if (s.sl && typ > 0) {
         var h = (((s.b - s.l) % 1440) + 1440) % 1440 / 60;
         var r1m = typ * Math.pow(0.5, h / 3), r2m = typ * Math.pow(0.5, h / 7);
-        sx = '<b>' + esc(T.sleep_h) + '</b> ' + T.sleep_gap.replace('{h}', num(r1(h))) + ' ' + T.sleep_rem.replace('{a}', Math.round(Math.min(r1m, r2m))).replace('{b}', Math.round(Math.max(r1m, r2m)));
-        if (h <= 9) sx += ' ' + T.sleep_res + ' <span class="small">' + ref(['drake', 'gardiner23', 'gardiner25', 'chang']) + '</span>';
-        sx += ' <a href="' + T.urls.lastcup + '" target="_blank" rel="noopener">' + esc(T.l_lastcup) + ' →</a> · <a href="' + T.urls.body + '" target="_blank" rel="noopener">' + esc(T.l_body) + ' →</a>';
+        sx = '<p>' + T.sleep_gap.replace('{h}', num(r1(h))) + ' ' + T.sleep_rem.replace('{a}', Math.round(Math.min(r1m, r2m))).replace('{b}', Math.round(Math.max(r1m, r2m))) + '</p>';
+        if (h <= 9) sx += '<p>' + T.sleep_res + '</p><p class="small">' + esc(T.src_l) + ': ' + ref(['drake', 'gardiner23', 'gardiner25', 'chang']) + '</p>';
+        sx += '<p><a href="' + T.urls.lastcup + '" target="_blank" rel="noopener">' + esc(T.l_lastcup) + ' →</a> · <a href="' + T.urls.body + '" target="_blank" rel="noopener">' + esc(T.l_body) + ' →</a></p>';
       }
-      $('x-sleep').innerHTML = sx; $('x-sleep').style.display = sx ? '' : 'none';
-      // pakaitalai
+      $('x-sleep').innerHTML = sx; $('d-sleep').style.display = sx ? '' : 'none';
+      if (sx && !$('d-sleep').hasAttribute('data-seen')) { $('d-sleep').open = true; $('d-sleep').setAttribute('data-seen', '1'); }
+      // pakaitalai: juostos toje pačioje skalėje
       var sw = '';
       if (typ > 0) {
         var alts = ['green', 'white', 'rooibos', 'herbal'].filter(function (i) { return i !== s.d && byId[i]; });
-        sw = '<b>' + esc(T.swap_h) + '</b><ul class="swap">' + alts.map(function (i) {
-          var a = byId[i], u = T.urls[i];
-          return '<li>' + n + ' × ' + (u ? '<a href="' + u + '" target="_blank" rel="noopener">' + esc(nm(a)) + '</a>' : esc(nm(a))) + ': ' + (a.typ > 0 ? range(a.lo * n, a.hi * n) + ' mg' : esc(T.zero_none)) + '</li>';
-        }).join('') + '</ul><a href="' + T.urls.convert + '" target="_blank" rel="noopener">' + esc(T.l_convert) + ' →</a>';
+        var rows = [[nm(d), lo, hi, null, true]].concat(alts.map(function (i) { var a = byId[i]; return [nm(a), a.lo * n, a.hi * n, T.urls[i], false]; }));
+        sw = '<div class="swp">' + rows.map(function (r) {
+          return '<div class="swr' + (r[4] ? ' me' : '') + '"><span class="swn">' + (r[3] ? '<a href="' + r[3] + '" target="_blank" rel="noopener">' + esc(r[0]) + '</a>' : esc(r[0])) + '</span>' +
+            '<span class="swb"><i style="width:' + Math.max(r[2] > 0 ? 2 : 0, pct(r[2])) + '%"></i></span><b>' + (r[2] > 0 ? range(r[1], r[2]) : '0') + ' mg</b></div>';
+        }).join('') + '</div><p><a href="' + T.urls.convert + '" target="_blank" rel="noopener">' + esc(T.l_convert) + ' →</a></p>';
       }
-      $('x-swap').innerHTML = sw; $('x-swap').style.display = sw ? '' : 'none';
+      $('x-swap').innerHTML = sw; $('d-swap').style.display = sw ? '' : 'none';
     }
     root.addEventListener('click', function (e) {
-      var b = e.target.closest('button'); if (!b) return;
-      if (b.id === 'nd') s.n = Math.max(1, s.n - 1); else if (b.id === 'ni') s.n = Math.min(12, s.n + 1); else return;
-      render(); sync();
+      var b = e.target.closest('.cup'); if (!b) return;
+      s.n = +b.getAttribute('data-n'); render(); sync();
     });
     root.addEventListener('change', function (e) {
       var id = e.target.id;
       if (id === 'sd') s.d = e.target.value;
       else if (id === 'pc') s.p = e.target.checked;
-      else if (id === 'wc') { s.wo = e.target.checked; $('wbox').hidden = !s.wo; if (s.wo && !(s.w >= 30)) s.w = 70; if (s.wo) $('wt').value = s.w; }
+      else if (id === 'wc') { s.wo = e.target.checked; $('wbox').hidden = !s.wo; }
       else if (id === 'sc') { s.sl = e.target.checked; $('sbox').hidden = !s.sl; }
-      else if (id === 'lt') s.l = parseHM(e.target.value, s.l);
-      else if (id === 'bt') s.b = parseHM(e.target.value, s.b);
       else return;
       render(); sync();
     });
