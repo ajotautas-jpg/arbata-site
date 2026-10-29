@@ -28,7 +28,7 @@ def data(lang):
             caf='Rooibos kofeino neturi, dauguma žolelių arbatų taip pat, bet ne visos: žiūrėk pakuotę. Filtruota kava ' + f + ', juodoji arbata ' + b + '.',
             tips=['Nežadame, kad arbata sušildys ar pagydys: tai šilto gėrimo pauzės idėja.', 'Jei nori šilto gėrimo su pienu, išbandyk rooibos latte.'],
             faq=[('Ką gerti vietoj kavos šaltą dieną?', 'Šiltą rooibos ar žolelių arbatą arba rooibos latte; jie nesuteikia kofeino.'), ('Ar žolelių arbatos visada be kofeino?', 'Dažniausiai taip, bet ne visada: maišiniuose gali būti arbatos su kofeinu. Pasitikrink pakuotę.')],
-            links=['tl_rooibos', 'tl_herbal', 'r_rooibos', 'calc'], src=['efsa', 'mayo', 'wp_rooibos', 'ci_herbal']),
+            links=['tl_rooibos', 'tl_herbal', 'r_rooibos', 'convert', 'calc'], src=['efsa', 'mayo', 'wp_rooibos', 'ci_herbal']),
          'travel': dict(name='Kelionių ritualas', h1='Kelionių ritualas: arbata kelyje vietoj stotelės kavai', kind='t',
             desc='Kaip pakeisti kavą arbata kelionėje: termosas, maišeliai, šalto užpilo butelis ir kofeino apskaita.',
             ans='Kelionei pasiimk termosą, kelis arbatos maišelius ir (jei nori) butelį šalto užpilo arbatos. Taip gersi savo gėrimą, o ne kavą iš stotelės. Vienu metu laikykis ne daugiau 200 mg kofeino (EFSA).',
@@ -64,7 +64,7 @@ def data(lang):
             caf='Juodoji arbata ' + b + ', žalioji ' + g + ', filtruotos kavos puodelis ' + f + '. Rooibos kofeino neturi. Kofeino pusinės eliminacijos laikas 3–7 val.',
             tips=['Ritualas nepakeičia poilsio: jei miegas ilgai blogas, pasitark su gydytoju.', 'Nustatyk kasdienį laiką paskutiniam kofeino puodeliui.'],
             faq=[('Kada nutraukti kofeiną dieną?', 'Priklauso nuo žmogaus; kofeinas lieka 3–7 val. pusinės eliminacijos laiku. Paskutinio puodelio įrankis padeda įvertinti.'), ('Ar arbata po darbo trukdo miegui?', 'Su kofeinu gali, be kofeino (rooibos, žolelių) dažniausiai ne.')],
-            links=['lastcup', 'tracker', 'r_rooibos', 'r_calm', 'tl_herbal'], src=['efsa', 'mayo', 'wp_rooibos']),
+            links=['lastcup', 'convert', 'tracker', 'r_rooibos', 'r_calm', 'tl_herbal'], src=['efsa', 'mayo', 'wp_rooibos']),
         }
     if lang == 'en':
         return {
@@ -76,7 +76,7 @@ def data(lang):
             caf='Rooibos has no caffeine and most herbal teas do not either, but not all: check the pack. Filter coffee ' + f + ', black tea ' + b + '.',
             tips=['We do not claim tea will warm or heal you: this is a warm-drink pause idea.', 'For a warm drink with milk try rooibos latte.'],
             faq=[('What can I drink instead of coffee on a cold day?', 'Warm rooibos or herbal tea or a rooibos latte; they give no caffeine.'), ('Are herbal teas always caffeine-free?', 'Usually, but not always: blends may include tea with caffeine. Check the pack.')],
-            links=['tl_rooibos', 'tl_herbal', 'r_rooibos', 'calc'], src=['efsa', 'mayo', 'wp_rooibos', 'ci_herbal']),
+            links=['tl_rooibos', 'tl_herbal', 'r_rooibos', 'convert', 'calc'], src=['efsa', 'mayo', 'wp_rooibos', 'ci_herbal']),
          'travel': dict(name='Travel ritual', h1='A travel ritual: tea on the road instead of a coffee stop', kind='t',
             desc='How to swap coffee for tea when travelling: a flask, tea bags, a bottle of cold brew and caffeine tracking.',
             ans='Take a flask, a few tea bags and, if you like, a bottle of cold brew tea. That way you drink your own tea rather than coffee from a stop. Keep to no more than 200 mg of caffeine at one time (EFSA).',
@@ -112,7 +112,7 @@ def data(lang):
             caf='Black tea ' + b + ', green ' + g + ', a cup of filter coffee ' + f + '. Rooibos has no caffeine. Caffeine has a half-life of 3–7 hours.',
             tips=['A ritual is no substitute for rest: if sleep is poor for long, talk to a doctor.', 'Set a daily time for your last caffeinated cup.'],
             faq=[('When should I stop caffeine in the day?', 'It depends on the person; caffeine stays for a half-life of 3–7 hours. The last-cup tool helps estimate.'), ('Does tea after work affect sleep?', 'With caffeine it can; caffeine-free (rooibos, herbal) usually does not.')],
-            links=['lastcup', 'tracker', 'r_rooibos', 'r_calm', 'tl_herbal'], src=['efsa', 'mayo', 'wp_rooibos']),
+            links=['lastcup', 'convert', 'tracker', 'r_rooibos', 'r_calm', 'tl_herbal'], src=['efsa', 'mayo', 'wp_rooibos']),
         }
     return {
      'cozy': dict(name='Rituale per giorni freddi', h1='Un rituale per i giorni freddi: tè caldo al posto del terzo caffè', kind='t',
@@ -123,7 +123,7 @@ def data(lang):
         caf='Il rooibos non ha caffeina e la maggior parte delle tisane neppure, ma non tutte: controlla la confezione. Caffè filtrato ' + f + ', tè nero ' + b + '.',
         tips=['Non diciamo che il tè ti scalda o ti cura: è un’idea di pausa con una bevanda calda.', 'Per una bevanda calda con latte prova il rooibos latte.'],
         faq=[('Cosa bere al posto del caffè in una giornata fredda?', 'Rooibos o tisana calda o un rooibos latte; non danno caffeina.'), ('Le tisane sono sempre senza caffeina?', 'Di solito sì, ma non sempre: le miscele possono includere tè con caffeina. Controlla la confezione.')],
-        links=['tl_rooibos', 'tl_herbal', 'r_rooibos', 'calc'], src=['efsa', 'mayo', 'wp_rooibos', 'ci_herbal']),
+        links=['tl_rooibos', 'tl_herbal', 'r_rooibos', 'convert', 'calc'], src=['efsa', 'mayo', 'wp_rooibos', 'ci_herbal']),
      'travel': dict(name='Rituale in viaggio', h1='Un rituale in viaggio: tè lungo la strada al posto della sosta per il caffè', kind='t',
         desc='Come sostituire il caffè con il tè in viaggio: thermos, bustine, bottiglia di cold brew e conteggio della caffeina.',
         ans='Porta un thermos, qualche bustina e, se vuoi, una bottiglia di tè cold brew. Così bevi il tuo tè invece del caffè di una sosta. Resta entro 200 mg di caffeina in una volta (EFSA).',
@@ -159,5 +159,5 @@ def data(lang):
         caf='Tè nero ' + b + ', verde ' + g + ', una tazza di caffè filtrato ' + f + '. Il rooibos non ha caffeina. L’emivita della caffeina è di 3–7 ore.',
         tips=['Un rituale non sostituisce il riposo: se il sonno è scarso a lungo, parlane con un medico.', 'Fissa un orario giornaliero per l’ultima tazza con caffeina.'],
         faq=[('Quando smettere con la caffeina durante il giorno?', 'Dipende dalla persona; la caffeina resta per un’emivita di 3–7 ore. Lo strumento dell’ultima tazza aiuta a stimare.'), ('Il tè dopo il lavoro disturba il sonno?', 'Con caffeina può; senza (rooibos, tisana) di solito no.')],
-        links=['lastcup', 'tracker', 'r_rooibos', 'r_calm', 'tl_herbal'], src=['efsa', 'mayo', 'wp_rooibos']),
+        links=['lastcup', 'convert', 'tracker', 'r_rooibos', 'r_calm', 'tl_herbal'], src=['efsa', 'mayo', 'wp_rooibos']),
     }

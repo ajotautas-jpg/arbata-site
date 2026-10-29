@@ -6,7 +6,7 @@ category: quit
 date: 2026-10-24
 related: abstinencija, kava-ar-arbata-ryte
 sources: juliano, mayo
-about: calc, convert, quiz, plan, diary, d_black, d_green, g_limit, hub_b
+about: calc, convert, quiz, plan, diary, d_black, d_green, g_limit, hub_b, tl_rooibos, tl_herbal
 ---
 
 One cup in the morning, another at work, and a third because somehow you need to make it through the afternoon. Coffee easily becomes part of everyday life, and sometimes we don't even notice how much we're drinking.
@@ -65,7 +65,7 @@ Black tea and green tea generally contain less caffeine than a similar-sized cup
 
 They also contain L-theanine, a compound studied for its potential effects on attention and concentration.
 
-If your goal is to go completely caffeine-free, rooibos tea or peppermint tea are worth exploring. Both are naturally caffeine-free, making them good options for evenings, too.
+If your goal is to go completely caffeine-free, [rooibos](@tl_rooibos) or peppermint tea are worth exploring. Both are naturally caffeine-free, making them good options for evenings, too. Other [herbal teas](@tl_herbal) are usually caffeine-free as well, though blends with tea or mate may contain some. The [converter](@convert) shows how much caffeine you save by swapping.
 
 Switching to tea also lets you keep some of the best parts of your coffee routine: a few quiet minutes, a warm cup in your hands, and an excuse to step away from everyday responsibilities.
 

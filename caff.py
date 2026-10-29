@@ -21,6 +21,9 @@ SOURCES = {
            'https://www.caffeineinformer.com/caffeine-content/tea-brewed'),
     'ci_mate': ('Caffeine Informer: yerba mate (producer data)',
                 'https://www.caffeineinformer.com/caffeine-content/ymateina-yerba-mate'),
+    'wp_rooibos': ('Wikipedia: Rooibos', 'https://en.wikipedia.org/wiki/Rooibos'),
+    'wp_herbal': ('Wikipedia: Herbal tea', 'https://en.wikipedia.org/wiki/Herbal_tea'),
+    'ci_herbal': ('Caffeine Informer: Herbal tea caffeine content', 'https://www.caffeineinformer.com/caffeine-content/herbal-tea'),
 }
 
 # Limitai ir farmakokinetika
@@ -80,6 +83,26 @@ OTHER_NAMES = {
 }
 
 
+# Gėrimai be kofeino (0 mg): tik įrankiams (keitiklis, palyginimas, sekiklis...). Į drinks() nededami,
+# kad iš jų nebūtų generuojami SEO puslapiai ir poros. Skaičiai turi sutapti su bibliotekos puslapiais (tealib_gen).
+# id, šaltiniai, patikimumas
+ZERO = [
+    ('rooibos', ['wp_rooibos'], 'medium'),
+    ('herbal', ['ci_herbal', 'wp_herbal'], 'medium'),   # dauguma 0 mg, bet ne visos (mišiniai su arbata, mate)
+]
+
+ZERO_NAMES = {
+    'rooibos': {'lt': 'Rooibos', 'en': 'Rooibos', 'it': 'Rooibos'},
+    'herbal': {'lt': 'Žolelių arbata', 'en': 'Herbal tea', 'it': 'Tisana'},
+}
+
+
+def zero_drinks():
+    """0 mg gėrimai įrankių sąrašui (group 'zero'); perg [0,0] – kad JS formulės nesiremtų tuščiu lauku."""
+    return [{'id': i, 'group': 'zero', 'lo': 0, 'hi': 0, 'typ': 0, 'ml': 237, 'g': 2, 'perg': [0, 0], 'whole': False,
+             'src': src, 'conf': conf, 'names': ZERO_NAMES[i]} for i, src, conf in ZERO]
+
+
 def r(x):
     return int(x + 0.5)
 
@@ -111,7 +134,7 @@ def data_js():
         'checked': CHECKED,
         'limits': LIMITS,
         'timeF': {str(k): v for k, v in TIME_F.items()},
-        'drinks': drinks() + __import__('brands_data').tool_drinks(),
+        'drinks': drinks() + zero_drinks() + __import__('brands_data').tool_drinks(),
         'sources': {k: {'title': v[0], 'url': v[1]} for k, v in SOURCES.items()},
     }
     return 'window.ARBATA_DATA=' + json.dumps(payload, ensure_ascii=False, separators=(',', ':')) + ';\n'

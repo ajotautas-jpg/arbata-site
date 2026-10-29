@@ -13,6 +13,8 @@
   var byId = {};
   D.drinks.forEach(function (d) { byId[d.id] = d; });
   var TEAS = D.drinks.filter(function (d) { return d.group === 'tea'; });
+  var ZER = D.drinks.filter(function (d) { return d.group === 'zero'; }); // 0 mg: rooibos, žolelių arbata
+  var TARGETS = TEAS.concat(ZER);
 
   function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
   function num(n) { var x = String(n); return lang === 'en' ? x : x.replace('.', ','); }
@@ -48,28 +50,44 @@
   var ids = D.drinks.map(function (d) { return d.id; });
   var coffeeIds = ['espresso', 'filter'];
   var teaIds = TEAS.map(function (d) { return d.id; });
+  var targetIds = TARGETS.map(function (d) { return d.id; });
+  // nuoroda į bibliotekos puslapį ir paaiškinimas, kai pasirinktas 0 mg gėrimas
+  function zeroInfo(d) {
+    if (!d || d.group !== 'zero') return '';
+    var u = (T.zurls || {})[d.id];
+    return esc(d.id === 'rooibos' ? T.zero_rooibos : T.zero_herbal) + (u ? ' <a href="' + u + '" target="_blank" rel="noopener">' + esc(T.zero_more) + ' →</a>' : '');
+  }
 
   // ---------- 1. keitiklis ----------
   function convert() {
-    var s = { k: pick('k', coffeeIds, 'filter'), c: Math.min(10, Math.max(1, parseInt(Q.get('c'), 10) || 3)), tea: pick('tea', teaIds, 'black') };
+    var s = { k: pick('k', coffeeIds, 'filter'), c: Math.min(10, Math.max(1, parseInt(Q.get('c'), 10) || 3)), tea: pick('tea', targetIds, 'black') };
     body.innerHTML =
       '<div class="tool-in">' +
       '<div class="fld"><span class="fld-label">' + esc(T.coffee_kind) + '</span><div class="pills">' + pills('data-k', coffeeIds.map(function (i) { return [i, nm(byId[i])]; }), s.k) + '</div></div>' +
       '<div class="fld"><span class="fld-label">' + esc(T.cups) + '</span>' + stepper('c-dec', 'c-inc', 'c-out') + '</div>' +
-      '<div class="fld"><span class="fld-label">' + esc(T.target) + '</span><div class="pills">' + pills('data-tea', TEAS.map(function (d) { return [d.id, nm(d)]; }), s.tea) + '</div></div></div>' +
+      '<div class="fld"><span class="fld-label">' + esc(T.target) + '</span><div class="pills">' + pills('data-tea', TARGETS.map(function (d) { return [d.id, nm(d)]; }), s.tea) + '</div></div></div>' +
       '<div class="tool-out"><div><span class="eyebrow">' + esc(T.result) + '</span><div style="margin-top:6px"><span class="big" id="r-big"></span></div><span class="per" id="r-sub"></span></div>' +
       '<div class="bars"><div class="bar-top"><span>' + esc(T.out_coffee) + '</span><b id="r-cof"></b></div><div class="bar-top"><span>' + esc(T.out_tea) + '</span><b id="r-tea"></b></div></div>' +
+      '<p class="tool-note" id="r-zero" style="color:var(--leaf-2)"></p>' +
       '<p class="tool-note" style="color:var(--leaf-2)">' + esc(T.note_limit) + '</p></div>';
     function render() {
       var cof = byId[s.k], tea = byId[s.tea];
       var tl = cof.lo * s.c, th = cof.hi * s.c, tt = cof.typ * s.c;
-      var mid = Math.max(1, Math.round(tt / tea.typ * 2) / 2);
-      var lo = Math.max(0.5, Math.round(tt / tea.hi * 2) / 2), hi = Math.round(tt / tea.lo * 2) / 2;
       $('c-out').textContent = s.c;
-      $('r-big').textContent = num(mid);
-      $('r-sub').textContent = T.out_eq + ' (' + T.range + ' ' + num(lo) + '–' + num(hi) + ')';
       $('r-cof').textContent = tl + '–' + th + ' mg';
-      $('r-tea').textContent = tea.lo + '–' + tea.hi + ' mg';
+      if (!(tea.typ > 0)) { // 0 mg gėrimas: puodelis už puodelį, jokios dalybos iš kofeino kiekio
+        $('r-big').textContent = num(s.c);
+        $('r-sub').textContent = T.zero_eq;
+        $('r-tea').textContent = '0 mg';
+        $('r-zero').innerHTML = zeroInfo(tea);
+      } else {
+        var mid = Math.max(1, Math.round(tt / tea.typ * 2) / 2);
+        var lo = Math.max(0.5, Math.round(tt / tea.hi * 2) / 2), hi = Math.round(tt / tea.lo * 2) / 2;
+        $('r-big').textContent = num(mid);
+        $('r-sub').textContent = T.out_eq + ' (' + T.range + ' ' + num(lo) + '–' + num(hi) + ')';
+        $('r-tea').textContent = tea.lo + '–' + tea.hi + ' mg';
+        $('r-zero').textContent = '';
+      }
       setPressed('[data-k]', 'data-k', s.k); setPressed('[data-tea]', 'data-tea', s.tea);
     }
     root.addEventListener('click', function (e) {
@@ -102,7 +120,10 @@
       $('tbl').innerHTML = '<table class="cmp"><thead><tr><th></th><th>' + esc(nm(A)) + '</th><th>' + esc(nm(B)) + '</th></tr></thead><tbody>' +
         row(T.per_cup, rg(A), rg(B)) + row(T.volume, A.ml + ' ml', B.ml + ' ml') + row(T.per100, p100(A), p100(B)) + '</tbody></table>';
       var ratio = A.typ / B.typ, txt;
-      if (ratio > 0.85 && ratio < 1.18) txt = T.ratio_same;
+      if (!(A.typ > 0) && !(B.typ > 0)) txt = T.ratio_same;
+      else if (!(A.typ > 0)) txt = nm(A) + ' – ' + T.zero_none;
+      else if (!(B.typ > 0)) txt = nm(B) + ' – ' + T.zero_none;
+      else if (ratio > 0.85 && ratio < 1.18) txt = T.ratio_same;
       else if (ratio >= 1) txt = T.ratio_pre + ' ' + nm(A) + ' – ' + num(r1(ratio)) + ' ' + T.ratio_mid + ' ' + nm(B);
       else txt = T.ratio_pre + ' ' + nm(B) + ' – ' + num(r1(1 / ratio)) + ' ' + T.ratio_mid + ' ' + nm(A);
       $('r-big').textContent = txt;
@@ -284,7 +305,7 @@
         lines.push([t, m]); hiL.push([t, h]); loL.push([t, l]);
         if (m > peak) { peak = m; peakT = t; }
       }
-      for (var k = 0; k < lines.length; k++) { if (lines[k][0] > peakT && lines[k][1] < 50) { below = lines[k][0]; break; } }
+      for (var k = 0; k < lines.length && peak > 0; k++) { if (lines[k][0] > peakT && lines[k][1] < 50) { below = lines[k][0]; break; } }
       var ymax = Math.max(100, Math.ceil(Math.max.apply(null, hiL.map(function (p) { return p[1]; })) / 50) * 50);
       var sx = function (t) { return X0 + (X1 - X0) * t / TMAX; }, sy = function (v) { return Y0 - (Y0 - Y1) * v / ymax; };
       var path = function (a) { return a.map(function (p, i) { return (i ? 'L' : 'M') + sx(p[0]).toFixed(1) + ' ' + sy(p[1]).toFixed(1); }).join(''); };
@@ -297,7 +318,7 @@
         '<path d="' + band + '" class="ch-band"/><path d="' + path(lines) + '" class="ch-line"/>' + dots + tx;
       var pk = Math.round(peak), lo = Math.round(Math.max.apply(null, [0].concat(loL.map(function (p) { return p[1]; })))), hi = Math.round(Math.max.apply(null, hiL.map(function (p) { return p[1]; })));
       $('r-big').textContent = pk;
-      $('r-sub').textContent = st.items.length ? (hhmm(peakT) + ' · ' + T.range + ' ' + lo + '–' + hi + ' mg · ' + (below !== null ? T.below + ' ' + hhmm(below) : T.never)) : '';
+      $('r-sub').textContent = st.items.length && peak === 0 ? T.zero_none : st.items.length ? (hhmm(peakT) + ' · ' + T.range + ' ' + lo + '–' + hi + ' mg · ' + (below !== null ? T.below + ' ' + hhmm(below) : T.never)) : '';
     }
     root.addEventListener('change', function (e) { if (e.target.id === 'sd') pickD = e.target.value; });
     root.addEventListener('input', function (e) { if (e.target.id === 'st') pickT = parseHM(e.target.value, pickT); });
@@ -317,12 +338,12 @@
     function nextMonday() { var dt = new Date(); var add = (8 - dt.getDay()) % 7 || 7; dt.setDate(dt.getDate() + add); return localISO(dt); }
     function human(iso) { var p = iso.split('-'); try { return new Date(Date.UTC(+p[0], +p[1] - 1, +p[2])).toLocaleDateString(lang, { day: 'numeric', month: 'short', timeZone: 'UTC' }); } catch (e) { return iso; } }
     var qs0 = Q.get('start');
-    var s = { k: pick('k', coffeeIds, 'filter'), c: Math.min(10, Math.max(1, parseInt(Q.get('c'), 10) || 4)), tea: pick('tea', teaIds, 'black'), w: Math.min(6, Math.max(2, parseInt(Q.get('w'), 10) || 4)), g: ['same', 'less', 'free'].indexOf(Q.get('g')) >= 0 ? Q.get('g') : 'same', start: /^\d{4}-\d{2}-\d{2}$/.test(qs0 || '') ? qs0 : nextMonday() };
+    var s = { k: pick('k', coffeeIds, 'filter'), c: Math.min(10, Math.max(1, parseInt(Q.get('c'), 10) || 4)), tea: pick('tea', targetIds, 'black'), w: Math.min(6, Math.max(2, parseInt(Q.get('w'), 10) || 4)), g: ['same', 'less', 'free'].indexOf(Q.get('g')) >= 0 ? Q.get('g') : 'same', start: /^\d{4}-\d{2}-\d{2}$/.test(qs0 || '') ? qs0 : nextMonday() };
     body.innerHTML =
       '<div class="tool-in">' +
       '<div class="fld"><span class="fld-label">' + esc(T.coffee_kind) + '</span><div class="pills">' + pills('data-k', coffeeIds.map(function (i) { return [i, nm(byId[i])]; }), s.k) + '</div></div>' +
       '<div class="fld"><span class="fld-label">' + esc(T.cups) + '</span>' + stepper('c-dec', 'c-inc', 'c-out') + '</div>' +
-      '<div class="fld"><span class="fld-label">' + esc(T.target) + '</span><div class="pills">' + pills('data-tea', TEAS.map(function (d) { return [d.id, nm(d)]; }), s.tea) + '</div></div>' +
+      '<div class="fld"><span class="fld-label">' + esc(T.target) + '</span><div class="pills">' + pills('data-tea', TARGETS.map(function (d) { return [d.id, nm(d)]; }), s.tea) + '</div><p class="small" id="zp"></p></div>' +
       '<div class="fld"><span class="fld-label">' + esc(T.weeks) + '</span><div class="pills">' + pills('data-w', [2, 3, 4, 5, 6].map(function (x) { return [x, x]; }), s.w) + '</div></div>' +
       '<div class="fld"><span class="fld-label">' + esc(T.goal) + '</span><div class="pills">' + pills('data-g', [['same', T.g_same], ['less', T.g_less], ['free', T.g_free]], s.g) + '</div><p class="small">' + esc(T.g_note) + '</p></div>' +
       '<div class="fld"><label class="fld-label" for="sd">' + esc(T.start) + '</label><input class="sel" type="date" id="sd" value="' + s.start + '"></div></div>' +
@@ -334,7 +355,8 @@
       for (var w = 0; w <= s.w; w++) {
         var cc = w === 0 ? s.c : Math.round(s.c * (1 - w / s.w)), tc = 0, fc = 0;
         if (w > 0) {
-          if (s.g === 'same') tc = Math.min(6, Math.round((s.c - cc) * cof.typ / tea.typ));
+          if (s.g === 'same' && tea.typ > 0) tc = Math.min(6, Math.round((s.c - cc) * cof.typ / tea.typ));
+          else if (s.g === 'same') tc = Math.min(6, s.c - cc); // 0 mg gėrimas: puodelis už puodelį
           else if (s.g === 'less') tc = Math.min(6, s.c - cc);
           else fc = Math.min(6, s.c - cc);
         }
@@ -346,6 +368,7 @@
       $('c-out').textContent = s.c;
       setPressed('[data-k]', 'data-k', s.k); setPressed('[data-tea]', 'data-tea', s.tea); setPressed('[data-w]', 'data-w', s.w); setPressed('[data-g]', 'data-g', s.g);
       var fr = s.g === 'free';
+      $('zp').innerHTML = byId[s.tea].typ > 0 ? '' : esc(T.zero_plan) + ' ' + zeroInfo(byId[s.tea]);
       var h = '<thead><tr><th>' + esc(T.week) + '</th><th>' + esc(T.coffee) + '</th><th>' + esc(fr ? T.free : T.tea) + '</th><th>' + esc(T.mg) + '</th></tr></thead><tbody>';
       rows().forEach(function (r) {
         var label = r.w === 0 ? esc(T.today) : (esc(T.week) + ' ' + r.w + '<br><span class="small">' + esc(human(addDays(s.start, (r.w - 1) * 7))) + '</span>');

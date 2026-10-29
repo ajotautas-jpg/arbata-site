@@ -18,6 +18,9 @@ SHARE = {'convert': True, 'compare': True, 'lastcup': True, 'timer': True, 'trac
 # Bendri tekstai
 S = {
  'lt': {
+  'zero_eq': 'puodelių be kofeino (kofeino −100 %)', 'zero_none': 'be kofeino', 'zero_cup': '0 mg puodelyje', 'zero_more': 'Apie šį gėrimą bibliotekoje',
+  'zero_rooibos': 'Rooibos pagal šaltinius natūraliai neturi kofeino.', 'zero_herbal': 'Dauguma žolelių arbatų kofeino neturi, bet mišiniai su arbata, mate ar guarana gali turėti. Žiūrėk pakuotę.',
+  'zero_plan': 'Su gėrimu be kofeino puodelis keičiamas puodeliu, todėl kofeinas mažėja kiekvieną savaitę.',
   'cups': 'Puodelių per dieną', 'coffee_kind': 'Tavo kava', 'target': 'Arbata vietoj kavos', 'drink': 'Gėrimas', 'a': 'Pirmas gėrimas', 'b': 'Antras gėrimas',
   'result': 'Rezultatas', 'per_cup': 'Kofeinas puodelyje', 'volume': 'Tūris', 'per100': 'mg / 100 ml', 'times': 'kartų',
   'bedtime': 'Einu miegoti', 'sens': 'Jautrumas kofeinui', 'sens_names': ['Jautrus', 'Vidutinis', 'Mažai jautrus'],
@@ -31,6 +34,9 @@ S = {
   'cups_word': 'puodeliai', 'about': 'apie', 'range': 'diapazonas', 'mg': 'mg', 'hour_short': 'val.',
  },
  'en': {
+  'zero_eq': 'caffeine-free cups (caffeine −100%)', 'zero_none': 'caffeine-free', 'zero_cup': '0 mg per cup', 'zero_more': 'About this drink in the library',
+  'zero_rooibos': 'According to the sources, rooibos is naturally caffeine-free.', 'zero_herbal': 'Most herbal teas contain no caffeine, but blends with tea, mate or guarana may. Check the packaging.',
+  'zero_plan': 'With a caffeine-free drink, a cup is swapped for a cup, so caffeine drops every week.',
   'cups': 'Cups per day', 'coffee_kind': 'Your coffee', 'target': 'Tea instead of coffee', 'drink': 'Drink', 'a': 'First drink', 'b': 'Second drink',
   'result': 'Result', 'per_cup': 'Caffeine per cup', 'volume': 'Volume', 'per100': 'mg / 100 ml', 'times': 'times',
   'bedtime': 'I go to sleep at', 'sens': 'Caffeine sensitivity', 'sens_names': ['Sensitive', 'Average', 'Not very sensitive'],
@@ -44,6 +50,9 @@ S = {
   'cups_word': 'cups', 'about': 'about', 'range': 'range', 'mg': 'mg', 'hour_short': 'h',
  },
  'it': {
+  'zero_eq': 'tazze senza caffeina (caffeina −100 %)', 'zero_none': 'senza caffeina', 'zero_cup': '0 mg per tazza', 'zero_more': 'Su questa bevanda nella libreria',
+  'zero_rooibos': 'Secondo le fonti, il rooibos è naturalmente privo di caffeina.', 'zero_herbal': 'La maggior parte delle tisane non contiene caffeina, ma i miscugli con tè, mate o guaranà possono contenerne. Controlla la confezione.',
+  'zero_plan': 'Con una bevanda senza caffeina una tazza sostituisce una tazza, quindi la caffeina cala ogni settimana.',
   'cups': 'Tazze al giorno', 'coffee_kind': 'Il tuo caffè', 'target': 'Tè al posto del caffè', 'drink': 'Bevanda', 'a': 'Prima bevanda', 'b': 'Seconda bevanda',
   'result': 'Risultato', 'per_cup': 'Caffeina per tazza', 'volume': 'Volume', 'per100': 'mg / 100 ml', 'times': 'volte',
   'bedtime': 'Vado a dormire alle', 'sens': 'Sensibilità alla caffeina', 'sens_names': ['Sensibile', 'Nella media', 'Poco sensibile'],
@@ -272,6 +281,9 @@ def _i18n_extra(tool, d, lang=None):
         import rituals_gen as RG
         u = lambda i: f'/{lang}/{RG.DIR[lang]}/{RG.SLUG[i][lang]}/'
         d['urls'] = {'a': u('morning'), 'b': u('break'), 'c': u('calm'), 'd': f'/{lang}/blog/{WD_SLUG[lang]}/', 'e': f'/{lang}/{RG.DIR[lang]}/'}
+    if tool in ('convert', 'plan') and lang:
+        import tealib_gen as TL
+        d['zurls'] = {i: f'/{lang}/{TL.DIR[lang]}/{(TL.SG.N[i] if i in TL.SG.N else TL.XT.NAMES[i])["slug"][lang]}/' for i in ('rooibos', 'herbal')}
     return d
 
 

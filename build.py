@@ -107,7 +107,7 @@ C = {
   'pillars': [
     ('book', 'Perėjimo gidai', 'Savaitė po savaitės: kaip sumažinti kavą ir ištverti pirmąsias dienas.'),
     ('leaf', 'Arbatų biblioteka', 'Kofeino kiekiai, skoniai ir virimas: nuo matcha iki stiprios juodosios.'),
-    ('cup', 'Receptai ir ritualai', 'Cold brew arbata, latte alternatyvos ir ryto rutinos, kurios pakeičia kavos pertrauką.'),
+    ('cup', 'Receptai ir ritualai', 'Cold brew arbata, gėrimai be kofeino (rooibos, žolelių arbata) ir ryto rutinos, kurios pakeičia kavos pertrauką.'),
     ('heart', 'Sveikata ir energija', 'Miegas, kofeino laikas ir ramesnė energija, be medicininių pažadų.'),
     ('globe', 'Istorijos ir kelionės', 'Skaitytojų patirtys ir arbatos kelionės: nuo arbatinių iki plantacijų.'),
     ('gear', 'Rekomenduojami daiktai', 'Arbatinukai, svarstyklės, termosai ir knygos. Partnerių nuorodos bus aiškiai pažymėtos.'),
@@ -209,7 +209,7 @@ C = {
   'pillars': [
     ('book', 'Transition guides', 'Week by week: how to cut down on coffee and get through the first days.'),
     ('leaf', 'Tea library', 'Caffeine levels, flavours and brewing: from matcha to strong black tea.'),
-    ('cup', 'Recipes and rituals', 'Cold brew tea, latte alternatives and morning routines that replace the coffee break.'),
+    ('cup', 'Recipes and rituals', 'Cold brew tea, caffeine-free drinks (rooibos, herbal tea) and morning routines that replace the coffee break.'),
     ('heart', 'Health and energy', 'Sleep, caffeine timing and calmer energy, with no medical promises.'),
     ('globe', 'Stories and travel', 'Reader experiences and tea journeys: from tea rooms to plantations.'),
     ('gear', 'Recommended gear', 'Teapots, scales, flasks and books. Partner links will be clearly marked.'),
@@ -307,7 +307,7 @@ C = {
   'pillars': [
     ('book', 'Guide alla transizione', 'Settimana dopo settimana: come ridurre il caffè e superare i primi giorni.'),
     ('leaf', 'Biblioteca dei tè', 'Caffeina, sapori e preparazione: dal matcha al tè nero deciso.'),
-    ('cup', 'Ricette e rituali', 'Tè cold brew, alternative al latte macchiato e routine che sostituiscono la pausa caffè.'),
+    ('cup', 'Ricette e rituali', 'Tè cold brew, bevande senza caffeina (rooibos, tisane) e routine che sostituiscono la pausa caffè.'),
     ('heart', 'Salute ed energia', 'Sonno, orari della caffeina ed energia più calma, senza promesse mediche.'),
     ('globe', 'Storie e viaggi', 'Esperienze dei lettori e viaggi nel tè: dalle sale da tè alle piantagioni.'),
     ('gear', 'Strumenti consigliati', 'Teiere, bilance, thermos e libri. I link di partner saranno sempre segnalati.'),
@@ -649,7 +649,7 @@ SRC_H = {'lt': ('Šaltiniai', 'Duomenys patikrinti', 'Mažesnio patikimumo duome
 def sources_html(lang):
     h, chk, low = SRC_H[lang]
     used = []
-    for d in caff.drinks():
+    for d in caff.drinks() + caff.zero_drinks():
         for k in d['src']:
             if k not in used:
                 used.append(k)

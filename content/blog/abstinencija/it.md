@@ -6,7 +6,7 @@ category: quit
 date: 2026-10-24
 related: mesti-kava, kava-ar-arbata-ryte
 sources: juliano
-about: diary, plan, tracker, calc, d_filter, d_energy, g_limit
+about: diary, plan, tracker, calc, d_filter, d_energy, g_limit, tl_rooibos, tl_herbal
 ---
 
 Ieri, l'ultimo caffè. Oggi hai mal di testa, fai fatica a concentrarti e persino le attività più semplici richiedono uno sforzo insolito. Ti sembra di aver dormito pochissimo, anche se hai riposato per otto ore.
@@ -84,7 +84,7 @@ Se hai già smesso di bere caffè, l'approccio più utile è aiutare il tuo orga
 - **Mangia regolarmente.** Intervalli troppo lunghi tra i pasti possono peggiorare il malessere in alcune persone, quindi cerca di mantenere le tue normali abitudini alimentari.
 - **Valuta una riduzione più graduale se i sintomi diventano difficili da gestire.** Non è necessario sopportare un forte disagio soltanto per eliminare la caffeina da un giorno all'altro.
 
-Se ti manca il rituale di una bevanda calda durante la giornata, puoi scegliere alternative naturalmente prive di caffeina, come il rooibos o una tisana alla menta piperita.
+Se ti manca il rituale di una bevanda calda durante la giornata, puoi scegliere alternative naturalmente prive di caffeina, come il [rooibos](@tl_rooibos) o una tisana alla menta piperita (vedi le [tisane](@tl_herbal); controlla i miscugli con tè o mate).
 
 Non elimineranno i sintomi dell'astinenza, ma possono aiutarti a mantenere un'abitudine piacevole senza assumere altra caffeina.
 

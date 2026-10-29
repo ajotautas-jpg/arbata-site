@@ -6,7 +6,7 @@ category: quit
 date: 2026-10-24
 related: mesti-kava, kava-ar-arbata-ryte
 sources: juliano
-about: diary, plan, tracker, calc, d_filter, d_energy, g_limit
+about: diary, plan, tracker, calc, d_filter, d_energy, g_limit, tl_rooibos, tl_herbal
 ---
 
 Vakar – paskutinis kavos puodelis. Šiandien skauda galvą, sunku susikaupti, o net paprasčiausi darbai reikalauja neįprastai daug pastangų. Atrodo, lyg naktį beveik nebūtų pavykę išsimiegoti, nors miegui skyrei visas aštuonias valandas.
@@ -72,7 +72,7 @@ Jeigu kofeino vartojimas jau nutrauktas, svarbiausia pasirūpinti savijauta, o n
 - **Valgyk reguliariai.** Ilgos pertraukos tarp valgymų kai kuriems žmonėms gali pabloginti savijautą, todėl verta išlaikyti įprastą valgymo ritmą.
 - **Jeigu simptomai labai vargina, apsvarstyk lėtesnį kofeino mažinimą.** Nebūtina kentėti stiprių simptomų vien tam, kad kofeino atsisakymas įvyktų iš karto.
 
-Jeigu norisi išlaikyti įprastą šilto gėrimo ritualą, galima rinktis natūraliai kofeino neturinčią arbatą. Ji nepašalins abstinencijos simptomų, tačiau gali padėti išsaugoti įprastą dienos ritmą.
+Jeigu norisi išlaikyti įprastą šilto gėrimo ritualą, galima rinktis natūraliai kofeino neturinčią arbatą, pavyzdžiui, [rooibos](@tl_rooibos) ar kitą [žolelių arbatą](@tl_herbal) (mišiniuose su arbata ar mate kofeino gali būti, tad žiūrėk sudėtį). Ji nepašalins abstinencijos simptomų, tačiau gali padėti išsaugoti įprastą dienos ritmą.
 
 [Užsirašinėk simptomus ir kofeiną kofeino dienoraštyje.](@diary)
 

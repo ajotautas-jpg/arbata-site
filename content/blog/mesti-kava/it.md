@@ -6,7 +6,7 @@ category: quit
 date: 2026-10-24
 related: abstinencija, kava-ar-arbata-ryte
 sources: juliano, mayo
-about: calc, convert, quiz, plan, diary, d_black, d_green, g_limit, hub_b
+about: calc, convert, quiz, plan, diary, d_black, d_green, g_limit, hub_b, tl_rooibos, tl_herbal
 ---
 
 Un espresso al mattino, un altro al bar durante la pausa e il terzo dopo pranzo, perché il pomeriggio bisogna pur affrontarlo. In Italia il caffè è molto più di una bevanda: è un'abitudine quotidiana, un piccolo piacere e spesso un momento da condividere.
@@ -81,7 +81,7 @@ Il tè nero e il tè verde contengono generalmente meno caffeina rispetto a una 
 
 Inoltre, entrambi contengono L-teanina, una sostanza studiata per i suoi possibili effetti sull'attenzione e sulla concentrazione.
 
-Se invece vuoi eliminare completamente la caffeina, puoi scegliere un tè rooibos o una tisana alla menta piperita, naturalmente privi di caffeina e adatti anche alla sera.
+Se invece vuoi eliminare completamente la caffeina, puoi scegliere il [rooibos](@tl_rooibos) o una tisana alla menta piperita, naturalmente privi di caffeina e adatti anche alla sera. Anche le altre [tisane](@tl_herbal) di solito non contengono caffeina, ma i miscugli con tè o mate possono contenerne. Il [convertitore](@convert) mostra quanta caffeina risparmi.
 
 Sostituire il caffè con il tè permette di conservare una delle parti più piacevoli del rituale: qualche minuto di tranquillità, una bevanda calda e una piccola pausa dalle preoccupazioni quotidiane.
 

@@ -6,7 +6,7 @@ category: quit
 date: 2026-10-24
 related: abstinencija, kava-ar-arbata-ryte
 sources: juliano, mayo
-about: calc, convert, quiz, plan, diary, d_black, d_green, g_limit, hub_b
+about: calc, convert, quiz, plan, diary, d_black, d_green, g_limit, hub_b, tl_rooibos, tl_herbal
 ---
 
 Vienas puodelis ryte, antras darbe, trečias – nes po pietų kažkaip reikia išgyventi. Kava lengvai tampa kasdienybės dalimi, o kartais net nepastebime, kiek jos išgeriame.
@@ -63,7 +63,7 @@ Vienas maloniausių būdų mažinti kavos vartojimą – atrasti kitą gėrimą,
 
 Juodoji ir žalioji arbata paprastai turi mažiau kofeino nei panašaus dydžio filtruotos kavos puodelis, todėl gali būti patogus tarpinis pasirinkimas. Be to, jose yra L-teanino – junginio, kurio poveikis dėmesiui ir susikaupimui nagrinėjamas moksliniuose tyrimuose.
 
-Jei tikslas yra visiškai atsisakyti kofeino, galima rinktis rooibos ar pipirmėčių arbatą. Jos natūraliai neturi kofeino, todėl tinka ir vakarui.
+Jei tikslas yra visiškai atsisakyti kofeino, galima rinktis [rooibos](@tl_rooibos) ar pipirmėčių arbatą. Jos natūraliai neturi kofeino, todėl tinka ir vakarui. Kitos [žolelių arbatos](@tl_herbal) dažniausiai irgi be kofeino, tik mišiniuose su arbata ar mate jo gali būti. Kiek kofeino sutaupysi, pakeitęs kavą, parodys [keitiklis](@convert).
 
 Arbata leidžia išsaugoti tai, kas kavos rituale dažnai maloniausia: kelias ramias minutes, šiltą puodelį ir progą trumpam atsitraukti nuo kasdienybės rūpesčių.
 

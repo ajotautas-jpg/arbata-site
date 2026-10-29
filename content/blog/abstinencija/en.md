@@ -6,7 +6,7 @@ category: quit
 date: 2026-10-24
 related: mesti-kava, kava-ar-arbata-ryte
 sources: juliano
-about: diary, plan, tracker, calc, d_filter, d_energy, g_limit
+about: diary, plan, tracker, calc, d_filter, d_energy, g_limit, tl_rooibos, tl_herbal
 ---
 
 Yesterday, your last cup of coffee. Today, you've got a headache, you can't concentrate, and even the simplest tasks seem to require an unreasonable amount of effort. It feels like you barely slept, even though you got a full eight hours.
@@ -84,7 +84,7 @@ If you've already stopped drinking coffee, the most useful approach is to suppor
 - **Eat regularly.** Long gaps between meals may make you feel worse, so try to maintain your usual eating routine.
 - **Consider a slower reduction if symptoms become difficult to manage.** There's no need to push through severe discomfort just to quit caffeine all at once.
 
-If you miss having a warm drink as part of your daily routine, naturally caffeine-free teas such as rooibos or peppermint tea can be comforting alternatives.
+If you miss having a warm drink as part of your daily routine, naturally caffeine-free teas such as [rooibos](@tl_rooibos) or peppermint ([herbal teas](@tl_herbal); check blends with tea or mate) can be comforting alternatives.
 
 They won't eliminate withdrawal symptoms, but they can help you maintain a familiar ritual without adding more caffeine.
 

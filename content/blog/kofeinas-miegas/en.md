@@ -6,7 +6,7 @@ category: health
 date: 2026-10-26
 related: mesti-kava, abstinencija, kava-ar-arbata-ryte
 sources: drake2013, gardiner2023, gardiner2025, chang2025, clark2017
-about: lastcup, body, timer, convert, calc, tl_green, tl_white, g_limit
+about: lastcup, body, timer, convert, calc, tl_green, tl_white, g_limit, tl_rooibos, tl_herbal
 ---
 
 You have a coffee after lunch and sleep fine. Or the opposite: one cup at five o'clock and you're tossing and turning until midnight. Why do people differ so much, and what do controlled studies say?
@@ -40,7 +40,7 @@ Meta-analyses pool many such studies: Gardiner 2023 pooled 24, and Chang 2025 po
 
 ## What this means in practice
 
-The research doesn't say "no caffeine after 2 p.m." It shows that the effect depends on dose, timing and the person. If you struggle to fall asleep, look at how much caffeine you get and when, then experiment: for example, have your last caffeinated drink earlier for a few days, or choose a tea with less caffeine.
+The research doesn't say "no caffeine after 2 p.m." It shows that the effect depends on dose, timing and the person. If you struggle to fall asleep, look at how much caffeine you get and when, then experiment: for example, have your last caffeinated drink earlier for a few days, or choose a tea with less caffeine. For the evening, caffeine-free drinks such as [rooibos](@tl_rooibos) or [herbal tea](@tl_herbal) work too (0 mg per cup, unless it is a blend with tea or mate).
 
 [Work out when to have your last cup](@lastcup)
 

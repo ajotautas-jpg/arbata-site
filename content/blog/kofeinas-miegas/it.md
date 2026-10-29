@@ -6,7 +6,7 @@ category: health
 date: 2026-10-26
 related: mesti-kava, abstinencija, kava-ar-arbata-ryte
 sources: drake2013, gardiner2023, gardiner2025, chang2025, clark2017
-about: lastcup, body, timer, convert, calc, tl_green, tl_white, g_limit
+about: lastcup, body, timer, convert, calc, tl_green, tl_white, g_limit, tl_rooibos, tl_herbal
 ---
 
 Bevi un caffè dopo pranzo e dormi benissimo. Oppure il contrario: una tazzina alle cinque e fino a mezzanotte ti giri nel letto. Perché le persone reagiscono in modo così diverso e cosa dicono gli studi controllati?
@@ -40,7 +40,7 @@ Le metanalisi riuniscono molti studi di questo tipo: Gardiner 2023 ne ha riuniti
 
 ## Cosa significa in pratica
 
-Gli studi non dicono «niente caffeina dopo le 14». Mostrano che l'effetto dipende da dose, orario e persona. Se fai fatica ad addormentarti, guarda quanta caffeina assumi e quando, poi prova: per esempio, per qualche giorno bevi l'ultima bevanda con caffeina prima, oppure scegli un tè con meno caffeina.
+Gli studi non dicono «niente caffeina dopo le 14». Mostrano che l'effetto dipende da dose, orario e persona. Se fai fatica ad addormentarti, guarda quanta caffeina assumi e quando, poi prova: per esempio, per qualche giorno bevi l'ultima bevanda con caffeina prima, oppure scegli un tè con meno caffeina. Per la sera vanno bene anche bevande senza caffeina come il [rooibos](@tl_rooibos) o la [tisana](@tl_herbal) (0 mg per tazza, se non è un miscuglio con tè o mate).
 
 [Calcola quando bere l'ultima tazza](@lastcup)
 

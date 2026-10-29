@@ -298,19 +298,19 @@ T['lt'].update(
     x_title='Daugiau rūšių ir užpilų', x_note='Čia rūšys ir užpilai, kurių kofeino negalime pateikti vienu skaičiumi iš savo matavimų: nuo gėrimų be kofeino iki japoniškų žaliųjų ir aromatizuotų arbatų. Kur šaltinis skaičiaus nenurodo, jo nerodome.',
     xt='{nom}: ar turi kofeino? Plikymas ir skonis', xd='{nom}: {cs} Kaip gaminama, kaip plikyti, šaltiniai.',
     x_na='pagal pakuotę', x_min='min.', c_zero='0 mg', c_zero_herbal='dauguma 0 mg, bet ne visos', c_range='{lo}–{hi} mg puodelyje (įvertis)', c_per100='apie {v} mg / 100 ml (gamintojo duomenys)',
-    c_none='patikimo skaičiaus nerasta', c_base='kaip pagrindo arbata: {lo}–{hi} mg', h_caf='Kofeinas', plan_cta='Keiti kavą kitu gėrimu? Pabandyk mažinimo planą', conv_cta='Kava → arbata keitiklis',
+    c_none='patikimo skaičiaus nerasta', c_base='kaip pagrindo arbata: {lo}–{hi} mg', h_caf='Kofeinas', plan_cta='Keiti kavą kitu gėrimu? Pabandyk mažinimo planą', conv_cta='Kava → arbata keitiklis', cmp_cta='Palygink su filtrine kava',
     h_flavour='Variantai ir skonis')
 T['en'].update(
     x_title='More types and infusions', x_note='Types and infusions where we cannot give one number from our own measurements: from caffeine-free drinks to Japanese green teas and flavoured teas. Where a source gives no number, we show none.',
     xt='{nom}: does it have caffeine? Brewing and taste', xd='{nom}: {cs} How it is made, how to brew it, sources.',
     x_na='see packaging', x_min='min', c_zero='0 mg', c_zero_herbal='most 0 mg, but not all', c_range='{lo}–{hi} mg per cup (estimate)', c_per100='about {v} mg / 100 ml (producer data)',
-    c_none='no reliable figure found', c_base='as the base tea: {lo}–{hi} mg', h_caf='Caffeine', plan_cta='Replacing coffee with something else? Try the switch plan', conv_cta='Coffee → tea converter',
+    c_none='no reliable figure found', c_base='as the base tea: {lo}–{hi} mg', h_caf='Caffeine', plan_cta='Replacing coffee with something else? Try the switch plan', conv_cta='Coffee → tea converter', cmp_cta='Compare with filter coffee',
     h_flavour='Variants and taste')
 T['it'].update(
     x_title='Altri tipi e infusi', x_note='Tipi e infusi per cui non possiamo dare un solo numero dalle nostre misure: dalle bevande senza caffeina ai tè verdi giapponesi e ai tè aromatizzati. Dove la fonte non dà un numero, non lo mostriamo.',
     xt='{nom}: contiene caffeina? Infusione e gusto', xd='{nom}: {cs} Come si fa, come prepararlo, fonti.',
     x_na='vedi la confezione', x_min='min', c_zero='0 mg', c_zero_herbal='per lo più 0 mg, ma non tutte', c_range='{lo}–{hi} mg per tazza (stima)', c_per100='circa {v} mg / 100 ml (dati del produttore)',
-    c_none='nessun valore affidabile trovato', c_base='come il tè di base: {lo}–{hi} mg', h_caf='Caffeina', plan_cta='Sostituisci il caffè con altro? Prova il piano di passaggio', conv_cta='Convertitore caffè → tè',
+    c_none='nessun valore affidabile trovato', c_base='come il tè di base: {lo}–{hi} mg', h_caf='Caffeina', plan_cta='Sostituisci il caffè con altro? Prova il piano di passaggio', conv_cta='Convertitore caffè → tè', cmp_cta='Confronta con il caffè filtro',
     h_flavour='Varianti e gusto')
 
 
@@ -354,8 +354,11 @@ def extra_page(B, i, lang):
     ol = ''.join(f'<a href="{B.PATH[key_t(j)](lang)}">{E(name_of(j, lang))}</a>' for j in others)
     cta = ''
     if XT.CAF[i]['kind'] == 'zero':
-        cta = (f'<p><a class="btn btn-forest btn-sm" href="{B.PATH["plan"](lang)}">{E(t["plan_cta"])} →</a> '
-               f'<a class="btn btn-outline btn-sm" href="{B.PATH["convert"](lang)}">{E(t["conv_cta"])}</a></p>')
+        q = f'?tea={i}' if i in ('rooibos', 'herbal') else ''
+        qc = f'?a=filter&amp;b={i}' if i in ('rooibos', 'herbal') else ''
+        cta = (f'<p><a class="btn btn-forest btn-sm" href="{B.PATH["plan"](lang)}{q}">{E(t["plan_cta"])} →</a> '
+               f'<a class="btn btn-outline btn-sm" href="{B.PATH["convert"](lang)}{q}">{E(t["conv_cta"])}</a>'
+               + (f' <a class="btn btn-outline btn-sm" href="{B.PATH["compare"](lang)}{qc}">{E(t["cmp_cta"])}</a>' if qc else '') + '</p>')
     srcs = list(XT.SRC[i])
     rest = x['caf'][len(x['caf'].split('. ')[0]) + 1:].strip()
     cafsec = ''
