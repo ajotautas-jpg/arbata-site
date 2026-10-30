@@ -3,6 +3,8 @@
 import html, os, shutil
 
 BASE = 'https://arbata.pajusk.lt'
+# Pereinamasis laikotarpis: indeksuojamų puslapių canonical rodo į naują domeną (tas pats kelias). Kai įjungti 301, šią eilutę ir šakas žemiau galima išmesti.
+CANON_BASE = 'https://arbatea.com'
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(HERE, 'dist')
 LANGS = ['lt', 'en', 'it']
@@ -418,6 +420,11 @@ def head(lang, key, title, desc, noindex=False):
     alts = ''.join(f'<link rel="alternate" hreflang="{l}" href="{BASE}{PATH[key](l)}">' for l in av)
     alts += f'<link rel="alternate" hreflang="x-default" href="{BASE}{PATH[key]("en" if "en" in av else av[0])}">'
     robots = '<meta name="robots" content="noindex, follow">' if noindex else ''
+    if noindex:
+        canon = f'{BASE}{PATH[key](lang)}'
+    else:
+        canon = f'{CANON_BASE}{PATH[key](lang)}'
+        alts = ''  # hreflang senajame domene panaikintas: prieštarautų canonical į kitą domeną
     return f'''<!doctype html>
 <html lang="{lang}">
 <head>
@@ -426,13 +433,13 @@ def head(lang, key, title, desc, noindex=False):
 <title>{E(title)}</title>
 <meta name="description" content="{E(desc)}">
 {robots}
-<link rel="canonical" href="{BASE}{PATH[key](lang)}">
+<link rel="canonical" href="{canon}">
 {alts}
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Arbata">
 <meta property="og:title" content="{E(title)}">
 <meta property="og:description" content="{E(desc)}">
-<meta property="og:url" content="{BASE}{PATH[key](lang)}">
+<meta property="og:url" content="{canon}">
 <meta property="og:locale" content="{LOCALE[lang]}">
 <meta name="theme-color" content="#1E4D36">
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
@@ -801,7 +808,7 @@ def main():
     write('/index.html', f'''<!doctype html>
 <html lang="lt"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Arbata</title>
-<link rel="canonical" href="{BASE}/lt/">
+<link rel="canonical" href="{CANON_BASE}/lt/">
 <noscript><meta http-equiv="refresh" content="0; url=/lt/"></noscript>
 <script>var l=(navigator.language||'lt').slice(0,2).toLowerCase();location.replace(l==='en'?'/en/':l==='it'?'/it/':'/lt/');</script>
 </head><body><p><a href="/lt/">Lietuvių</a> · <a href="/en/">English</a> · <a href="/it/">Italiano</a></p></body></html>
