@@ -1,0 +1,17 @@
+# 301: arbata.pajusk.lt -> arbatea.com (puslapis į puslapį, tas pats kelias)
+# NEĮJUNGTA. Įjungimas (tik kai savininkas pasakys):
+#   1) šio failo turinį įterpti į `static/.htaccess` PRIEŠ eilutę "RedirectMatch 404 ^/_data" (arba į pačią pradžią),
+#   2) `python3 build.py && python3 check.py`, commit, push į main, `./deploy.sh`,
+#   3) patikra: `curl -sI https://arbata.pajusk.lt/lt/markes/clipper/` -> 301, Location: https://arbatea.com/lt/markes/clipper/
+# Po įjungimo canonical žymės senajame domene nebereikalingos (build.py: CANON_BASE). Senus adresus palikti 12 mėn.
+# Nukreipimas tiesioginis (viena grandinė): http ir https, www ir ne-www iš karto į https://arbatea.com (be www).
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteCond %{HTTP_HOST} ^(www\.)?arbata\.pajusk\.lt$ [NC]
+# lieka senajame domene: duomenų/stat. galiniai taškai (nenukreipti POST užklausų)
+RewriteCond %{REQUEST_URI} !^/(stats(/|$)|subscribe\.php|a\.php|_data(/|$)) [NC]
+# šaknis -> /lt/ (naujo domeno šaknis irgi turi canonical /lt/)
+RewriteRule ^$ https://arbatea.com/lt/ [R=301,L]
+# visa kita: tas pats kelias ir užklausos eilutė
+RewriteRule ^(.+)$ https://arbatea.com/$1 [R=301,L]
+</IfModule>
